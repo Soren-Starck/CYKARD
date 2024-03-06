@@ -1,19 +1,74 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-            <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ pagetitle }}</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    {% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+    <link rel="stylesheet" href="{{ asset('assets/styles/navstyle.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/styles/trellostyle.css') }}">
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li>
+                <a href="{{ path('app_accueil') }}">Accueil</a>
+            </li>
+            {% if not app.user %}
+                <li>
+                    <a class="flex flex-row gap-2 items-center justify-center" href="{{ path('app_login') }}">
+                        Connexion <img alt="login" src="{{ asset('assets/img/enter.png') }}" >
+                    </a>
+                </li>
+                <li>
+                    <a class="flex flex-row gap-2 items-center justify-center" href="{{ path('app_register') }}">
+                        Inscription <img alt="S'inscrire" title="S'inscrire" src="{{ asset('assets/img/add-user.png') }}" >
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ path('app_tableaux') }}">Mes tableaux</a>
+                </li>
+                <li>
+                    <a href="{{ path('app_account', { 'login': app.user.login|url_encode }) }}">
+                        Mon compte (<span>{{ app.user.login }}</span>) <img alt="logout" src="{{ asset('assets/img/user.png') }}">
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('app_logout') }}">
+                        Déconnexion <img alt="logout" src="{{ asset('assets/img/logout.png') }}">
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <div>
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</header>
+<main>
+    {% block body %}{% endblock %}
+</main>
+
+<footer>
+    <p>
+        Copyright Trello-Trollé Company
+    </p>
+</footer>
+</body>
 </html>

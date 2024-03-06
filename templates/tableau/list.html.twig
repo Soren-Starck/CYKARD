@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List of Tableaux{% endblock %}
+
+{% block body %}
+    <h3>Mes tableaux ({{ tableaux|length }})</h3>
+    <div class="tableaux">
+        {% for tableau in tableaux %}
+            <div class="ligne_tableau">
+                <div>{{ tableau.titretableau }}</div>
+                <div>
+                    <a href="{{ path('app_tableau_edit', {'id': tableau.idtableau}) }}">
+                        Modifier
+                    </a>
+                </div>
+                <div>
+                    <a href="{{ path('app_tableau_delete', {'id': tableau.idtableau}) }}">
+                        Supprimer le tableau
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div>
+        <a href="{{ path('app_tableau_new') }}">Ajouter un tableau</a>
+    </div>
+{% endblock %}
