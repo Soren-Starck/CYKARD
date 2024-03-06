@@ -10,16 +10,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_LOGIN', fields: ['login'])]
+#[ORM\UniqueConstraint(name: 'user_pkey', columns: ['login', 'email'])]
 #[UniqueEntity(fields: ['login'], message: 'There is already an account with this login')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
+    #[ORM\Id]
     #[ORM\Column(length: 180)]
     private ?string $login = null;
 
@@ -41,16 +38,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $prenom = null;
 
+    #[ORM\Id]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getLogin(): ?string
     {
