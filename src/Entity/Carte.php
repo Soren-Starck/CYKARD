@@ -26,9 +26,6 @@ class Carte
     #[ORM\Column(length: 7)]
     private ?string $couleurcarte = null;
 
-    #[ORM\Column]
-    private ?int $idcolonne = null;
-
     #[ORM\ManyToOne(inversedBy: 'cartes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Colonne $colonne = null;
@@ -85,18 +82,6 @@ class Carte
     public function setCouleurcarte(string $couleurcarte): static
     {
         $this->couleurcarte = $couleurcarte;
-
-        return $this;
-    }
-
-    public function getIdcolonne(): ?int
-    {
-        return $this->idcolonne;
-    }
-
-    public function setIdcolonne(int $idcolonne): static
-    {
-        $this->idcolonne = $idcolonne;
 
         return $this;
     }

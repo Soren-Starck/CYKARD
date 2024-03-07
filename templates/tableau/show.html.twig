@@ -1,0 +1,30 @@
+{# templates/tableau/show.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tableau.titretableau }}{% endblock %}
+
+{% block body %}
+    <h1>{{ tableau.titretableau }}</h1>
+
+    {% for colonne in colonnes %}
+        <div class="colonne">
+            <h2>{{ colonne.titrecolonne }}</h2>
+
+            <a href="{{ path('colonne_edit', {'id': colonne.id}) }}">Modify</a>
+            <a href="{{ path('colonne_delete', {'id': colonne.id}) }}">Delete</a>
+
+            {% for carte in colonne.cartes %}
+                <div class="carte">
+                    <h3>{{ carte.titrecarte }}</h3>
+                    <p>{{ carte.descriptifcarte }}</p>
+                    <a href="{{ path('carte_new', {'colonne_id': colonne.id}) }}">Create new carte</a>
+                    <a href="{{ path('carte_edit', {'id': carte.id}) }}">Modify</a>
+                    <a href="{{ path('carte_delete', {'id': carte.id}) }}">Delete</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <a href="{{ path('colonne_new', {'tableau_id': tableau.id}) }}">Create new colonne</a>
+{% endblock %}

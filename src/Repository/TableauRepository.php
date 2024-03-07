@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Tableau;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,16 @@ class TableauRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Tableau::class);
+    }
+
+    public function findByUser(User $user): array
+    {
+        return $this->createQueryBuilder('t')
+            ->innerJoin('t.users', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->getQuery()
+            ->getResult();
     }
 
 

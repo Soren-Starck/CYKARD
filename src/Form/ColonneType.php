@@ -15,10 +15,6 @@ class ColonneType extends AbstractType
     {
         $builder
             ->add('titrecolonne')
-            ->add('tableau', EntityType::class, [
-                'class' => Tableau::class,
-                'choice_label' => 'id',
-            ])
         ;
     }
 

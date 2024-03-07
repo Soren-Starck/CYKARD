@@ -39,7 +39,7 @@
                     <a href="{{ path('app_tableaux') }}">Mes tableaux</a>
                 </li>
                 <li>
-                    <a href="{{ path('app_account', { 'login': app.user.login|url_encode }) }}">
+                    <a href="{{ path('app_account') }}">
                         Mon compte (<span>{{ app.user.login }}</span>) <img alt="logout" src="{{ asset('assets/img/user.png') }}">
                     </a>
                 </li>

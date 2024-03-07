@@ -1,0 +1,15 @@
+{# templates/colonne/new.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle colonne{% endblock %}
+
+{% block body %}
+    <h3>Nouvelle colonne :</h3>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+
+    <button type="submit">Create</button>
+    {{ form_end(form) }}
+{% endblock %}
