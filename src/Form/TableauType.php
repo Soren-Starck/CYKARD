@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Tableau;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,6 +16,11 @@ class TableauType extends AbstractType
         $builder
             ->add('codetableau')
             ->add('titretableau')
+            ->add('users', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'id',
+                'multiple' => true,
+            ])
         ;
     }
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CarteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,7 +15,7 @@ class Carte
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $idcarte = null;
+    private ?int $id = null;
 
     #[ORM\Column(length: 50)]
     private ?string $titrecarte = null;
@@ -27,14 +29,26 @@ class Carte
     #[ORM\Column]
     private ?int $idcolonne = null;
 
-    public function getIdcarte(): ?int
+    #[ORM\ManyToOne(inversedBy: 'cartes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Colonne $colonne = null;
+
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'carte')]
+    private Collection $users;
+
+    public function __construct()
     {
-        return $this->idcarte;
+        $this->users = new ArrayCollection();
     }
 
-    public function setIdcarte(int $idcarte): static
+    public function getId(): ?int
     {
-        $this->idcarte = $idcarte;
+        return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
 
         return $this;
     }
@@ -83,6 +97,45 @@ class Carte
     public function setIdcolonne(int $idcolonne): static
     {
         $this->idcolonne = $idcolonne;
+
+        return $this;
+    }
+
+    public function getColonne(): ?Colonne
+    {
+        return $this->colonne;
+    }
+
+    public function setColonne(?Colonne $colonne): static
+    {
+        $this->colonne = $colonne;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addCarte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeCarte($this);
+        }
 
         return $this;
     }

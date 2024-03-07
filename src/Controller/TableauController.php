@@ -3,24 +3,25 @@
 namespace App\Controller;
 
 use App\Repository\AppDbRepository;
+use App\Repository\TableauRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class TableauController extends AbstractController
 {
-    private AppDbRepository $appDbRepository;
+    private TableauRepository $tableauRepository;
 
-    public function __construct(AppDbRepository $appDbRepository)
+    public function __construct(TableauRepository $tableauRepository)
     {
-        $this->appDbRepository = $appDbRepository;
+        $this->tableauRepository = $tableauRepository;
     }
 
     #[Route('/tableaux', name: 'app_tableaux')]
     public function listTableaux(): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        $tableaux = $this->appDbRepository->findAll();
+        $tableaux = $this->tableauRepository->findAll();
 
         return $this->render('tableau/list.html.twig', [
             'tableaux' => $tableaux,

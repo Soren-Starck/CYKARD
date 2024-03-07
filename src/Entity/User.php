@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -10,13 +12,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ORM\UniqueConstraint(name: 'user_pkey', columns: ['login', 'email'])]
 #[UniqueEntity(fields: ['login'], message: 'There is already an account with this login')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
     #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
     #[ORM\Column(length: 180)]
     private ?string $login = null;
 
@@ -38,12 +43,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $prenom = null;
 
-    #[ORM\Id]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
+
+    #[ORM\ManyToMany(targetEntity: Carte::class, inversedBy: 'users')]
+    private Collection $carte;
+
+    #[ORM\ManyToMany(targetEntity: Tableau::class, inversedBy: 'users')]
+    private Collection $tableau;
+
+    public function __construct()
+    {
+        $this->carte = new ArrayCollection();
+        $this->tableau = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
 
     public function getLogin(): ?string
@@ -164,6 +192,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Carte>
+     */
+    public function getCarte(): Collection
+    {
+        return $this->carte;
+    }
+
+    public function addCarte(Carte $carte): static
+    {
+        if (!$this->carte->contains($carte)) {
+            $this->carte->add($carte);
+        }
+
+        return $this;
+    }
+
+    public function removeCarte(Carte $carte): static
+    {
+        $this->carte->removeElement($carte);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tableau>
+     */
+    public function getTableau(): Collection
+    {
+        return $this->tableau;
+    }
+
+    public function addTableau(Tableau $tableau): static
+    {
+        if (!$this->tableau->contains($tableau)) {
+            $this->tableau->add($tableau);
+        }
+
+        return $this;
+    }
+
+    public function removeTableau(Tableau $tableau): static
+    {
+        $this->tableau->removeElement($tableau);
 
         return $this;
     }
