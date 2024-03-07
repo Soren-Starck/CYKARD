@@ -13,12 +13,12 @@
 
             <a href="{{ path('colonne_edit', {'id': colonne.id}) }}">Modify</a>
             <a href="{{ path('colonne_delete', {'id': colonne.id}) }}">Delete</a>
+            <a href="{{ path('carte_new', {'colonne_id': colonne.id}) }}">Create new carte</a>
 
             {% for carte in colonne.cartes %}
                 <div class="carte">
                     <h3>{{ carte.titrecarte }}</h3>
                     <p>{{ carte.descriptifcarte }}</p>
-                    <a href="{{ path('carte_new', {'colonne_id': colonne.id}) }}">Create new carte</a>
                     <a href="{{ path('carte_edit', {'id': carte.id}) }}">Modify</a>
                     <a href="{{ path('carte_delete', {'id': carte.id}) }}">Delete</a>
                 </div>
