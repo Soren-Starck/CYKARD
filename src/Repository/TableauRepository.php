@@ -2,59 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Tableau;
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Lib\Database\Database;
 
-/**
- * @extends ServiceEntityRepository<Tableau>
- *
- * @method Tableau|null find($id, $lockMode = null, $lockVersion = null)
- * @method Tableau|null findOneBy(array $criteria, array $orderBy = null)
- * @method Tableau[]    findAll()
- * @method Tableau[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class TableauRepository extends ServiceEntityRepository
+class TableauRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private Database $db;
+
+    public function __construct(Database $db)
     {
-        parent::__construct($registry, Tableau::class);
+        $this->db = $db;
     }
 
     public function findByUser(User $user): array
     {
-        return $this->createQueryBuilder('t')
-            ->innerJoin('t.users', 'u')
-            ->where('u.id = :userId')
-            ->setParameter('userId', $user->getId())
-            ->getQuery()
-            ->getResult();
+        return $this->db
+            ->table('tableau')
+            ->join('user_tableau', 'tableau.id = user_tableau.tableau_id')
+            ->where('user_tableau.user_id', '=', 'userId')
+            ->bind('userId', $user->getId())
+            ->fetchAll();
     }
-
-
-    //    /**
-    //     * @return Tableau[] Returns an array of Tableau objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('t.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Tableau
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

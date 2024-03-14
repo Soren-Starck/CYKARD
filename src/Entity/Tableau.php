@@ -6,6 +6,7 @@ use App\Repository\TableauRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: TableauRepository::class)]
 class Tableau
@@ -14,12 +15,15 @@ class Tableau
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['tableau.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['tableau.index'])]
     private ?string $codetableau = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['tableau.show'])]
     private ?string $titretableau = null;
 
     #[ORM\OneToMany(targetEntity: Colonne::class, mappedBy: 'tableau', orphanRemoval: true)]

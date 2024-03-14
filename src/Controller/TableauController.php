@@ -4,13 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Tableau;
 use App\Form\TableauType;
-use App\Repository\AppDbRepository;
+use App\Lib\ORM\Database;
 use App\Repository\TableauRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 class TableauController extends AbstractController
 {
@@ -25,9 +27,7 @@ class TableauController extends AbstractController
     public function listTableaux(): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        $user = $this->getUser();
-        $tableaux = $this->tableauRepository->findByUser($user);
-
+        $tableaux = $this->tableauRepository->findByUser($this->getUser());
         return $this->render('tableau/list.html.twig', [
             'tableaux' => $tableaux,
             'pagetitle' => 'Liste des tableaux',
@@ -98,4 +98,25 @@ class TableauController extends AbstractController
         ]);
     }
 
+    #[Route('/api/tableaux', name: 'app_tableau_api_show_all', methods: ['GET'])]
+    public function index(TableauRepository $tableauRepository): Response
+    {
+        $tableaux = $tableauRepository->findAll();
+        return $this->json($tableaux, 200, [], ['groups' => 'tableau.index']);
+    }
+
+    #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
+    public function show(Tableau $tableau): Response
+    {
+        return $this->json($tableau, 200, [], ['groups' => ['tableau.index', 'tableau.show']]);
+    }
+
+    #[Route('/api/tableau', name: 'app_tableau_api_update', methods: ['POST'])]
+    public function create(Request $request, #[MapRequestPayload(serializationContext: ['groups' => ['tableau.index', 'tableau.show']])] Tableau $tableau, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->persist($tableau);
+        $entityManager->flush();
+
+        return $this->json($tableau, 201, [], ['groups' => ['tableau.index', 'tableau.show']]);
+    }
 }
