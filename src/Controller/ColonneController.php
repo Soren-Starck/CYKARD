@@ -17,9 +17,7 @@ class ColonneController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, int $tableau_id): Response
     {
         $tableau = $entityManager->getRepository(Tableau::class)->find($tableau_id);
-        if (!$tableau) {
-            throw $this->createNotFoundException('No tableau found for id '.$tableau_id);
-        }
+        if (!$tableau) throw $this->createNotFoundException('No tableau found for id '.$tableau_id);
 
         $colonne = new Colonne();
         $colonne->setTableau($tableau);

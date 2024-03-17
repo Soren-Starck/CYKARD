@@ -2,6 +2,7 @@
 
 namespace App\Lib\Database;
 
+use AllowDynamicProperties;
 use PDO;
 
 /**
@@ -9,7 +10,7 @@ use PDO;
  *
  * Cette classe fournit des méthodes pour interagir avec une base de données en utilisant PDO.
  */
-class Database implements DatabaseInterface
+#[AllowDynamicProperties] class Database implements DatabaseInterface
 {
     /**
      * @var PDO L'instance PDO utilisée pour les interactions avec la base de données.
@@ -53,5 +54,22 @@ class Database implements DatabaseInterface
         }
         $stmt->execute();
         return $stmt;
+    }
+
+    /**
+     * Exécute une requête SQL brute et retourne tous les résultats.
+     *
+     * @param string $query La requête SQL à exécuter.
+     * @param array $params Les paramètres à lier à la requête.
+     * @return array Les résultats de la requête.
+     */
+    public function raw(string $query, array $params = []): array
+    {
+        $this->query = $query;
+        $this->params = $params;
+
+        $stmt = $this->pdo->prepare($this->query);
+        $stmt->execute($this->params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

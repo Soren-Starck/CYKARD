@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Carte;
+use App\Entity\Colonne;
 use App\Entity\Tableau;
 use App\Form\TableauType;
 use App\Lib\ORM\Database;
@@ -87,12 +89,48 @@ class TableauController extends AbstractController
     }
 
     #[Route('/tableau/{id}', name: 'app_tableau_show', methods: ['GET'])]
-    public function showTableau(Tableau $tableau): Response
+    public function showTableau($id): Response
     {
-        $colonnes = $tableau->getColonnes();
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $tableau_colonnes = $this->tableauRepository->findTableauColonnes($this->getUser(), $id);
 
+        $tableauObject = null;
+        $colonnes = [];
+
+        foreach ($tableau_colonnes as $item) {
+            if (!$tableauObject) {
+                $tableauObject = new Tableau();
+                $tableauObject->setId($id);
+                $tableauObject->setCodetableau($item['codetableau']);
+                $tableauObject->setTitretableau($item['titretableau']);
+            }
+
+            $colonne = new Colonne();
+            if ($item['colonne_id'] !== null) $colonne->setId($item['colonne_id']);
+            if ($item['titrecolonne'] !== null) $colonne->setTitrecolonne($item['titrecolonne']);
+            $colonne->setTableau($tableauObject);
+
+            if ($item['id']) {
+                $carte = new Carte();
+                $carte->setId($item['id']);
+                $carte->setTitrecarte($item['titrecarte']);
+                $carte->setDescriptifcarte($item['descriptifcarte']);
+                $carte->setCouleurcarte($item['couleurcarte']);
+                $carte->setColonne($colonne);
+
+                $colonne->addCarte($carte);
+            }
+
+            $colonnes[$item['colonne_id']] = $colonne;
+        }
+
+        foreach ($colonnes as $colonne) {
+            $tableauObject->addColonne($colonne);
+        }
+
+//        dd($tableau_colonnes, $tableauObject, $colonnes);
         return $this->render('tableau/show.html.twig', [
-            'tableau' => $tableau,
+            'tableau' => $tableauObject,
             'colonnes' => $colonnes,
             'pagetitle' => 'Tableau',
         ]);

@@ -82,9 +82,11 @@ class QueryBuilder
      * @param string $param Le paramètre à comparer à la colonne.
      * @return self L'instance actuelle de QueryBuilder.
      */
-    public function where(string $column, string $operator, string $param): self
+    public function where(string $column, string $operator, string $param, string $logic = 'AND'): self
     {
-        $this->query .= sprintf(' WHERE %s %s :%s', $column, $operator, $param);
+        if (str_contains($this->query, 'WHERE')) $this->query .= " $logic";
+        else $this->query .= ' WHERE';
+        $this->query .= sprintf(' %s %s :%s', $column, $operator, $param);
         return $this;
     }
 
@@ -115,6 +117,30 @@ class QueryBuilder
     }
 
     /**
+     * Obtient la requête SQL en cours de construction.
+     *
+     * @return string La requête SQL.
+     */
+    public function getQuery(): string
+    {
+        return $this->query;
+    }
+
+    /**
+     * Ajoute une clause LEFT JOIN à la requête SQL.
+     *
+     * @param string $table La table à joindre.
+     * @param string $condition La condition pour la jointure.
+     * @return self L'instance actuelle de QueryBuilder.
+     */
+    public function leftJoin(string $table, string $condition): self
+    {
+        $this->query .= sprintf(' LEFT JOIN %s ON %s', $table, $condition);
+        return $this;
+    }
+
+
+    /**
      * Exécute la requête SQL et retourne tous les résultats.
      *
      * @return array Les résultats de la requête.
@@ -124,15 +150,5 @@ class QueryBuilder
         $stmt = $this->pdo->prepare($this->query);
         $stmt->execute($this->params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * Obtient la requête SQL en cours de construction.
-     *
-     * @return string La requête SQL.
-     */
-    public function getQuery(): string
-    {
-        return $this->query;
     }
 }

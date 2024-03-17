@@ -2,47 +2,15 @@
 
 namespace App\Repository;
 
-use App\Entity\Colonne;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Lib\Database\Database;
 
-/**
- * @extends ServiceEntityRepository<Colonne>
- *
- * @method Colonne|null find($id, $lockMode = null, $lockVersion = null)
- * @method Colonne|null findOneBy(array $criteria, array $orderBy = null)
- * @method Colonne[]    findAll()
- * @method Colonne[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class ColonneRepository extends ServiceEntityRepository
+class ColonneRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private Database $db;
+
+    public function __construct(Database $db)
     {
-        parent::__construct($registry, Colonne::class);
+        $this->db = $db;
     }
 
-    //    /**
-    //     * @return Colonne[] Returns an array of Colonne objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Colonne
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }
