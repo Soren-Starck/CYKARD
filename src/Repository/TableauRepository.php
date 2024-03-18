@@ -6,7 +6,7 @@ use App\Entity\User;
 use App\Lib\Database\Database;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class TableauRepository
+class TableauRepository implements AbstractRepository
 {
     private Database $db;
 
@@ -37,7 +37,14 @@ class TableauRepository
             ->bind('userId', $user->getId())
             ->bind('tableauId', $id)
             ->fetchAll();
-
-
     }
+
+    public function findAll(): array
+    {
+        return $this->db
+            ->table('tableau')
+            ->fetchAll();
+    }
+
+
 }

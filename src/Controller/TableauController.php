@@ -6,7 +6,6 @@ use App\Entity\Carte;
 use App\Entity\Colonne;
 use App\Entity\Tableau;
 use App\Form\TableauType;
-use App\Lib\ORM\Database;
 use App\Repository\TableauRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -93,10 +92,8 @@ class TableauController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $tableau_colonnes = $this->tableauRepository->findTableauColonnes($this->getUser(), $id);
-
         $tableauObject = null;
         $colonnes = [];
-
         foreach ($tableau_colonnes as $item) {
             if (!$tableauObject) {
                 $tableauObject = new Tableau();
@@ -117,18 +114,13 @@ class TableauController extends AbstractController
                 $carte->setDescriptifcarte($item['descriptifcarte']);
                 $carte->setCouleurcarte($item['couleurcarte']);
                 $carte->setColonne($colonne);
-
                 $colonne->addCarte($carte);
             }
-
             $colonnes[$item['colonne_id']] = $colonne;
         }
 
-        foreach ($colonnes as $colonne) {
-            $tableauObject->addColonne($colonne);
-        }
+        foreach ($colonnes as $colonne) $tableauObject->addColonne($colonne);
 
-//        dd($tableau_colonnes, $tableauObject, $colonnes);
         return $this->render('tableau/show.html.twig', [
             'tableau' => $tableauObject,
             'colonnes' => $colonnes,

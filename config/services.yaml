@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+  jwt_secret_key: '%env(JWT_SECRET_KEY)%'
 
 services:
   # default configuration for services in *this* file
@@ -28,6 +29,10 @@ services:
     class: PDO
     arguments:
       - '%env(resolve:DATABASE_URL_2)%'
+
+  App\Lib\JWT\JsonWebToken:
+    arguments:
+      - '%jwt_secret_key%'
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones

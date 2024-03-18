@@ -28,6 +28,11 @@ use PDO;
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
+    public static function getInstance(): Database
+    {
+        return new Database(new PDO(getenv('DATABASE_URL_2')));
+    }
+
     /**
      * Crée une nouvelle instance de QueryBuilder et définit la table pour la requête.
      *
@@ -37,6 +42,23 @@ use PDO;
     public function table(string $table): QueryBuilder
     {
         return (new QueryBuilder($this->pdo))->table($table);
+    }
+
+    /**
+     * Exécute une requête SQL brute et retourne tous les résultats.
+     *
+     * @param string $query La requête SQL à exécuter.
+     * @param array $params Les paramètres à lier à la requête.
+     * @return array Les résultats de la requête.
+     */
+    public function raw(string $query, array $params = []): array
+    {
+        $this->query = $query;
+        $this->params = $params;
+
+        $stmt = $this->pdo->prepare($this->query);
+        $stmt->execute($this->params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -56,20 +78,40 @@ use PDO;
         return $stmt;
     }
 
-    /**
-     * Exécute une requête SQL brute et retourne tous les résultats.
-     *
-     * @param string $query La requête SQL à exécuter.
-     * @param array $params Les paramètres à lier à la requête.
-     * @return array Les résultats de la requête.
-     */
-    public function raw(string $query, array $params = []): array
+    public function insert(string $table, array $data): void
     {
-        $this->query = $query;
-        $this->params = $params;
+        $columns = array_keys($data);
+        $placeholders = array_map(fn($item) => ':' . $item, $columns);
 
-        $stmt = $this->pdo->prepare($this->query);
-        $stmt->execute($this->params);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = sprintf(
+            'INSERT INTO "%s" (%s) VALUES (%s)',
+            $table,
+            implode(', ', $columns),
+            implode(', ', $placeholders)
+        );
+
+        $this->execute($sql, $data);
+    }
+
+    public function update(string $table, array $data, array $where): void
+    {
+        $setPart = [];
+        foreach ($data as $column => $value) {
+            $setPart[] = "$column = :$column";
+        }
+
+        $wherePart = [];
+        foreach ($where as $column => $value) {
+            $wherePart[] = "$column = :$column";
+        }
+
+        $sql = sprintf(
+            'UPDATE %s SET %s WHERE %s',
+            $table,
+            implode(', ', $setPart),
+            implode(' AND ', $wherePart)
+        );
+
+        $this->execute($sql, array_merge($data, $where));
     }
 }

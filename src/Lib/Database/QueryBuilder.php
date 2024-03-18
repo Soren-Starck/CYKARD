@@ -43,7 +43,7 @@ class QueryBuilder
      * @param mixed $value La valeur à lier.
      * @return self L'instance actuelle de QueryBuilder.
      */
-    public function bind(string $param, $value): self
+    public function bind(string $param, mixed $value): self
     {
         $this->params[$param] = $value;
         return $this;
@@ -151,4 +151,5 @@ class QueryBuilder
         $stmt->execute($this->params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
 }

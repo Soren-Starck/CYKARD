@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: TableauRepository::class)]
-class Tableau
+class Tableau implements \JsonSerializable
 {
 
     #[ORM\Id]
@@ -129,5 +129,16 @@ class Tableau
         }
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'codetableau' => $this->codetableau,
+            'titretableau' => $this->titretableau,
+            'colonnes' => $this->colonnes,
+            'users' => $this->users,
+        ];
     }
 }
