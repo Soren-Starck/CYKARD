@@ -6,12 +6,15 @@ use App\Entity\Carte;
 use App\Entity\Colonne;
 use App\Entity\Tableau;
 use App\Form\TableauType;
+use App\Lib\Security\ConnexionUtilisateur;
+use App\Lib\Security\UserHelper;
 use App\Repository\TableauRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
@@ -27,12 +30,18 @@ class TableauController extends AbstractController
     #[Route('/tableaux', name: 'app_tableaux')]
     public function listTableaux(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $tableaux = $this->tableauRepository->findByUser($this->getUser());
-        return $this->render('tableau/list.html.twig', [
-            'tableaux' => $tableaux,
-            'pagetitle' => 'Liste des tableaux',
-        ]);
+        if (UserHelper::isUserLoggedIn()) {
+            $user = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+            if (!str_contains(ConnexionUtilisateur::getRoles()[0]['roles'], 'ROLE_USER'))
+                throw new AccessDeniedHttpException('Access Denied');
+            $tableaux = $this->tableauRepository->findByUser($user);
+            return $this->render('tableau/list.html.twig', [
+                'tableaux' => $tableaux,
+                'pagetitle' => 'Liste des tableaux',
+            ]);
+        } else {
+            return $this->redirectToRoute('app_login');
+        }
     }
 
     #[Route('/tableau/new', name: 'app_tableau_new', methods: ['GET', 'POST'])]

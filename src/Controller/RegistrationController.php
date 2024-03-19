@@ -68,12 +68,12 @@ class RegistrationController extends AbstractController
     #[Route('/verify/email/{token}', name: 'app_verify_email')]
     public function verifyEmail(string $token, Database $database): Response
     {
-        $userId = $database->table('user')->select('gozzog.user', ['id'])
+        $userLogin = $database->table('user')->select('gozzog.user', ['login'])
             ->where('verification_token', '=', 'verif_token')
             ->bind('verif_token', $token)
             ->fetchAll();
-        if (!$userId) throw $this->createNotFoundException('This verification token does not exist.');
-        $database->update('gozzog.user', ['is_verified' => 1, 'verification_token' => null], ['id' => $userId[0]['id']]);
+        if (!$userLogin) throw $this->createNotFoundException('This verification token does not exist.');
+        $database->update('gozzog.user', ['is_verified' => 1, 'verification_token' => null], ['login' => $userLogin[0]['login']]);
         return $this->redirectToRoute('app_login');
     }
 }

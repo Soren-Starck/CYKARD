@@ -28,6 +28,6 @@ class Cookie
 
     public static function supprimer($cle): void
     {
-        setcookie($cle, "", time() - 3600);
+        setcookie($cle, "", time() - 3600, "/");
     }
 }

@@ -15,13 +15,13 @@ class TableauRepository implements AbstractRepository
         $this->db = $db;
     }
 
-    public function findByUser(UserInterface $user): array
+    public function findByUser(string $login): array
     {
         return $this->db
             ->table('tableau')
             ->join('user_tableau', 'tableau.id = user_tableau.tableau_id')
-            ->where('user_tableau.user_id', '=', 'userId')
-            ->bind('userId', $user->getId())
+            ->where('user_tableau.user_login', '=', 'login')
+            ->bind('login', $login)
             ->fetchAll();
     }
 

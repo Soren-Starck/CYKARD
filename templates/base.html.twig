@@ -23,7 +23,7 @@
             <li>
                 <a href="{{ path('app_accueil') }}">Accueil</a>
             </li>
-            {% if not app.user %}
+            {% if not is_user_logged_in() %}
                 <li>
                     <a class="flex flex-row gap-2 items-center justify-center" href="{{ path('app_login') }}">
                         Connexion <img alt="login" src="{{ asset('assets/img/enter.png') }}" >
@@ -35,19 +35,20 @@
                     </a>
                 </li>
             {% else %}
-                <li>
-                    <a href="{{ path('app_tableaux') }}">Mes tableaux</a>
-                </li>
-                <li>
-                    <a href="{{ path('app_account') }}">
-                        Mon compte (<span>{{ app.user.login }}</span>) <img alt="logout" src="{{ asset('assets/img/user.png') }}">
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ path('app_logout') }}">
-                        Déconnexion <img alt="logout" src="{{ asset('assets/img/logout.png') }}">
-                    </a>
-                </li>
+                {% if is_user_logged_in() %}
+                    <li>
+                        <a href="{{ path('app_tableaux') }}">Mes tableaux</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_account') }}">
+                            Mon compte (<span>{{ app_user.currentUser }}</span>) <img alt="logout" src="{{ asset('assets/img/user.png') }}">                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_logout') }}">
+                            Déconnexion <img alt="logout" src="{{ asset('assets/img/logout.png') }}">
+                        </a>
+                    </li>
+                {% endif %}
             {% endif %}
         </ul>
     </nav>

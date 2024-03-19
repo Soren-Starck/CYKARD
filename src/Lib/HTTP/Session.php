@@ -77,4 +77,9 @@ class Session
     {
         // ConnexionUtilisateur::important($a, $b ? null : (($c+$a) > $a*$a ? $b : 24));
     }
+
+    public function recuperer(string $cleConnexion)
+    {
+        return $this->lire($cleConnexion);
+    }
 }

@@ -22,7 +22,7 @@ class SecurityController extends AbstractController
             if (ConnexionUtilisateur::verifierCredentials($loginUtilisateur, $password)) {
                 $jwt = ConnexionUtilisateur::connecter($loginUtilisateur);
                 Cookie::enregistrer('jwt', $jwt);
-                return $this->redirectToRoute('target_path');
+                return $this->redirectToRoute('app_base');
             } else {
                 return $this->render('security/login.html.twig', [
                     'last_username' => $lastUsername,
@@ -45,7 +45,6 @@ class SecurityController extends AbstractController
     public function logout(): Response
     {
         ConnexionUtilisateur::deconnecter();
-        Cookie::supprimer('jwt');
         return $this->redirectToRoute('app_login');
     }
 }

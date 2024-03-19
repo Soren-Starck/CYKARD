@@ -18,10 +18,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private int $id;
-
     #[ORM\Column(length: 180)]
     private ?string $login = null;
 
@@ -66,12 +62,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->carte = new ArrayCollection();
         $this->tableau = new ArrayCollection();
     }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
 
     public function getLogin(): ?string
     {
@@ -263,10 +253,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->verificationToken = $verificationToken;
         return $this;
-    }
-
-    public function setId(mixed $id): void
-    {
-        $this->id = $id;
     }
 }

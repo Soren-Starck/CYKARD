@@ -3,11 +3,12 @@
 namespace App\Lib\Security;
 
 use App\Lib\Database\Database;
+use App\Lib\HTTP\Cookie;
 use App\Lib\HTTP\Session;
 
 class ConnexionUtilisateur
 {
-    private static string $cleConnexion = "_utilisateurConnecte";
+    public static string $cleConnexion = "_utilisateurConnecte";
 
     public static function connecter(string $loginUtilisateur): string
     {
@@ -19,7 +20,9 @@ class ConnexionUtilisateur
     public static function deconnecter(): void
     {
         $session = Session::getInstance();
+        Cookie::supprimer('jwt');
         $session->supprimer(ConnexionUtilisateur::$cleConnexion);
+        $session->detruire();
     }
 
     public static function estUtilisateur($login): bool
@@ -47,10 +50,22 @@ class ConnexionUtilisateur
 
     public static function verifierCredentials(string $login, string $password): bool
     {
-        $user = Database::getInstance()->table('user')
-            ->where('login', '=', $login)
+        $user = Database::getInstance()->table('gozzog.user')
+            ->where('login', '=', 'login')
+            ->bind('login', $login)
             ->fetchAll();
         if (empty($user)) return false;
         return MotDePasse::verifier($password, $user[0]['password']);
+    }
+
+    public static function getRoles(): array
+    {
+        $roles = Database::getInstance()->table('gozzog.user')
+            ->select('gozzog.user', ['roles'])
+            ->where('login', '=', 'login')
+            ->bind('login', self::getLoginUtilisateurConnecte())
+            ->fetchAll();
+
+        return $roles;
     }
 }
