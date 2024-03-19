@@ -17,9 +17,9 @@
     <link rel="stylesheet" href="{{ asset('assets/styles/trellostyle.css') }}">
 </head>
 <body>
-<header class="w-full shadow flex flex-row justify-between backdrop-blur-md">
-    <div class="my-auto ml-5 drop-shadow-sm font-extrabold">LOGO</div>
-    <nav class="flex flex-row justify-end">
+<header class="w-full shadow flex flex-row justify-between backdrop-blur-md h-12">
+    <div class="my-auto ml-5 drop-shadow-sm font-extrabold text-xl">BLYAT-CARD</div>
+    <nav class="flex flex-row justify-end my-auto">
         <ul>
             <li>
                 <a href="{{ path('app_accueil') }}">Accueil</a>
@@ -46,7 +46,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('app_logout') }}">
+                        <a href="{{ path('app_logout') }}" class="text-red-500 bg-red-100 hover:bg-red-200 hover:text-red-600">
                             Déconnexion
                         </a>
                     </li>

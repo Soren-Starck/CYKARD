@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-*:focus {
-  outline: none;
-}
 
 html {
     @apply font-sans;
@@ -15,7 +12,7 @@ nav > ul > li > a{
 }
 
 .container {
-    @apply shadow rounded-xl border border-neutral-200;
+    @apply shadow rounded-xl border border-neutral-200 p-5;
 }
 
 input[type=text],
@@ -24,15 +21,11 @@ input[type=password]{
 }
 
 input[type=checkbox]{
-    @apply shadow border border-neutral-900 rounded-sm my-2 w-4 h-4 bg-neutral-900 hover:cursor-pointer;
+    @apply accent-neutral-900 shadow border border-neutral-900 rounded-sm my-2 w-4 h-4 bg-neutral-900 hover:cursor-pointer;
 }
 
 button[type=submit]{
     @apply transition w-full bg-neutral-900 hover:bg-neutral-800 text-gray-50 rounded-md shadow font-medium text-sm px-4 py-2 h-9;
-}
-
-form{
-    @apply p-5;
 }
 
 .VBox {
@@ -45,4 +38,8 @@ label{
 
 h1{
     @apply font-medium text-lg;
+}
+
+#registration_form  > div{
+    @apply flex flex-col py-1;
 }
