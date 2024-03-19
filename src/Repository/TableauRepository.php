@@ -63,7 +63,7 @@ class TableauRepository implements AbstractRepository
             ->where('tableau_id', '=', 'id')
             ->bind('login', $login)
             ->bind('id', $id)
-            ->fetchAll() !== null;
+            ->fetchAll() !== [];
     }
 
 }

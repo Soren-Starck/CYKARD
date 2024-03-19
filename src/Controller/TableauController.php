@@ -149,7 +149,9 @@ class TableauController extends AbstractController
     {
         $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
         if ($login === null) $login = $request->headers->get('Login');
-        if($tableauRepository->verifyUserTableau($login, $id) === false) throw new AccessDeniedHttpException('Access Denied');
+        if($tableauRepository->verifyUserTableau($login, $id) === false) {
+            throw new AccessDeniedHttpException('Access Denied');
+        }
 
         $data = json_decode($request->getContent(), true);
         $titre = $data['titre'] ?? null;
