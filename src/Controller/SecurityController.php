@@ -22,6 +22,7 @@ class SecurityController extends AbstractController
             $password = $request->request->get('password');
             if (ConnexionUtilisateur::verifierCredentials($loginUtilisateur, $password)) {
                 $jwt = ConnexionUtilisateur::connecter($loginUtilisateur);
+//                dd($jwt);
                 Cookie::enregistrer('jwt', $jwt);
                 return $this->redirectToRoute('app_base');
             } else {

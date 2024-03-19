@@ -25,16 +25,16 @@ class TableauRepository implements AbstractRepository
             ->fetchAll();
     }
 
-    public function findTableauColonnes(UserInterface $user, mixed $id): array
+    public function findTableauColonnes(string $login, mixed $id): array
     {
         return $this->db
             ->table('tableau')
             ->leftJoin('user_tableau', 'tableau.id = user_tableau.tableau_id')
             ->leftJoin('colonne', 'tableau.id = colonne.tableau_id')
             ->leftJoin('carte', 'colonne.id = carte.colonne_id')
-            ->where('user_tableau.user_id', '=', 'userId')
+            ->where('user_tableau.user_login', '=', 'userLogin')
             ->where('tableau.id', '=', 'tableauId')
-            ->bind('userId', $user->getId())
+            ->bind('userLogin', $login)
             ->bind('tableauId', $id)
             ->fetchAll();
     }
@@ -42,7 +42,7 @@ class TableauRepository implements AbstractRepository
     public function findAll(): array
     {
         return $this->db
-            ->table('tableau')
+            ->table('gozzog.tableau')
             ->fetchAll();
     }
 

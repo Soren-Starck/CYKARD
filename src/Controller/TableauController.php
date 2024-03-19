@@ -32,10 +32,10 @@ class TableauController extends AbstractController
     public function listTableaux(): Response
     {
         if (UserHelper::isUserLoggedIn()) {
-            $user = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+            $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
             if (!str_contains(ConnexionUtilisateur::getRoles()[0]['roles'], 'ROLE_USER'))
                 throw new AccessDeniedHttpException('Access Denied');
-            $tableaux = $this->tableauRepository->findByUser($user);
+            $tableaux = $this->tableauRepository->findByUser($login);
             return $this->render('tableau/list.html.twig', [
                 'tableaux' => $tableaux,
                 'pagetitle' => 'Liste des tableaux',
@@ -145,8 +145,10 @@ class TableauController extends AbstractController
     }
 
     #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
-    public function show(Tableau $tableau): Response
+    public function show(TableauRepository $tableauRepository, $id): Response
     {
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        $tableau = $tableauRepository->findTableauColonnes($login, $id);
         return $this->json($tableau, 200, [], ['groups' => ['tableau.index', 'tableau.show']]);
     }
 

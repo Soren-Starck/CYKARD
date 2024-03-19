@@ -14,7 +14,9 @@ class ConnexionUtilisateur
     {
         $session = Session::getInstance();
         $session->enregistrer(ConnexionUtilisateur::$cleConnexion, $loginUtilisateur);
-        return JsonWebToken::encoder(['login' => $loginUtilisateur]);
+        $jwt = JsonWebToken::encoder(['login' => $loginUtilisateur]);
+        Cookie::enregistrer('jwt', $jwt);
+        return $jwt;
     }
 
     public static function deconnecter(): void
