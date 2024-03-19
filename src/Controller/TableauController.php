@@ -141,7 +141,21 @@ class TableauController extends AbstractController
     public function index(TableauRepository $tableauRepository): Response
     {
         $tableaux = $tableauRepository->findAll();
-        return $this->json($tableaux, 200, [], ['groups' => 'tableau.index']);
+        return $this->json($tableaux);
+    }
+
+    #[Route('/api/tableau/{id}/modify',name : 'app_tableau_api_modify', methods: ['POST'])]
+    public function modify(TableauRepository $tableauRepository, $id, Request $request): Response
+    {
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
+        if($tableauRepository->verifyUserTableau($login, $id) === false) throw new AccessDeniedHttpException('Access Denied');
+
+        $data = json_decode($request->getContent(), true);
+        $titre = $data['titre'] ?? null;
+
+        $tableauRepository->modify($id, $titre);
+        return $this->json($tableauRepository->findTableauColonnes($login, $id), 200, [], ['groups' => ['tableau.index', 'tableau.show']]);
     }
 
     #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
