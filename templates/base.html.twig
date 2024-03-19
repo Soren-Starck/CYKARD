@@ -15,10 +15,11 @@
     {% endblock %}
     <link rel="stylesheet" href="{{ asset('assets/styles/navstyle.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/styles/trellostyle.css') }}">
-        </head>
+</head>
 <body>
-<header>
-    <nav>
+<header class="w-full flex flex-row justify-between border-b-[1px] border-neutral-100 backdrop-blur-md">
+    <div class="my-auto ml-5 drop-shadow-sm font-extrabold">LOGO</div>
+    <nav class="flex flex-row justify-end">
         <ul>
             <li>
                 <a href="{{ path('app_accueil') }}">Accueil</a>
@@ -26,12 +27,12 @@
             {% if not is_user_logged_in() %}
                 <li>
                     <a class="flex flex-row gap-2 items-center justify-center" href="{{ path('app_login') }}">
-                        Connexion <img alt="login" src="{{ asset('assets/img/enter.png') }}" >
+                        Connexion
                     </a>
                 </li>
                 <li>
                     <a class="flex flex-row gap-2 items-center justify-center" href="{{ path('app_register') }}">
-                        Inscription <img alt="S'inscrire" title="S'inscrire" src="{{ asset('assets/img/add-user.png') }}" >
+                        Inscription
                     </a>
                 </li>
             {% else %}
@@ -41,28 +42,31 @@
                     </li>
                     <li>
                         <a href="{{ path('app_account') }}">
-                            Mon compte (<span>{{ app_user.currentUser }}</span>) <img alt="logout" src="{{ asset('assets/img/user.png') }}">                        </a>
+                            Mon compte (<span>{{ app_user.currentUser }}</span>)
+                        </a>
                     </li>
                     <li>
                         <a href="{{ path('app_logout') }}">
-                            Déconnexion <img alt="logout" src="{{ asset('assets/img/logout.png') }}">
+                            Déconnexion
                         </a>
                     </li>
                 {% endif %}
             {% endif %}
         </ul>
     </nav>
-    <div>
-        {% for type, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ type }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-    </div>
 </header>
-<main>
+
+<div>
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+<main class="mt-10">
     {% block body %}{% endblock %}
 </main>
 
