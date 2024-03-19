@@ -118,4 +118,25 @@ use PDO;
 
         $this->execute($sql, array_merge($data, $where));
     }
+
+    public function delete(string $string, array $array)
+    {
+        $wherePart = [];
+        foreach ($array as $column => $value) {
+            $wherePart[] = "$column = :$column";
+        }
+
+        $sql = sprintf(
+            'DELETE FROM %s WHERE %s',
+            $string,
+            implode(' AND ', $wherePart)
+        );
+
+        $this->execute($sql, $array);
+    }
+
+    public function lastInsertId(): false|string
+    {
+        return $this->pdo->lastInsertId();
+    }
 }
