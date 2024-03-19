@@ -20,11 +20,15 @@ nav > ul > li > a{
 
 input[type=text],
 input[type=password]{
-    @apply h-9 text-sm shadow-sm rounded-md border border-neutral-200 px-3 py-1 mb-2 active:border-neutral-400;
+    @apply h-9 text-sm shadow-sm rounded-md border border-neutral-200 px-3 py-1 my-2 active:border-neutral-400;
+}
+
+input[type=checkbox]{
+    @apply shadow border border-neutral-900 rounded-sm my-2 w-4 h-4 bg-neutral-900 hover:cursor-pointer;
 }
 
 button[type=submit]{
-    @apply w-full bg-neutral-900 text-gray-50 rounded-md shadow font-medium text-sm px-4 py-2 h-9;
+    @apply transition w-full bg-neutral-900 hover:bg-neutral-800 text-gray-50 rounded-md shadow font-medium text-sm px-4 py-2 h-9;
 }
 
 form{
@@ -39,3 +43,6 @@ label{
     @apply font-medium text-sm;
 }
 
+h1{
+    @apply font-medium text-lg;
+}
