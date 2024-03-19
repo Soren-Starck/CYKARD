@@ -53,12 +53,12 @@ class CarteRepository
             ->fetchAll() !== [];
     }
 
-    public function deleteCard(int $id)
+    public function deleteCard(int $id): void
     {
         $this->db->delete('carte', ['id' => $id]);
     }
 
-    public function createCard(mixed $titre, mixed $descriptif, mixed $couleur, mixed $colonne_id, ?string $login): array
+    public function createCard(mixed $titre, mixed $descriptif, mixed $couleur, mixed $colonne_id): array
     {
         $this->db->insert('carte', [
             'titrecarte' => $titre,
@@ -85,7 +85,7 @@ class CarteRepository
         ]);
     }
 
-    public function deleteAssigns(int $id, ?string $login): void
+    public function deleteAssigns(int $id): void
     {
         $this->db->delete('user_carte', [
             'carte_id' => $id,
