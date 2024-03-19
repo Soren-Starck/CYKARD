@@ -18,10 +18,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private int $id;
-
     #[ORM\Column(length: 180)]
     private ?string $login = null;
 
@@ -47,7 +43,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column(type: 'boolean')]
-    private $isVerified = false;
+    private bool $isVerified = false;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $verificationToken = null;
 
     #[ORM\ManyToMany(targetEntity: Carte::class, inversedBy: 'users')]
     private Collection $carte;
@@ -55,17 +54,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Tableau::class, inversedBy: 'users')]
     private Collection $tableau;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $apiToken = null;
+
     public function __construct()
     {
         $this->carte = new ArrayCollection();
         $this->tableau = new ArrayCollection();
     }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
 
     public function getLogin(): ?string
     {
@@ -182,10 +178,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->isVerified;
     }
 
-    public function setIsVerified(bool $isVerified): static
+    public function setVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
-
         return $this;
     }
 
@@ -234,6 +229,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->tableau->removeElement($tableau);
 
+        return $this;
+    }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(?string $apiToken): static
+    {
+        $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+    public function getVerificationToken(): ?string
+    {
+        return $this->verificationToken;
+    }
+
+    public function setVerificationToken(?string $verificationToken): self
+    {
+        $this->verificationToken = $verificationToken;
         return $this;
     }
 }

@@ -20,17 +20,6 @@ class CarteType extends AbstractType
             ->add('titrecarte')
             ->add('descriptifcarte')
             ->add('couleurcarte')
-//            ->add('colonne', EntityType::class, [
-//                'class' => Colonne::class,
-//                'choice_label' => 'id',
-//                'data' => $options['colonne'],
-//            ])
-//            ->add('users', EntityType::class, [
-//                'class' => User::class,
-//                'choice_label' => 'id',
-//                'multiple' => true,
-//                'data' => [$this->security->getUser()],
-//            ])
         ;
     }
 

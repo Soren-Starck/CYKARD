@@ -2,59 +2,49 @@
 
 namespace App\Repository;
 
-use App\Entity\Tableau;
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Lib\Database\Database;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @extends ServiceEntityRepository<Tableau>
- *
- * @method Tableau|null find($id, $lockMode = null, $lockVersion = null)
- * @method Tableau|null findOneBy(array $criteria, array $orderBy = null)
- * @method Tableau[]    findAll()
- * @method Tableau[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class TableauRepository extends ServiceEntityRepository
+class TableauRepository implements AbstractRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private Database $db;
+
+    public function __construct(Database $db)
     {
-        parent::__construct($registry, Tableau::class);
+        $this->db = $db;
     }
 
-    public function findByUser(User $user): array
+    public function findByUser(string $login): array
     {
-        return $this->createQueryBuilder('t')
-            ->innerJoin('t.users', 'u')
-            ->where('u.id = :userId')
-            ->setParameter('userId', $user->getId())
-            ->getQuery()
-            ->getResult();
+        return $this->db
+            ->table('tableau')
+            ->join('user_tableau', 'tableau.id = user_tableau.tableau_id')
+            ->where('user_tableau.user_login', '=', 'login')
+            ->bind('login', $login)
+            ->fetchAll();
+    }
+
+    public function findTableauColonnes(string $login, mixed $id): array
+    {
+        return $this->db
+            ->table('tableau')
+            ->leftJoin('user_tableau', 'tableau.id = user_tableau.tableau_id')
+            ->leftJoin('colonne', 'tableau.id = colonne.tableau_id')
+            ->leftJoin('carte', 'colonne.id = carte.colonne_id')
+            ->where('user_tableau.user_login', '=', 'userLogin')
+            ->where('tableau.id', '=', 'tableauId')
+            ->bind('userLogin', $login)
+            ->bind('tableauId', $id)
+            ->fetchAll();
+    }
+
+    public function findAll(): array
+    {
+        return $this->db
+            ->table('gozzog.tableau')
+            ->fetchAll();
     }
 
 
-    //    /**
-    //     * @return Tableau[] Returns an array of Tableau objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('t.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Tableau
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }
