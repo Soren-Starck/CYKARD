@@ -145,9 +145,10 @@ class TableauController extends AbstractController
     }
 
     #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
-    public function show(TableauRepository $tableauRepository, $id): Response
+    public function show(TableauRepository $tableauRepository, Request $request, $id): Response
     {
         $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
         $tableau = $tableauRepository->findTableauColonnes($login, $id);
         return $this->json($tableau, 200, [], ['groups' => ['tableau.index', 'tableau.show']]);
     }
