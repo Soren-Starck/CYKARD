@@ -15,7 +15,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(Request $request): Response
     {
-        $lastUsername = $request->request->get('username');
+        $lastUsername = $request->request->get('login');
         if ($request->isMethod('POST')) {
             $loginUtilisateur = $lastUsername;
             $password = $request->request->get('password');
