@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Lib\HTTP\Cookie;
 use App\Lib\Security\ConnexionUtilisateur;
+use JetBrains\PhpStorm\NoReturn;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

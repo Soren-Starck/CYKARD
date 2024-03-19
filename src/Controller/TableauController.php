@@ -7,6 +7,7 @@ use App\Entity\Colonne;
 use App\Entity\Tableau;
 use App\Form\TableauType;
 use App\Lib\Security\ConnexionUtilisateur;
+use App\Lib\Security\JsonWebToken;
 use App\Lib\Security\UserHelper;
 use App\Repository\TableauRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -99,7 +100,6 @@ class TableauController extends AbstractController
     #[Route('/tableau/{id}', name: 'app_tableau_show', methods: ['GET'])]
     public function showTableau($id): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $tableau_colonnes = $this->tableauRepository->findTableauColonnes($this->getUser(), $id);
         $tableauObject = null;
         $colonnes = [];
