@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Carte;
-use App\Entity\Colonne;
-use App\Form\CarteType;
 use App\Lib\Security\ConnexionUtilisateur;
 use App\Repository\CarteRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -69,7 +66,7 @@ class CarteController extends AbstractController
 //    }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route('/api/carte/update/{id}', name: 'api_carte_edit', methods: ['POST'])]
     public function update(CarteRepository $carte, Request $request, int $id): Response
@@ -79,12 +76,15 @@ class CarteController extends AbstractController
         if ($carte->verifyUserCarte($id, $login) === false) {
             throw new AccessDeniedHttpException('Vous n\'avez pas les droits pour modifier cette carte');
         }
+
         $data = json_decode($request->getContent(), true);
-        //j'ai mis ca pour que ca marche avec postman, faudra juste enlever le ?? $request->headers->get('titre') et mettre $data['titre'] etc... Car c'etait pas dans le body
+
+        //j'ai mis ca pour que ca marche avec postman, faudra juste enlever toutes les variables et mettre data[''] dans les fonctions
         $titre = $data['titrecarte'] ?? $request->headers->get('titrecarte');
         $descriptif = $data['descriptifcarte'] ?? $request->headers->get('descriptifcarte');
         $couleur = $data['couleurcarte'] ?? $request->headers->get('couleurcarte');
         $colonne_id = $data['colonne_id'] ?? $request->headers->get('colonne_id');
+
         $carte->updateCard($id, $titre, $descriptif, $couleur, $colonne_id);
         return $this->json($carte->find($id));
     }
@@ -122,6 +122,7 @@ class CarteController extends AbstractController
         if ($login === null) $login = $request->headers->get('Login');
 
         $data = json_decode($request->getContent(), true);
+
         $titre = $data['titrecarte'] ?? $request->headers->get('titrecarte');
         $descriptif = $data['descriptifcarte'] ?? $request->headers->get('descriptifcarte');
         $couleur = $data['couleurcarte'] ?? $request->headers->get('couleurcarte');
@@ -136,7 +137,6 @@ class CarteController extends AbstractController
     {
         $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
         if ($login === null) $login = $request->headers->get('Login');
-        $data = json_decode($request->getContent(), true);
         $carte->assignCard($id,$login);
         return $this->json($carte->findAssign($id));
     }
@@ -146,7 +146,6 @@ class CarteController extends AbstractController
     {
         $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
         if ($login === null) $login = $request->headers->get('Login');
-        $data = json_decode($request->getContent(), true);
         $carte->unassignCard($id,$login);
         return $this->json(['message' => 'Carte désassignée']);
     }
