@@ -24,6 +24,7 @@ class SecurityController extends AbstractController
                 $jwt = ConnexionUtilisateur::connecter($loginUtilisateur);
 //                dd($jwt);
                 Cookie::enregistrer('jwt', $jwt);
+                dd(Cookie::lire('jwt'));
                 return $this->redirectToRoute('app_base');
             } else {
                 return $this->render('security/login.html.twig', [

@@ -122,4 +122,20 @@ use PDO;
     {
         return $this->pdo->lastInsertId();
     }
+
+    public function delete(string $string, array $array)
+    {
+        $wherePart = [];
+        foreach ($array as $column => $value) {
+            $wherePart[] = "$column = :$column";
+        }
+
+        $sql = sprintf(
+            'DELETE FROM %s WHERE %s',
+            $string,
+            implode(' AND ', $wherePart)
+        );
+
+        $this->execute($sql, $array);
+    }
 }
