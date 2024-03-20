@@ -88,12 +88,11 @@ use PDO;
         $placeholders = array_map(fn($item) => ':' . $item, $columns);
 
         $sql = sprintf(
-            'INSERT INTO "%s" (%s) VALUES (%s)',
+            'INSERT INTO %s (%s) VALUES (%s)',
             $table,
             implode(', ', $columns),
             implode(', ', $placeholders)
         );
-
         $this->execute($sql, $data);
     }
 
@@ -117,5 +116,10 @@ use PDO;
         );
 
         $this->execute($sql, array_merge($data, $where));
+    }
+
+    public function lastInsertId(): false|string
+    {
+        return $this->pdo->lastInsertId();
     }
 }

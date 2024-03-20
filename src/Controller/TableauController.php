@@ -160,6 +160,19 @@ class TableauController extends AbstractController
         return $this->json($tableauRepository->findTableauColonnes($login, $id), 200, [], ['groups' => ['tableau.index', 'tableau.show']]);
     }
 
+    #[Route('/api/tableau', name: 'app_tableau_api_create', methods: ['POST'])]
+    public function create(Request $request, TableauRepository $tableau): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $titre = $data['titre'] ?? null;
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
+        $id=$tableau->create($titre, $login);
+        return $this->json($tableau->findTableauColonnes($login, $id), 201, [], ['groups' => ['tableau.index', 'tableau.show']]);
+    }
+
+
+
     #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
     public function show(TableauRepository $tableauRepository, Request $request, $id): Response
     {
@@ -169,12 +182,5 @@ class TableauController extends AbstractController
         return $this->json($tableau, 200, [], ['groups' => ['tableau.index', 'tableau.show']]);
     }
 
-    #[Route('/api/tableau', name: 'app_tableau_api_update', methods: ['POST'])]
-    public function create(Request $request, #[MapRequestPayload(serializationContext: ['groups' => ['tableau.index', 'tableau.show']])] Tableau $tableau, EntityManagerInterface $entityManager): Response
-    {
-        $entityManager->persist($tableau);
-        $entityManager->flush();
 
-        return $this->json($tableau, 201, [], ['groups' => ['tableau.index', 'tableau.show']]);
-    }
 }
