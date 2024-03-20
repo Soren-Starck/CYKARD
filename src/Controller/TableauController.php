@@ -144,6 +144,13 @@ class TableauController extends AbstractController
         return $this->json($tableaux);
     }
 
+
+
+
+
+
+
+     ## Fonctions API
     #[Route('/api/tableau/{id}/modify',name : 'app_tableau_api_modify', methods: ['POST'])]
     public function modify(TableauRepository $tableauRepository, $id, Request $request): Response
     {
@@ -182,8 +189,6 @@ class TableauController extends AbstractController
         $tableauRepository->delete($id);
         return $this->json(null, 204);
     }
-
-
 
     #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
     public function show(TableauRepository $tableauRepository, Request $request, $id): Response
