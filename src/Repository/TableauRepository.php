@@ -80,4 +80,16 @@ class TableauRepository implements AbstractRepository
         return $id;
     }
 
+    public function delete(mixed $id)
+    {
+        $this->db->delete(
+            'gozzog.user_tableau',
+            ['tableau_id' => $id]
+        );
+        $this->db->delete(
+            'gozzog.tableau',
+            ['id' => $id]
+        );
+    }
+
 }

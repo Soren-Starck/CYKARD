@@ -171,6 +171,18 @@ class TableauController extends AbstractController
         return $this->json($tableau->findTableauColonnes($login, $id), 201, [], ['groups' => ['tableau.index', 'tableau.show']]);
     }
 
+    #[Route('/api/tableau/{id}/delete', name: 'app_tableau_api_delete', methods: ['GET'])]
+    public function delete(TableauRepository $tableauRepository, $id, Request $request): Response
+    {
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
+        if($tableauRepository->verifyUserTableau($login, $id) === false) {
+            throw new AccessDeniedHttpException('Access Denied');
+        }
+        $tableauRepository->delete($id);
+        return $this->json(null, 204);
+    }
+
 
 
     #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
