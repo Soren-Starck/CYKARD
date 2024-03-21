@@ -7,19 +7,16 @@ use App\Entity\Colonne;
 use App\Entity\Tableau;
 use App\Form\TableauType;
 use App\Lib\Security\ConnexionUtilisateur;
-use App\Lib\Security\JsonWebToken;
 use App\Lib\Security\UserHelper;
 use App\Repository\TableauRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
-class TableauController extends AbstractController
+class TableauController extends GeneriqueController
 {
     private TableauRepository $tableauRepository;
 
