@@ -24,6 +24,7 @@ class JwtSubscriber implements EventSubscriberInterface
 
         $authorizationHeader = $request->headers->get('Authorization');
 
+        //red
         if (!$authorizationHeader) throw new AccessDeniedHttpException('Authorization header is missing');
 
         if (!str_starts_with($authorizationHeader, 'Bearer ')) throw new AccessDeniedHttpException('Invalid Authorization header format');

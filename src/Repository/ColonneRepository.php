@@ -17,13 +17,26 @@ class ColonneRepository
     public function findByTableau(string $login, $id): array
     {
         return $this->db
-            ->table('colonne')->select('colonne', ['titrecolonne'])
+            ->table('colonne')->select('colonne', ['colonne.id, titrecolonne'])
             ->leftJoin('tableau', 'colonne.tableau_id = tableau.id')
             ->join('user_tableau', 'tableau.id = user_tableau.tableau_id')
             ->where('user_tableau.user_login', '=', 'userLogin')
             ->where('tableau.id', '=', 'tableauId')
             ->bind('userLogin', $login)
             ->bind('tableauId', $id)
+            ->fetchAll();
+    }
+
+    public function findByTableauAndColonne(string $login, $id): array
+    {
+        return $this->db
+            ->table('colonne')->select('colonne', ['colonne.id, titrecolonne'])
+            ->leftJoin('tableau', 'colonne.tableau_id = tableau.id')
+            ->join('user_tableau', 'tableau.id = user_tableau.tableau_id')
+            ->where('user_tableau.user_login', '=', 'userLogin')
+            ->where('colonne.id', '=', 'colonneId')
+            ->bind('userLogin', $login)
+            ->bind('colonneId', $id)
             ->fetchAll();
     }
 
