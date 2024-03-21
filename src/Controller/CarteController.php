@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 class CarteController extends AbstractController
 {
@@ -68,97 +69,96 @@ class CarteController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('/api/carte/update/{id}', name: 'api_carte_edit', methods: ['POST'])]
+    #[Route('/api/carte/update/{id}', name: 'api_carte_edit',requirements: ['id' => Requirement::DIGITS], methods: ['PUT'])]
     public function update(CarteRepository $carte, Request $request, int $id): Response
     {
         $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
         if ($login === null) $login = $request->headers->get('Login');
-        if ($carte->verifyUserCarte($id, $login) === false) {
-            throw new AccessDeniedHttpException('Vous n\'avez pas les droits pour modifier cette carte');
-        }
-
+        if ($carte->verifyUserCarte($id, $login) === false) return  $this->json(['error' => 'Acces denied'], 403);
         $data = json_decode($request->getContent(), true);
 
-        //j'ai mis ca pour que ca marche avec postman, faudra juste enlever toutes les variables et mettre data[''] dans les fonctions
-        $titre = $data['titrecarte'] ?? $request->headers->get('titrecarte');
-        $descriptif = $data['descriptifcarte'] ?? $request->headers->get('descriptifcarte');
-        $couleur = $data['couleurcarte'] ?? $request->headers->get('couleurcarte');
-        $colonne_id = $data['colonne_id'] ?? $request->headers->get('colonne_id');
+        $titre = $data['titrecarte'];
+        if (!$titre) return $this->json(['error' => 'Titre manquant'], 400);
+        $descriptif = $data['descriptifcarte'];
+        if (!$descriptif) return $this->json(['error' => 'Descriptif manquant'], 400);
+        $couleur = $data['couleurcarte'];
+        if (!$couleur) return $this->json(['error' => 'Couleur manquante'], 400);
+        $colonne_id = $data['colonne_id'];
+        if (!$colonne_id) return $this->json(['error' => 'Colonne manquante'], 400);
 
-        $carte->updateCard($id, $titre, $descriptif, $couleur, $colonne_id);
-        return $this->json($carte->find($id));
+        $dbResponse = $carte->updateCard($id, $titre, $descriptif, $couleur, $colonne_id);
+        if (!$dbResponse) return $this->json(['error' => 'Erreur lors de la mise à jour de la carte'], 500);
+        return $this->json(null, 200);
     }
 
-//    #[Route('/carte/delete/{id}', name: 'carte_delete', methods: ['GET'])]
-//    public function delete(EntityManagerInterface $entityManager, int $id): Response
-//    {
-//        $carte = $entityManager->getRepository(Carte::class)->find($id);
-//        if (!$carte) {
-//            throw $this->createNotFoundException('No carte found for id '.$id);
-//        }
-//
-//        $entityManager->remove($carte);
-//        $entityManager->flush();
-//
-//        return $this->redirectToRoute('app_tableaux');
-//    }
-
-    #[Route('/api/carte/delete/{id}', name: 'api_carte_delete', methods: ['POST'])]
+    #[Route('/api/carte/delete/{id}', name: 'api_carte_delete', methods: ['DEL'])]
     public function delete(CarteRepository $carte, Request $request, int $id): Response
     {
         $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) $login = $request->headers->get('Login');
-        if ($carte->verifyUserCarte($id, $login) === false) throw new AccessDeniedHttpException('Vous n\'avez pas les droits pour supprimer cette carte');
-
-        $carte->deleteAssigns($id, $login);
-        $carte->deleteCard($id);
-        return $this->json(['message' => 'Carte supprimée']);
+        if ($login === null) return $this->json(['error' => 'Access denied'], 403);
+        if (!$carte->verifyUserCarte($id, $login)) return $this->json(['error' => 'Access denied'], 403);
+        $dbResponse = $carte->deleteAssigns($id);
+        if (!$dbResponse) return $this->json(['error' => 'Erreur lors de la suppression des assignations'], 500);
+        $dbResponse = $carte->deleteCard($id);
+        if (!$dbResponse) return $this->json(['error' => 'Erreur lors de la suppression de la carte'], 500);
+        return $this->json(null, 204);
     }
 
-    #[Route('/api/carte/create', name: 'api_carte_create', methods: ['POST'])]
-    public function create(CarteRepository $carte, Request $request): Response
+    #[Route('/api/carte/create/{id_colonne}', name: 'api_carte_create', requirements: ['id' => Requirement::DIGITS], methods: ['POST'])]
+    public function create(CarteRepository $carte, Request $request,int $id_colonne): Response
     {
         $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) $login = $request->headers->get('Login');
-
+        if ($login === null) return $this->json(['error' => 'Access denied'], 403);
         $data = json_decode($request->getContent(), true);
-
-        $titre = $data['titrecarte'] ?? $request->headers->get('titrecarte');
-        $descriptif = $data['descriptifcarte'] ?? $request->headers->get('descriptifcarte');
-        $couleur = $data['couleurcarte'] ?? $request->headers->get('couleurcarte');
-        $colonne_id = $data['colonne_id'] ?? $request->headers->get('colonne_id');
-
-        $infoCard = $carte->createCard($titre, $descriptif, $couleur, $colonne_id, $login);
-        return $this->json($infoCard);
+        $titre = $data['titrecarte'];
+        $descriptif = $data['descriptifcarte'];
+        $couleur = $data['couleurcarte'];
+        if (!$titre) return $this->json(['error' => 'Titre manquant'], 400);
+        if (!$descriptif) return $this->json(['error' => 'Descriptif manquant'], 400);
+        if (!$couleur) return $this->json(['error' => 'Couleur manquante'], 400);
+        if (!$id_colonne) return $this->json(['error' => 'IdColonne manquante'], 400);
+        if (!$carte->verifyUserColonne($id_colonne, $login)) return $this->json(['error' => 'Access denied'], 403);
+        $infoCard = $carte->createCard($titre, $descriptif, $couleur, $id_colonne);
+        if (!$infoCard) return $this->json(['error' => 'Erreur lors de la création de la carte'], 500);
+        return $this->json($infoCard->toArray(), 201);
     }
 
     #[Route('/api/carte/assign/{id}', name: 'api_carte_assign', methods: ['POST'])]
     public function assign(CarteRepository $carte, Request $request, int $id): Response
     {
         $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) $login = $request->headers->get('Login');
-        $carte->assignCard($id,$login);
-        return $this->json($carte->findAssign($id));
+        if ($login === null) return $this->json(['error' => 'Access denied'], 403);
+        if (!$carte->verifyUserCarte($id, $login)) return $this->json(['error' => 'Access denied'], 403);
+        $dbResponse = $carte->assignCard($id,$login);
+        if (!$dbResponse) return $this->json(['error' => 'Erreur lors de l\'assignation de la carte'], 500);
+        return $this->json($dbResponse, 201);
     }
 
     #[Route('/api/carte/unassign/{id}', name: 'api_carte_unassign', methods: ['POST'])]
     public function unassign(CarteRepository $carte, Request $request, int $id): Response
     {
         $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) $login = $request->headers->get('Login');
-        $carte->unassignCard($id,$login);
-        return $this->json(['message' => 'Carte désassignée']);
+        if ($login === null) return $this->json(['error' => 'Access denied'], 403);
+        if (!$carte->verifyUserCarte($id, $login)) return $this->json(['error' => 'Access denied'], 403);
+        $dbResponse = $carte->unassignCard($id,$login);
+        if (!$dbResponse) return $this->json(['error' => 'Erreur lors de la désassignation de la carte'], 500);
+        return $this->json(null, 204);
     }
 
-    #[Route('/api/carte/read/{id}', name: 'api_carte_read', methods: ['GET'])]
-    public function read(CarteRepository $carte, int $id): Response
+    #[Route('/api/carte/read/{id_carte}', name: 'api_carte_read', methods: ['GET'])]
+    public function read(CarteRepository $carte, int $id_carte): Response
     {
-        return $this->json($carte->find($id));
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) return $this->json(['error' => 'Access denied'], 403);
+        if (!$carte->verifyUserCarte($id_carte, $login)) return $this->json(['error' => 'Access denied'], 403);
+        return $this->json($carte->find($id_carte));
     }
 
-    #[Route('/api/carte/readall', name: 'api_carte_readall', methods: ['GET'])]
-    public function readAll(CarteRepository $carte): Response
-    {
-        return $this->json($carte->getAll());
-    }
+//    #[Route('/api/carte/readall', name: 'api_carte_readall', methods: ['GET'])]
+//    public function readAll(CarteRepository $carte): Response
+//    {
+//        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+//        if ($login === null) return $this->json(['error' => 'Access denied'], 403);
+//        return $this->json($carte->getAll());
+//    }
 }

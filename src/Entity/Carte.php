@@ -124,4 +124,15 @@ class Carte
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'titrecarte' => $this->titrecarte,
+            'descriptifcarte' => $this->descriptifcarte,
+            'couleurcarte' => $this->couleurcarte,
+            'colonne_id' => $this->colonne->getId(),
+        ];
+    }
 }

@@ -119,7 +119,7 @@ use PDO;
         $this->execute($sql, array_merge($data, $where));
     }
 
-    public function delete(string $string, array $array)
+    public function delete(string $string, array $array): void
     {
         $wherePart = [];
         foreach ($array as $column => $value) {
@@ -133,6 +133,7 @@ use PDO;
         );
 
         $this->execute($sql, $array);
+
     }
 
     public function lastInsertId(): false|string
