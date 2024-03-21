@@ -141,17 +141,7 @@ class CarteRepository
         $array = $this->db
             ->table('carte')
             ->fetchAll();
-        $cards = [];
-        foreach ($array as $item) {
-            $carte = new Carte();
-            $carte->setId($item['id']);
-            $carte->setTitrecarte($item['titrecarte']);
-            $carte->setDescriptifcarte($item['descriptifcarte']);
-            $carte->setCouleurcarte($item['couleurcarte']);
-            $carte->setColonne($item['colonne_id']);
-            $cards[] = $carte;
-        }
-        return $cards;
+        return $this->constructArray($array);
     }
 
     public function verifyUserColonne($id_colonne, string $login): bool
@@ -163,5 +153,48 @@ class CarteRepository
             ->bind('id_colonne', $id_colonne)
             ->bind('tableau_id', $login)
             ->fetchAll() !== [];
+    }
+
+    public function findByColonne(int $id_colonne, string $login): array
+    {
+        return $this->db
+            ->table('carte')
+            ->where('colonne_id', '=', 'id_colonne')
+            ->where('user_login', '=', 'login')
+            ->bind('id_colonne', $id_colonne)
+            ->bind('login', $login)
+            ->fetchAll();
+    }
+
+    /**
+     * @param array $array
+     * @return array
+     */
+    public function constructArray(array $array): array
+    {
+        $cards = [];
+        foreach ($array as $item) {
+            $carte = new Carte();
+            $carte->setId($item['id']);
+            $carte->setTitrecarte($item['titrecarte']);
+            $carte->setDescriptifcarte($item['descriptifcarte']);
+            $carte->setCouleurcarte($item['couleurcarte']);
+            $cards[] = $carte;
+        }
+        return $cards;
+    }
+
+    public function verifyUserTableauByCard(int $id, ?string $login) : bool
+    {
+        return $this->db
+                ->table('carte')
+                ->leftJoin('colonne', 'carte.colonne_id = colonne.id')
+                ->join('tableau', 'colonne.tableau_id = tableau.id')
+                ->join('user_tableau', 'tableau.id = user_tableau.tableau_id')
+                ->where('carte.id', '=', 'id')
+                ->where('user_tableau.user_login', '=', 'login')
+                ->bind('id', $id)
+                ->bind('login', $login)
+                ->fetchAll() !== [];
     }
 }
