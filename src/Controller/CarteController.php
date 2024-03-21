@@ -73,8 +73,7 @@ class CarteController extends GeneriqueController
     #[Route('/api/carte/update/{id}', name: 'api_carte_edit',requirements: ['id' => Requirement::DIGITS], methods: ['PUT'])]
     public function update(CarteRepository $carte, Request $request, int $id): Response
     {
-        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) $login = $request->headers->get('Login');
+        $login = $this->getLoginFromJwt($request);
         if ($carte->verifyUserTableauByCard($id, $login) === false) return  $this->json(['error' => 'Acces denied'], 403);
         $data = json_decode($request->getContent(), true);
         $titre = $data['titrecarte'];
@@ -93,8 +92,7 @@ class CarteController extends GeneriqueController
     #[Route('/api/carte/delete/{id}', name: 'api_carte_delete', methods: ['DEL'])]
     public function delete(CarteRepository $carte, Request $request, int $id): Response
     {
-        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) return $this->json(['error' => 'Access denied'], 403);
+        $login = $this->getLoginFromJwt($request);
         if (!$carte->verifyUserTableauByCard($id, $login)) return $this->json(['error' => 'Access denied'], 403);
         $dbResponse = $carte->deleteAssigns($id);
         if (!$dbResponse) return $this->json(['error' => 'Erreur lors de la suppression des assignations'], 500);
@@ -106,8 +104,7 @@ class CarteController extends GeneriqueController
     #[Route('/api/carte/create/{id_colonne}', name: 'api_carte_create', requirements: ['id' => Requirement::DIGITS], methods: ['POST'])]
     public function create(ColonneRepository $colonneRepository, CarteRepository $carte, Request $request,int $id_colonne): Response
     {
-        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) return $this->json(['error' => 'Access denied'], 403);
+        $login = $this->getLoginFromJwt($request);
         $data = json_decode($request->getContent(), true);
         $titre = $data['titrecarte'];
         $descriptif = $data['descriptifcarte'];
@@ -116,17 +113,16 @@ class CarteController extends GeneriqueController
         if (!$descriptif) return $this->json(['error' => 'Descriptif manquant'], 400);
         if (!$couleur) return $this->json(['error' => 'Couleur manquante'], 400);
         if (!$id_colonne) return $this->json(['error' => 'IdColonne manquante'], 400);
-        if (!$colonneRepository->verifyUserTableauByColonne($id_colonne, $login)) return $this->json(['error' => 'Access denied'], 403);
+        if (!$colonneRepository->verifyUserTableauByColonne($login,$id_colonne)) return $this->json(['error' => 'Access denied'], 403);
         $infoCard = $carte->createCard($titre, $descriptif, $couleur, $id_colonne);
         if (!$infoCard) return $this->json(['error' => 'Erreur lors de la création de la carte'], 500);
         return $this->json($infoCard->toArray(), 201);
     }
 
     #[Route('/api/carte/assign/{id}', name: 'api_carte_assign', methods: ['POST'])]
-    public function assign(CarteRepository $carte, int $id): Response
+    public function assign(CarteRepository $carte,Request $request, int $id): Response
     {
-        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) return $this->json(['error' => 'Access denied'], 403);
+        $login = $this->getLoginFromJwt($request);
         if (!$carte->verifyUserTableauByCard($id, $login)) return $this->json(['error' => 'Access denied'], 403);
         $dbResponse = $carte->assignCard($id,$login);
         if (!$dbResponse) return $this->json(['error' => 'Erreur lors de l\'assignation de la carte'], 500);
@@ -134,10 +130,9 @@ class CarteController extends GeneriqueController
     }
 
     #[Route('/api/carte/unassign/{id}', name: 'api_carte_unassign', methods: ['POST'])]
-    public function unassign(CarteRepository $carte, int $id): Response
+    public function unassign(CarteRepository $carte,Request $request, int $id): Response
     {
-        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) return $this->json(['error' => 'Access denied'], 403);
+        $login = $this->getLoginFromJwt($request);
         if (!$carte->verifyUserTableauByCard($id, $login)) return $this->json(['error' => 'Access denied'], 403);
         $dbResponse = $carte->unassignCard($id,$login);
         if (!$dbResponse) return $this->json(['error' => 'Erreur lors de la désassignation de la carte'], 500);
@@ -145,9 +140,9 @@ class CarteController extends GeneriqueController
     }
 
     #[Route('/api/carte/read/{id_colonne}', name: 'api_carte_read', methods: ['GET'])]
-    public function read(CarteRepository $carte, int $id_colonne): Response
+    public function read(CarteRepository $carte, Request $request, int $id_colonne): Response
     {
-        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        $login = $this->getLoginFromJwt($request);
         $carte = $carte->findByColonne($id_colonne, $login);
         return $carte ? $this->json($carte, 200) : $this->json(['error' => 'no card found'], 404);
     }
