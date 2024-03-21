@@ -88,12 +88,11 @@ use PDO;
         $placeholders = array_map(fn($item) => ':' . $item, $columns);
 
         $sql = sprintf(
-            'INSERT INTO "%s" (%s) VALUES (%s)',
+            'INSERT INTO %s (%s) VALUES (%s)',
             $table,
             implode(', ', $columns),
             implode(', ', $placeholders)
         );
-
         $this->execute($sql, $data);
     }
 
@@ -119,7 +118,12 @@ use PDO;
         $this->execute($sql, array_merge($data, $where));
     }
 
-    public function delete(string $string, array $array): void
+    public function lastInsertId(): false|string
+    {
+        return $this->pdo->lastInsertId();
+    }
+
+    public function delete(string $string, array $array)
     {
         $wherePart = [];
         foreach ($array as $column => $value) {
@@ -133,11 +137,5 @@ use PDO;
         );
 
         $this->execute($sql, $array);
-
-    }
-
-    public function lastInsertId(): false|string
-    {
-        return $this->pdo->lastInsertId();
     }
 }

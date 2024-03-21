@@ -63,6 +63,5 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_base');
-
     }
 }

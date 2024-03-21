@@ -96,4 +96,12 @@ class Colonne
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'titrecolonne' => $this->titrecolonne,
+        ];
+    }
 }

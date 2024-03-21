@@ -46,5 +46,50 @@ class TableauRepository implements AbstractRepository
             ->fetchAll();
     }
 
+    public function modify($id, $titre)
+    {
+        $this->db->update(
+            'gozzog.tableau',
+            ['titretableau' => $titre],
+            ['id' => $id]
+        );
+    }
+
+    public function verifyUserTableau(string $login, mixed $id): bool
+    {
+        return $this->db
+            ->table('user_tableau')
+            ->where('user_login', '=', 'login')
+            ->where('tableau_id', '=', 'id')
+            ->bind('login', $login)
+            ->bind('id', $id)
+            ->fetchAll() !== [];
+    }
+
+    public function create(mixed $titre, ?string $login)
+    {
+        $this->db->insert(
+            'gozzog.tableau',
+            ['titretableau' => $titre]
+        );
+        $id = $this->db->lastInsertId();
+        $this->db->insert(
+            'gozzog.user_tableau',
+            ['user_login' => $login, 'tableau_id' => $id]
+        );
+        return $id;
+    }
+
+    public function delete(mixed $id)
+    {
+        $this->db->delete(
+            'gozzog.user_tableau',
+            ['tableau_id' => $id]
+        );
+        $this->db->delete(
+            'gozzog.tableau',
+            ['id' => $id]
+        );
+    }
 
 }
