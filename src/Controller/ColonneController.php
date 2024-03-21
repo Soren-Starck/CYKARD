@@ -2,77 +2,63 @@
 
 namespace App\Controller;
 
-use App\Entity\Colonne;
-use App\Entity\Tableau;
-use App\Form\ColonneType;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Lib\Security\ConnexionUtilisateur;
+use App\Repository\ColonneRepository;
+use App\Repository\TableauRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 class ColonneController extends AbstractController
 {
-    #[Route('/tableau/{tableau_id}/colonne/new', name: 'colonne_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, int $tableau_id): Response
+    #[Route('/api/tableau/{tableau_id}/colonnes', name: 'app_colonnes_tableau_api_show', requirements: ['tableau_id' => Requirement::DIGITS], methods: ['GET'])]
+    public function show(ColonneRepository $colonneRepository, Request $request, $tableau_id): Response
     {
-        $tableau = $entityManager->getRepository(Tableau::class)->find($tableau_id);
-        if (!$tableau) throw $this->createNotFoundException('No tableau found for id '.$tableau_id);
-
-        $colonne = new Colonne();
-        $colonne->setTableau($tableau);
-
-        $form = $this->createForm(ColonneType::class, $colonne);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($colonne);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_tableaux');
-        }
-
-        return $this->render('colonne/new.html.twig', [
-            'form' => $form->createView(),
-            'pagetitle' => 'Nouvelle colonne',
-        ]);
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
+        $colonne = $colonneRepository->findByTableau($login, $tableau_id);
+        if (!$colonne) return $this->json(['error' => 'No colonne found'], 404);
+        return $this->json($colonne, 200);
     }
 
-    #[Route('/colonne/edit/{id}', name: 'colonne_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    #[Route('/api/colonne/{id}/modify', name: 'app_colonne_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
+    public function edit(ColonneRepository $colonneRepository, Request $request, $id): Response
     {
-        $colonne = $entityManager->getRepository(Colonne::class)->find($id);
-        if (!$colonne) {
-            throw $this->createNotFoundException('No colonne found for id '.$id);
-        }
-
-        $form = $this->createForm(ColonneType::class, $colonne);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_tableaux');
-        }
-
-        return $this->render('colonne/edit.html.twig', [
-            'form' => $form->createView(),
-            'pagetitle' => 'Modifier une colonne',
-        ]);
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
+        if (!$colonneRepository->verifyUserTableauByColonne($login, $id)) return $this->json(['error' => 'Access Denied'], 403);
+        $data = json_decode($request->getContent(), true);
+        $titre = $data['TitreColonne'];
+        if (!$titre) return $this->json(['error' => 'TitreColonne is required'], 400);
+        $colonneRepository->editTitreColonne($id, $titre);
+        return $this->json($colonneRepository->findByTableau($login, $id), 200);
     }
 
-    #[Route('/colonne/delete/{id}', name: 'colonne_delete', methods: ['GET'])]
-    public function delete(EntityManagerInterface $entityManager, int $id): Response
+    #[Route('/api/colonne/{id}/delete', name: 'app_colonne_api_delete', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]
+    public function delete(ColonneRepository $colonneRepository, $id, Request $request): Response
     {
-        $colonne = $entityManager->getRepository(Colonne::class)->find($id);
-        if (!$colonne) {
-            throw $this->createNotFoundException('No colonne found for id '.$id);
-        }
-
-        $entityManager->remove($colonne);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_tableaux');
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
+        if (!$colonneRepository->verifyUserTableauByColonne($login, $id)) return $this->json(['error' => 'Access Denied'], 403);
+        $dbResponse = $colonneRepository->delete($id);
+        if (!$dbResponse) return $this->json(['error' => 'Error deleting colonne'], 500);
+        return $this->json(null, 204);
     }
 
+    #[Route('/api/colonne/create', name: 'app_colonne_api_create', methods: ['POST'])]
+    public function create(TableauRepository $tableauRepository, ColonneRepository $colonneRepository, Request $request): Response
+    {
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
+        $data = json_decode($request->getContent(), true);
+        $titre = $data['TitreColonne'];
+        $tableau_id = $data['TableauId'];
+        if (!$titre || !$tableau_id) return $this->json(['error' => 'TitreColonne and TableauId are required'], 400);
+        if (!$tableauRepository->verifyUserTableau($login, $tableau_id)) return $this->json(['error' => 'Access Denied'], 403);
+        $colonneResponse = $colonneRepository->create($titre, $tableau_id);
+        if (!$colonneResponse) return $this->json(['error' => 'Error creating colonne'], 500);
+        return $this->json($colonneResponse->toArray(), 201);
+    }
 }

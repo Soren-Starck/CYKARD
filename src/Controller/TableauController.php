@@ -27,7 +27,6 @@ class TableauController extends AbstractController
     {
         $this->tableauRepository = $tableauRepository;
     }
-
     #[Route('/tableaux', name: 'app_tableaux')]
     public function listTableaux(): Response
     {
@@ -96,7 +95,6 @@ class TableauController extends AbstractController
 
         return $this->redirectToRoute('app_tableaux');
     }
-
     #[Route('/tableau/{id}', name: 'app_tableau_show', methods: ['GET'])]
     public function showTableau($id): Response
     {
@@ -143,12 +141,6 @@ class TableauController extends AbstractController
         $tableaux = $tableauRepository->findAll();
         return $this->json($tableaux);
     }
-
-
-
-
-
-
 
      ## Fonctions API
     #[Route('/api/tableau/{id}/modify',name : 'app_tableau_api_modify', methods: ['POST'])]
@@ -198,6 +190,5 @@ class TableauController extends AbstractController
         $tableau = $tableauRepository->findTableauColonnes($login, $id);
         return $this->json($tableau, 200, [], ['groups' => ['tableau.index', 'tableau.show']]);
     }
-
 
 }
