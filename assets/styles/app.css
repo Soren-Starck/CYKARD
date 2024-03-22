@@ -30,8 +30,16 @@ button[type=submit]{
     @apply transition w-full bg-neutral-900 hover:bg-neutral-800 text-gray-50 rounded-md shadow font-medium text-sm px-4 py-2 h-9;
 }
 
+button{
+    @apply transition border-2 font-medium border-neutral-900 rounded-md shadow text-neutral-900 px-4 py-2 h-8 flex flex-row items-center gap-2 hover:bg-neutral-900 hover:text-gray-50;
+}
+
 .VBox {
     @apply flex flex-col;
+}
+
+.HBox {
+    @apply flex flex-row;
 }
 
 label{
@@ -59,5 +67,8 @@ h2{
 }
 
 .link{
-    @apply text-neutral-900 hover:text-neutral-800 underline font-bold;
+    @apply text-neutral-900 hover:text-neutral-700 underline font-bold;
+}
+.parentVBox > div {
+    @apply flex flex-col gap-1;
 }

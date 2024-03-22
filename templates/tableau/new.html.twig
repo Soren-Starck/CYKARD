@@ -5,14 +5,16 @@
 {% block title %}Nouveau tableau{% endblock %}
 
 {% block body %}
-    <div class="container w-1/2 m-auto">
+    <div class="container w-1/4 m-auto">
         <h1>Créer un nouveau tableau</h1>
-
         {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="btn">{{ button_label|default('Save') }}</button>
+        <div class="my-4">
+            {{ form_widget(form, {'attr': {'class': 'parentVBox'}}) }}
+        </div>
+        <div class="flex flex-row items-center justify-between">
+            <a class="danger px-3 py-1 rounded-md" href="{{ path('app_tableaux') }}">Annuler</a>
+            <button class="">{{ button_label|default('Créer') }}</button>
+        </div>
         {{ form_end(form) }}
-
-        <a class="danger px-3 py-1 rounded-md" href="{{ path('app_tableaux') }}">Annuler</a>
     </div>
 {% endblock %}
