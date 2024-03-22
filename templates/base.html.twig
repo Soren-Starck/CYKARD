@@ -42,11 +42,12 @@
                     </li>
                     <li>
                         <a href="{{ path('app_account') }}">
+                            <i class="fas fa-user mt-1 mr-1"></i>
                             Mon compte (<span>{{ app_user.currentUser }}</span>)
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('app_logout') }}" class="text-red-500 bg-red-100 hover:bg-red-200 hover:text-red-600">
+                        <a href="{{ path('app_logout') }}" class="danger">
                             Déconnexion
                         </a>
                     </li>
@@ -70,10 +71,10 @@
     {% block body %}{% endblock %}
 </main>
 
-<footer>
-    <p>
-        Copyright Trello-Trollé Company
-    </p>
+<footer class="w-full p-5 border shadow flex flex-row justify-center">
+    <h1>
+        Copyright @2024 BLYAT-CARD Company
+    </h1>
 </footer>
 </body>
 </html>

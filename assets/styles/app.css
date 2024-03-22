@@ -1,3 +1,5 @@
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -40,6 +42,22 @@ h1{
     @apply font-medium text-lg;
 }
 
+h2{
+    @apply font-medium text-base;
+}
+
 #registration_form  > div{
     @apply flex flex-col py-1;
+}
+
+.danger {
+    @apply text-red-500 bg-red-100 hover:bg-red-200 hover:text-red-600;
+}
+
+.icon {
+    @apply transition text-neutral-900 rounded-md bg-neutral-100 hover:bg-neutral-200 p-2;
+}
+
+.link{
+    @apply text-neutral-900 hover:text-neutral-800 underline font-bold;
 }

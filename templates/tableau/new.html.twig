@@ -2,15 +2,17 @@
 
 {% extends 'base.html.twig' %}
 
-{% block title %}New Tableau{% endblock %}
+{% block title %}Nouveau tableau{% endblock %}
 
 {% block body %}
-    <h1>Create new Tableau</h1>
+    <div class="container w-1/2 m-auto">
+        <h1>Créer un nouveau tableau</h1>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-    {{ form_end(form) }}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
 
-    <a href="{{ path('app_tableaux') }}">back to list</a>
+        <a class="danger px-3 py-1 rounded-md" href="{{ path('app_tableaux') }}">Annuler</a>
+    </div>
 {% endblock %}
