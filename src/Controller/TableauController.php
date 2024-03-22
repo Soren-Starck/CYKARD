@@ -7,19 +7,16 @@ use App\Entity\Colonne;
 use App\Entity\Tableau;
 use App\Form\TableauType;
 use App\Lib\Security\ConnexionUtilisateur;
-use App\Lib\Security\JsonWebToken;
 use App\Lib\Security\UserHelper;
 use App\Repository\TableauRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
-class TableauController extends AbstractController
+class TableauController extends GeneriqueController
 {
     private TableauRepository $tableauRepository;
 
@@ -27,7 +24,6 @@ class TableauController extends AbstractController
     {
         $this->tableauRepository = $tableauRepository;
     }
-
     #[Route('/tableaux', name: 'app_tableaux')]
     public function listTableaux(): Response
     {
@@ -96,7 +92,6 @@ class TableauController extends AbstractController
 
         return $this->redirectToRoute('app_tableaux');
     }
-
     #[Route('/tableau/{id}', name: 'app_tableau_show', methods: ['GET'])]
     public function showTableau($id): Response
     {
@@ -141,23 +136,56 @@ class TableauController extends AbstractController
     public function index(TableauRepository $tableauRepository): Response
     {
         $tableaux = $tableauRepository->findAll();
-        return $this->json($tableaux, 200, [], ['groups' => 'tableau.index']);
+        return $this->json($tableaux);
+    }
+
+     ## Fonctions API
+    #[Route('/api/tableau/{id}/modify',name : 'app_tableau_api_modify', methods: ['POST'])]
+    public function modify(TableauRepository $tableauRepository, $id, Request $request): Response
+    {
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
+        if($tableauRepository->verifyUserTableau($login, $id) === false) {
+            throw new AccessDeniedHttpException('Access Denied');
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $titre = $data['titre'] ?? null;
+
+        $tableauRepository->modify($id, $titre);
+        return $this->json($tableauRepository->findTableauColonnes($login, $id), 200, [], ['groups' => ['tableau.index', 'tableau.show']]);
+    }
+
+    #[Route('/api/tableau', name: 'app_tableau_api_create', methods: ['POST'])]
+    public function create(Request $request, TableauRepository $tableau): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $titre = $data['titre'] ?? null;
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
+        $id=$tableau->create($titre, $login);
+        return $this->json($tableau->findTableauColonnes($login, $id), 201, [], ['groups' => ['tableau.index', 'tableau.show']]);
+    }
+
+    #[Route('/api/tableau/{id}/delete', name: 'app_tableau_api_delete', methods: ['GET'])]
+    public function delete(TableauRepository $tableauRepository, $id, Request $request): Response
+    {
+        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
+        if($tableauRepository->verifyUserTableau($login, $id) === false) {
+            throw new AccessDeniedHttpException('Access Denied');
+        }
+        $tableauRepository->delete($id);
+        return $this->json(null, 204);
     }
 
     #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
-    public function show(TableauRepository $tableauRepository, $id): Response
+    public function show(TableauRepository $tableauRepository, Request $request, $id): Response
     {
         $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+        if ($login === null) $login = $request->headers->get('Login');
         $tableau = $tableauRepository->findTableauColonnes($login, $id);
         return $this->json($tableau, 200, [], ['groups' => ['tableau.index', 'tableau.show']]);
     }
 
-    #[Route('/api/tableau', name: 'app_tableau_api_update', methods: ['POST'])]
-    public function create(Request $request, #[MapRequestPayload(serializationContext: ['groups' => ['tableau.index', 'tableau.show']])] Tableau $tableau, EntityManagerInterface $entityManager): Response
-    {
-        $entityManager->persist($tableau);
-        $entityManager->flush();
-
-        return $this->json($tableau, 201, [], ['groups' => ['tableau.index', 'tableau.show']]);
-    }
 }

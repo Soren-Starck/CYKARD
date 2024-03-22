@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Lib\HTTP\Cookie;
 use App\Lib\Security\ConnexionUtilisateur;
-use JetBrains\PhpStorm\NoReturn;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,8 +21,8 @@ class SecurityController extends AbstractController
             $password = $request->request->get('password');
             if (ConnexionUtilisateur::verifierCredentials($loginUtilisateur, $password)) {
                 $jwt = ConnexionUtilisateur::connecter($loginUtilisateur);
-//                dd($jwt);
                 Cookie::enregistrer('jwt', $jwt);
+                Cookie::lire('jwt');
                 return $this->redirectToRoute('app_base');
             } else {
                 return $this->render('security/login.html.twig', [
