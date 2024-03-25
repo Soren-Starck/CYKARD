@@ -32,9 +32,10 @@ class ColonneController extends GeneriqueController
         $login = $this->getLoginFromJwt($request);
         if (!$this->colonneRepository->verifyUserTableauByColonne($login, $id)) return $this->json(['error' => 'Access Denied'], 403);
         $data = json_decode($request->getContent(), true);
-        $titre = $data['TitreColonne'];
+        $titre = $data['titrecolonne'];
         if (!$titre) return $this->json(['error' => 'TitreColonne is required'], 400);
-        $this->colonneRepository->editTitreColonne($id, $titre);
+        $dbResponse = $this->colonneRepository->editTitreColonne($id, $titre);
+        if (!$dbResponse) return $this->json(['error' => 'Error editing colonne'], 500);
         return $this->json($this->colonneRepository->findByTableauAndColonne($login, $id), 200);
     }
 
