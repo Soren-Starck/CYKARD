@@ -70,7 +70,8 @@ class QueryBuilder
      */
     public function select(string $table, array $columns = ['*']): self
     {
-        $this->query = sprintf('SELECT %s FROM %s', implode(', ', $columns), $table);
+        $columnsString = implode(', ', $columns);
+        $this->query = sprintf('SELECT %s FROM %s', $columnsString, $table);
         return $this;
     }
 

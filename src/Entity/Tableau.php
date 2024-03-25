@@ -141,4 +141,33 @@ class Tableau implements \JsonSerializable
             'users' => $this->users,
         ];
     }
+
+    public function toArray(): array
+    {
+        $colonnes = [];
+        foreach ($this->getColonnes() as $colonne) {
+            $cartes = [];
+            foreach ($colonne->getCartes() as $carte) {
+                $cartes[] = [
+                    'id' => $carte->getId(),
+                    'titrecarte' => $carte->getTitrecarte(),
+                    'descriptifcarte' => $carte->getDescriptifcarte(),
+                    'couleurcarte' => $carte->getCouleurcarte(),
+                ];
+            }
+
+            $colonnes[] = [
+                'id' => $colonne->getId(),
+                'titrecolonne' => $colonne->getTitrecolonne(),
+                'cartes' => $cartes,
+            ];
+        }
+
+        return [
+            'id' => $this->getId(),
+            'codetableau' => $this->getCodetableau(),
+            'titretableau' => $this->getTitretableau(),
+            'colonnes' => $colonnes,
+        ];
+    }
 }

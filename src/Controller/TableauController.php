@@ -5,11 +5,10 @@ namespace App\Controller;
 use App\Entity\Carte;
 use App\Entity\Colonne;
 use App\Entity\Tableau;
-use App\Form\TableauType;
 use App\Lib\Security\ConnexionUtilisateur;
 use App\Lib\Security\UserHelper;
+use App\Repository\Service\TableauService;
 use App\Repository\TableauRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -40,59 +39,7 @@ class TableauController extends GeneriqueController
             return $this->redirectToRoute('app_login');
         }
     }
-
-    #[Route('/tableau/new', name: 'app_tableau_new', methods: ['GET', 'POST'])]
-    public function newTableau(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $tableau = new Tableau();
-        $form = $this->createForm(TableauType::class, $tableau);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $tableau->addUser($this->getUser());
-
-            $tableau->setCodetableau(bin2hex(random_bytes(6)));
-
-            $entityManager->persist($tableau);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_tableaux');
-        }
-
-        return $this->render('tableau/new.html.twig', [
-            'tableau' => $tableau,
-            'form' => $form->createView(),
-            'pagetitle' => 'Nouveau tableau',
-        ]);
-    }
-
-    #[Route('/tableau/edit/{id}', name: 'app_tableau_edit', methods: ['GET', 'POST'])]
-    public function editTableau(Request $request, Tableau $tableau, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(TableauType::class, $tableau);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-            return $this->redirectToRoute('app_tableaux');
-        }
-
-        return $this->render('tableau/edit.html.twig', [
-            'tableau' => $tableau,
-            'form' => $form->createView(),
-            'pagetitle' => 'Modifier le tableau',
-        ]);
-    }
-
-    #[Route('/tableau/delete/{id}', name: 'app_tableau_delete', methods: ['GET'])]
-    public function deleteTableau(Tableau $tableau, EntityManagerInterface $entityManager): Response
-    {
-        $entityManager->remove($tableau);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_tableaux');
-    }
-    #[Route('/tableau/{id}', name: 'app_tableau_show', methods: ['GET'])]
+    #[Route('/tableau/{id}', name: 'app_tableau_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
     public function showTableau($id): Response
     {
         $tableau_colonnes = $this->tableauRepository->findTableauColonnes($this->getUser(), $id);
@@ -132,60 +79,45 @@ class TableauController extends GeneriqueController
         ]);
     }
 
-    #[Route('/api/tableaux', name: 'app_tableau_api_show_all', methods: ['GET'])]
-    public function index(TableauRepository $tableauRepository): Response
+    #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
+    public function show(Request $request, $id): Response
     {
-        $tableaux = $tableauRepository->findAll();
-        return $this->json($tableaux);
+        $tableau = $this->tableauRepository->findTableauColonnes($this->getLoginFromJwt($request), $id);
+        if (!$tableau) return $this->json(['error' => 'No tableau found'], 404);
+        return $this->json(TableauService::createTableauFromDbResponse($tableau)->toArray(), 200);
     }
 
-     ## Fonctions API
-    #[Route('/api/tableau/{id}/modify',name : 'app_tableau_api_modify', methods: ['POST'])]
-    public function modify(TableauRepository $tableauRepository, $id, Request $request): Response
+    #[Route('/api/tableau/{id}/modify', name: 'app_tableau_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
+    public function modify(Request $request, $id): Response
     {
-        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) $login = $request->headers->get('Login');
-        if($tableauRepository->verifyUserTableau($login, $id) === false) {
-            throw new AccessDeniedHttpException('Access Denied');
-        }
-
+        $login = $this->getLoginFromJwt($request);
+        if (!$this->tableauRepository->verifyUserTableau($login, $id)) return $this->json(['error' => 'Access Denied'], 403);
         $data = json_decode($request->getContent(), true);
-        $titre = $data['titre'] ?? null;
-
-        $tableauRepository->modify($id, $titre);
-        return $this->json($tableauRepository->findTableauColonnes($login, $id), 200, [], ['groups' => ['tableau.index', 'tableau.show']]);
+        $titre = $data['titre'];
+        if (!$titre) return $this->json(['error' => 'Titre is required'], 400);
+        $this->tableauRepository->modify($id, $titre);
+        return $this->json($this->tableauRepository->findTableauColonnes($login, $id), 200);
     }
 
-    #[Route('/api/tableau', name: 'app_tableau_api_create', methods: ['POST'])]
-    public function create(Request $request, TableauRepository $tableau): Response
+    #[Route('/api/tableau/{id}/delete', name: 'app_tableau_api_delete', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]
+    public function delete(Request $request, $id): Response
     {
-        $data = json_decode($request->getContent(), true);
-        $titre = $data['titre'] ?? null;
-        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) $login = $request->headers->get('Login');
-        $id=$tableau->create($titre, $login);
-        return $this->json($tableau->findTableauColonnes($login, $id), 201, [], ['groups' => ['tableau.index', 'tableau.show']]);
-    }
-
-    #[Route('/api/tableau/{id}/delete', name: 'app_tableau_api_delete', methods: ['GET'])]
-    public function delete(TableauRepository $tableauRepository, $id, Request $request): Response
-    {
-        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) $login = $request->headers->get('Login');
-        if($tableauRepository->verifyUserTableau($login, $id) === false) {
-            throw new AccessDeniedHttpException('Access Denied');
-        }
-        $tableauRepository->delete($id);
+        $login = $this->getLoginFromJwt($request);
+        if (!$this->tableauRepository->verifyUserTableau($login, $id)) return $this->json(['error' => 'Access Denied'], 403);
+        $dbResponse = $this->tableauRepository->delete($id);
+        if (!$dbResponse) return $this->json(['error' => 'Error deleting tableau'], 500);
         return $this->json(null, 204);
     }
 
-    #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
-    public function show(TableauRepository $tableauRepository, Request $request, $id): Response
+    #[Route('/api/tableau', name: 'app_tableau_api_create', methods: ['POST'])]
+    public function create(Request $request): Response
     {
-        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-        if ($login === null) $login = $request->headers->get('Login');
-        $tableau = $tableauRepository->findTableauColonnes($login, $id);
-        return $this->json($tableau, 200, [], ['groups' => ['tableau.index', 'tableau.show']]);
+        $login = $this->getLoginFromJwt($request);
+        $data = json_decode($request->getContent(), true);
+        $titre = $data['titre'];
+        if (!$titre) return $this->json(['error' => 'Titre is required'], 400);
+        $tableauResponse = $this->tableauRepository->create($titre, $login);
+        if (!$tableauResponse) return $this->json(['error' => 'Error creating tableau'], 500);
+        return $this->json($this->tableauRepository->findTableauColonnes($login, $tableauResponse), 201);
     }
-
 }
