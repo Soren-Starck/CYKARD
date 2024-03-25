@@ -14,9 +14,7 @@ class ColonneController extends GeneriqueController
     #[Route('/api/tableau/{tableau_id}/colonnes', name: 'app_colonnes_tableau_api_show', requirements: ['tableau_id' => Requirement::DIGITS], methods: ['GET'])]
     public function show(ColonneRepository $colonneRepository, Request $request, $tableau_id): Response
     {
-        $login = $this->getLoginFromJwt($request);
-        $colonne = $colonneRepository->findByTableau($login, $tableau_id);
-        return $colonne ? $this->json($colonne, 200) : $this->json(['error' => 'No colonne found'], 404);
+        return $this->json($colonneRepository->findByTableau($this->getLoginFromJwt($request), $tableau_id) ?? ['error' => 'No colonne found'], 404);
     }
 
     #[Route('/api/colonne/{id}/modify', name: 'app_colonne_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
