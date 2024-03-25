@@ -14,7 +14,6 @@ class TableauRepository implements AbstractRepository
     {
         $this->db = $db;
     }
-
     public function findByUser(string $login): array
     {
         return $this->db
@@ -24,11 +23,10 @@ class TableauRepository implements AbstractRepository
             ->bind('login', $login)
             ->fetchAll();
     }
-
-    public function findTableauColonnes(string $login, mixed $id): array
+    public function findTableauColonnes(string $login, int $id): array
     {
         return $this->db
-            ->table('tableau')
+            ->table('tableau')->select('tableau', ['tableau.id', 'tableau.codetableau', 'tableau.titretableau', 'colonne.id as colonne_id', 'colonne.titrecolonne', 'carte.id as id_carte', 'carte.titrecarte', 'carte.descriptifcarte', 'carte.couleurcarte'])
             ->leftJoin('user_tableau', 'tableau.id = user_tableau.tableau_id')
             ->leftJoin('colonne', 'tableau.id = colonne.tableau_id')
             ->leftJoin('carte', 'colonne.id = carte.colonne_id')
@@ -38,7 +36,6 @@ class TableauRepository implements AbstractRepository
             ->bind('tableauId', $id)
             ->fetchAll();
     }
-
     public function findAll(): array
     {
         return $this->db
@@ -54,7 +51,6 @@ class TableauRepository implements AbstractRepository
             ['id' => $id]
         );
     }
-
     public function verifyUserTableau(string $login, mixed $id): bool
     {
         return $this->db
@@ -91,5 +87,7 @@ class TableauRepository implements AbstractRepository
             ['id' => $id]
         );
     }
+
+
 
 }

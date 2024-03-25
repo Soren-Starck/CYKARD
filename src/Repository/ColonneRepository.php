@@ -13,11 +13,10 @@ class ColonneRepository
     {
         $this->db = $db;
     }
-
     public function findByTableau(string $login, $id): array
     {
         return $this->db
-            ->table('colonne')->select('colonne', ['colonne.id, titrecolonne'])
+            ->table('colonne')->select('colonne', ['colonne.id', 'titrecolonne'])
             ->leftJoin('tableau', 'colonne.tableau_id = tableau.id')
             ->join('user_tableau', 'tableau.id = user_tableau.tableau_id')
             ->where('user_tableau.user_login', '=', 'userLogin')
@@ -26,11 +25,10 @@ class ColonneRepository
             ->bind('tableauId', $id)
             ->fetchAll();
     }
-
     public function findByTableauAndColonne(string $login, $id): array
     {
         return $this->db
-            ->table('colonne')->select('colonne', ['colonne.id, titrecolonne'])
+            ->table('colonne')->select('colonne', ['colonne.id', 'titrecolonne'])
             ->leftJoin('tableau', 'colonne.tableau_id = tableau.id')
             ->join('user_tableau', 'tableau.id = user_tableau.tableau_id')
             ->where('user_tableau.user_login', '=', 'userLogin')
@@ -39,12 +37,10 @@ class ColonneRepository
             ->bind('colonneId', $id)
             ->fetchAll();
     }
-
     public function editTitreColonne($id, mixed $titre): void
     {
         $this->db->update('colonne', ['titrecolonne' => $titre], ['id' => $id]);
     }
-
     public function verifyUserTableauByColonne(?string $login, $id): bool
     {
         return $this->db
