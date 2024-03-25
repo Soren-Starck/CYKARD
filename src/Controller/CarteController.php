@@ -15,62 +15,10 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 class CarteController extends GeneriqueController
 {
-//    #[Route('/colonne/{colonne_id}/carte/new', name: 'carte_new', methods: ['GET', 'POST'])]
-//    public function new(Request $request, EntityManagerInterface $entityManager, int $colonne_id): Response
-//    {
-//        $colonne = $entityManager->getRepository(Colonne::class)->find($colonne_id);
-//        if (!$colonne) {
-//            throw $this->createNotFoundException('No colonne found for id ' . $colonne_id);
-//        }
-//
-//        $carte = new Carte();
-//        $carte->setColonne($colonne);
-//
-//        $form = $this->createForm(CarteType::class, $carte, [
-//            'colonne' => $colonne,
-//        ]);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager->persist($carte);
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('app_tableaux');
-//        }
-//
-//        return $this->render('carte/new.html.twig', [
-//            'form' => $form->createView(),
-//            'pagetitle' => 'Nouvelle carte',
-//        ]);
-//    }
-
-//    #[Route('/carte/edit/{id}', name: 'carte_edit', methods: ['GET', 'POST'])]
-//    public function edit(Request $request, EntityManagerInterface $entityManager, int $id): Response
-//    {
-//        $carte = $entityManager->getRepository(Carte::class)->find($id);
-//        if (!$carte) {
-//            throw $this->createNotFoundException('No carte found for id '.$id);
-//        }
-//
-//        $form = $this->createForm(CarteType::class, $carte);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('app_tableaux');
-//        }
-//
-//        return $this->render('carte/edit.html.twig', [
-//            'form' => $form->createView(),
-//            'pagetitle' => 'Modifier une carte',
-//        ]);
-//    }
-
     /**
      * @throws Exception
      */
-    #[Route('/api/carte/update/{id}', name: 'api_carte_edit',requirements: ['id' => Requirement::DIGITS], methods: ['PUT'])]
+    #[Route('/api/carte/update/{id}', name: 'api_carte_edit',requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
     public function update(CarteRepository $carte, Request $request, int $id): Response
     {
         $login = $this->getLoginFromJwt($request);
@@ -119,7 +67,7 @@ class CarteController extends GeneriqueController
         return $this->json($infoCard->toArray(), 201);
     }
 
-    #[Route('/api/carte/assign/{id}', name: 'api_carte_assign', methods: ['POST'])]
+    #[Route('/api/carte/assign/{id}', name: 'api_carte_assign', requirements: ['id' => Requirement::DIGITS], methods: ['POST'])]
     public function assign(CarteRepository $carte,Request $request, int $id): Response
     {
         $login = $this->getLoginFromJwt($request);
@@ -129,7 +77,7 @@ class CarteController extends GeneriqueController
         return $this->json($dbResponse, 201);
     }
 
-    #[Route('/api/carte/unassign/{id}', name: 'api_carte_unassign', methods: ['POST'])]
+    #[Route('/api/carte/unassign/{id}', name: 'api_carte_unassign', methods: ['PATCH'])]
     public function unassign(CarteRepository $carte,Request $request, int $id): Response
     {
         $login = $this->getLoginFromJwt($request);
@@ -139,19 +87,18 @@ class CarteController extends GeneriqueController
         return $this->json(null, 204);
     }
 
-    #[Route('/api/carte/read/{id_colonne}', name: 'api_carte_read', methods: ['GET'])]
-    public function read(CarteRepository $carte, Request $request, int $id_colonne): Response
+    #[Route('/api/carte/read/{id_carte}', name: 'api_carte_read', methods: ['GET'])]
+    public function read(CarteRepository $carte, Request $request, int $id_carte): Response
     {
         $login = $this->getLoginFromJwt($request);
-        $carte = $carte->findByColonne($id_colonne, $login);
+        $carte = $carte->find($id_carte);
         return $carte ? $this->json($carte, 200) : $this->json(['error' => 'no card found'], 404);
     }
 
-//    #[Route('/api/carte/readall', name: 'api_carte_readall', methods: ['GET'])]
-//    public function readAll(CarteRepository $carte): Response
-//    {
-//        $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-//        if ($login === null) return $this->json(['error' => 'Access denied'], 403);
-//        return $this->json($carte->getAll());
-//    }
+    #[Route('/api/carte/readall', name: 'api_carte_readall', methods: ['GET'])]
+    public function readAll(CarteRepository $carte, Request $request): Response
+    {
+        $login = $this->getLoginFromJwt($request);
+        return $this->json($carte->getAll(), 200);
+    }
 }

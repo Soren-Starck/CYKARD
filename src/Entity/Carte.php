@@ -131,8 +131,7 @@ class Carte
             'id' => $this->id,
             'titrecarte' => $this->titrecarte,
             'descriptifcarte' => $this->descriptifcarte,
-            'couleurcarte' => $this->couleurcarte,
-            'colonne_id' => $this->colonne->getId(),
+            'couleurcarte' => $this->couleurcarte
         ];
     }
 }
