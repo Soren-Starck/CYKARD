@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\Service;
+namespace App\Service;
 
 use App\Entity\Carte;
 use App\Entity\Colonne;

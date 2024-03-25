@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Lib\Security;
+namespace App\Lib\Security\UserConnection;
 
-use App\Lib\Security\UserHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

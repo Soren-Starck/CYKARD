@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Lib\HTTP\Cookie;
-use App\Lib\Security\ConnexionUtilisateur;
+use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
