@@ -13,6 +13,7 @@ class ColonneRepository
     {
         $this->db = $db;
     }
+
     public function findByTableau(string $login, $id): array
     {
         return $this->db
@@ -25,6 +26,7 @@ class ColonneRepository
             ->bind('tableauId', $id)
             ->fetchAll();
     }
+
     public function findByTableauAndColonne(string $login, $id): array
     {
         return $this->db
@@ -37,10 +39,17 @@ class ColonneRepository
             ->bind('colonneId', $id)
             ->fetchAll();
     }
-    public function editTitreColonne($id, mixed $titre): void
+
+    public function editTitreColonne($id, mixed $titre): bool
     {
-        $this->db->update('colonne', ['titrecolonne' => $titre], ['id' => $id]);
+        try {
+            $this->db->update('colonne', ['titrecolonne' => $titre], ['id' => $id]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
+
     public function verifyUserTableauByColonne(?string $login, $id): bool
     {
         return $this->db

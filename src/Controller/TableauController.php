@@ -93,10 +93,11 @@ class TableauController extends GeneriqueController
         $login = $this->getLoginFromJwt($request);
         if (!$this->tableauRepository->verifyUserTableau($login, $id)) return $this->json(['error' => 'Access Denied'], 403);
         $data = json_decode($request->getContent(), true);
-        $titre = $data['titre'];
+        $titre = $data['titretableau'];
         if (!$titre) return $this->json(['error' => 'Titre is required'], 400);
-        $this->tableauRepository->modify($id, $titre);
-        return $this->json($this->tableauRepository->findTableauColonnes($login, $id), 200);
+        $dbResponse = $this->tableauRepository->editTitreTableau($id, $titre);
+        if (!$dbResponse) return $this->json(['error' => 'Error editing tableau'], 500);
+        return $this->show($request, $id);
     }
 
     #[Route('/api/tableau/{id}/delete', name: 'app_tableau_api_delete', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]
@@ -114,10 +115,10 @@ class TableauController extends GeneriqueController
     {
         $login = $this->getLoginFromJwt($request);
         $data = json_decode($request->getContent(), true);
-        $titre = $data['titre'];
+        $titre = $data['titretableau'];
         if (!$titre) return $this->json(['error' => 'Titre is required'], 400);
-        $tableauResponse = $this->tableauRepository->create($titre, $login);
-        if (!$tableauResponse) return $this->json(['error' => 'Error creating tableau'], 500);
-        return $this->json($this->tableauRepository->findTableauColonnes($login, $tableauResponse), 201);
+        $tableau = $this->tableauRepository->create($titre, $login);
+        if (!$tableau) return $this->json(['error' => 'Error creating tableau'], 500);
+        return $this->json($tableau[0], 201);
     }
 }

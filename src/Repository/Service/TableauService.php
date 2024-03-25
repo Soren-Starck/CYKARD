@@ -17,7 +17,7 @@ class TableauService
 
         $colonnes = [];
         foreach ($dbResponse as $row) {
-            if (!isset($colonnes[$row['colonne_id']])) {
+            if ($row['colonne_id'] !== null) {
                 $colonne = new Colonne();
                 $colonne->setId($row['colonne_id']);
                 $colonne->setTitrecolonne($row['titrecolonne']);

@@ -2,9 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\User;
 use App\Lib\Database\Database;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class TableauRepository implements AbstractRepository
 {
@@ -14,6 +12,7 @@ class TableauRepository implements AbstractRepository
     {
         $this->db = $db;
     }
+
     public function findByUser(string $login): array
     {
         return $this->db
@@ -23,6 +22,57 @@ class TableauRepository implements AbstractRepository
             ->bind('login', $login)
             ->fetchAll();
     }
+
+    public function findAll(): array
+    {
+        return $this->db
+            ->table('gozzog.tableau')
+            ->fetchAll();
+    }
+
+    public function editTitreTableau($id, $titre): bool
+    {
+        try {
+            $this->db->update('tableau', ['titretableau' => $titre], ['id' => $id]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function verifyUserTableau(string $login, mixed $id): bool
+    {
+        return $this->db
+                ->table('user_tableau')
+                ->where('user_login', '=', 'login')
+                ->where('tableau_id', '=', 'id')
+                ->bind('login', $login)
+                ->bind('id', $id)
+                ->fetchAll() !== [];
+    }
+
+    public function delete(mixed $id): bool
+    {
+        try {
+            $this->db->delete('tableau', ['id' => $id]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function create(mixed $titre, ?string $login): array|bool
+    {
+        try {
+            $this->db->insert('tableau', ['titretableau' => $titre]);
+            $tableauId = $this->db->lastInsertId();
+            $this->db->insert('user_tableau', ['user_login' => $login, 'tableau_id' => $tableauId, 'user_role' => 'USER_ADMIN']);
+            return $this->db->table('tableau')->select('tableau', ['id', 'titretableau', 'codetableau'])->where('id', '=', 'id')->bind('id', $tableauId)->fetchAll();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     public function findTableauColonnes(string $login, int $id): array
     {
         return $this->db
@@ -36,58 +86,4 @@ class TableauRepository implements AbstractRepository
             ->bind('tableauId', $id)
             ->fetchAll();
     }
-    public function findAll(): array
-    {
-        return $this->db
-            ->table('gozzog.tableau')
-            ->fetchAll();
-    }
-
-    public function modify($id, $titre)
-    {
-        $this->db->update(
-            'gozzog.tableau',
-            ['titretableau' => $titre],
-            ['id' => $id]
-        );
-    }
-    public function verifyUserTableau(string $login, mixed $id): bool
-    {
-        return $this->db
-            ->table('user_tableau')
-            ->where('user_login', '=', 'login')
-            ->where('tableau_id', '=', 'id')
-            ->bind('login', $login)
-            ->bind('id', $id)
-            ->fetchAll() !== [];
-    }
-
-    public function create(mixed $titre, ?string $login)
-    {
-        $this->db->insert(
-            'gozzog.tableau',
-            ['titretableau' => $titre]
-        );
-        $id = $this->db->lastInsertId();
-        $this->db->insert(
-            'gozzog.user_tableau',
-            ['user_login' => $login, 'tableau_id' => $id]
-        );
-        return $id;
-    }
-
-    public function delete(mixed $id)
-    {
-        $this->db->delete(
-            'gozzog.user_tableau',
-            ['tableau_id' => $id]
-        );
-        $this->db->delete(
-            'gozzog.tableau',
-            ['id' => $id]
-        );
-    }
-
-
-
 }
