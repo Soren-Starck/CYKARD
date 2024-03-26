@@ -22,11 +22,10 @@
                         <a class="btnSecondary w-fit" href="{{ path('app_tableaux') }}">Consulter mes tableaux</a>
                     </div>
                 {% else %}
-                    <p>
-                        Pour créer des tableaux, commencez par vous
-                        <a class="link" href="{{ path('app_login') }}">connecter</a>
-                        ou par <a class="link" href="{{ path('app_register') }}">créer un compte</a>!
-                    </p>
+                    <div class="flex flex-row justify-start gap-2 my-3">
+                        <a class="btnPrimary w-fit" href="{{ path('app_login') }}">Connectez vous</a>
+                        <a class="btnSecondary w-fit" href="{{ path('app_register') }}">Inscrivez vous</a>
+                    </div>
                 {% endif %}
             </div>
         </div>
