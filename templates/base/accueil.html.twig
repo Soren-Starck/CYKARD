@@ -3,16 +3,109 @@
 {% block title %}{{ pagetitle }}{% endblock %}
 
 {% block body %}
-    <div><p>Bienvenue sur <strong>BLYAT-CARD</strong>!</p></div>
-    <div>
-        {% if is_user_logged_in() %}
-            <span><a class="link" href="{{ path('app_tableaux') }}">Consulter mes tableaux</a></span>
-        {% else %}
-            <p>
-                Pour créer des tableaux, commencez par vous
-                <a class="link" href="{{ path('app_login') }}">connecter</a>
-                ou par <a class="link" href="{{ path('app_register') }}">créer un compte</a>!
+    <div class="my-auto flex flex-row justify-center gap-5 h-full">
+        <div class="my-auto w-1/2">
+            <div class="text-4xl">
+                <p>Bienvenue sur
+                    <strong class="bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600 text-transparent">
+                        BLYAT-CARD
+                    </strong>
+                </p>
+            </div>
+            <p class="my-2">
+                Créer vos propres tableaux de cartes et partager les avec la communauté.
             </p>
-        {% endif %}
+            <div>
+                {% if is_user_logged_in() %}
+                    <div class="flex flex-row justify-start gap-2 my-3">
+                        <a class="btnPrimary w-fit" href="{{ path('app_tableau_new') }}">Créer un tableau</a>
+                        <a class="btnSecondary w-fit" href="{{ path('app_tableaux') }}">Consulter mes tableaux</a>
+                    </div>
+                {% else %}
+                    <p>
+                        Pour créer des tableaux, commencez par vous
+                        <a class="link" href="{{ path('app_login') }}">connecter</a>
+                        ou par <a class="link" href="{{ path('app_register') }}">créer un compte</a>!
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="my-auto w-1/2 h-[300px] mb-[250px] flex flex-col items-center justify-center relative select-none">
+            <div class="blob blobA bg-cyan-500"></div>
+            <div class="blob blobB bg-blue-600"></div>
+            <div class="blob blobC bg-sky-500"></div>
+
+            <div class="z-10 flex flex-row mt-[250px]">
+
+                <div class="flex flex-col mr-4">
+
+                    <div class="mt-6 mb-4 group relative p-6 bg-white flex flex-col overflow-hidden shadow rounded-md border w-full h-fit justify-around items-center">
+                        <a class="h-full w-full flex justify-around items-center">
+                            <div>
+                                <h2 class="mr-auto">SAE Semestre 4</h2>
+                            </div>
+                            <div class="absolute top-1 right-2 text-neutral-700 invisible">
+                                <a>
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a>
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="group relative p-4 bg-white flex flex-col shadow rounded-md border w-[200px] justify-around items-center">
+                        <a class="h-full w-full flex justify-around items-center">
+                            <div>
+                                <div class="flex flex-row justify-start">
+                                    <img src="https://www.lirmm.fr/~trombetton/photos/photo_tyrol.jpg"
+                                         alt="Profile Image" class="w-16 h-16 border  rounded-full">
+                                    <p class="m-auto ml-2">Gilles Trombettoni</p>
+                                </div>
+                                <p class="text-sm text-neutral-500 italic mt-2">"Un outil encore jamais vu en France !"</p>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="flex flex-col w-[200px]">
+
+                    <div class="mb-4 group relative p-4 bg-white flex flex-col shadow rounded-md border  justify-around items-center">
+                        <a class="h-full w-full flex justify-around items-center">
+                            <div>
+                                <div class="flex flex-row justify-start">
+                                    <img src="https://lastfm.freetls.fastly.net/i/u/ar0/92c372883f05137bb7c6e9ec49afe403.jpg"
+                                         alt="Profile Image" class="w-16 h-16 border  rounded-full">
+                                    <p class="m-auto">Rick Astley</p>
+                                </div>
+                                <p class="text-sm text-neutral-500 italic mt-2">"I love BLYAT-CARD, those guys will
+                                    never
+                                    give you up !"</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="group relative p-6 bg-white flex flex-col overflow-hidden shadow rounded-md border w-full h-fit justify-around items-center">
+                        <a class="h-full w-full flex justify-around items-center">
+                            <div>
+                                <h2 class="mr-auto">Je sais pas quoi mettre ici</h2>
+                            </div>
+                            <div class="absolute top-1 right-2 text-neutral-700 invisible">
+                                <a>
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a>
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
     </div>
 {% endblock %}
