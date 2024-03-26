@@ -6,25 +6,25 @@
     <div class="w-1/2 mx-auto">
         <div class="flex flex-row justify-between mb-3">
             <h1>Mes tableaux ({{ tableaux|length }})</h1>
-            <a href="{{ path('app_tableau_new') }}"><i class="fas fa-plus icon mt-1 mr-1"></i></a>
+            <a href="{{ path('app_tableau_new') }}" title="Créer un nouveau tableau"><i
+                        class="fas fa-plus icon mt-1 mr-1"></i></a>
         </div>
-        <div class="tableaux grid grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {% for tableau in tableaux %}
-                <div class="flex flex-col shadow overflow-hidden rounded-md border w-1/6 p-3 justify-around items-center">
-                    <a
-                            href="{{ path('app_tableau_show', {'id': tableau.id}) }}">
+                <div class="group relative h-20 flex flex-col hover:cursor-pointer overflow-hidden shadow rounded-md border w-full justify-around items-center bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,.2)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] bg-[position:-100%_0,0_0] bg-no-repeat hover:bg-[position:200%_0,0_0] hover:transition-[background-position_0s_ease] hover:duration-[1500ms]">
+                    <a href="{{ path('app_tableau_show', {'id': tableau.id}) }}" class="h-full w-full flex justify-around items-center">
                         <div>
-                            <h2 class="mr-auto ml-1">{{ tableau.titretableau }}</h2>
+                            <h2 class="mr-auto">{{ tableau.titretableau }}</h2>
                         </div>
-                        <div>
-                            <a href="{{ path('app_tableau_edit', {'id': tableau.id}) }}">
-                                Modifier
+                        <div class="transition absolute top-1 right-2 opacity-0 group-hover:opacity-100 text-neutral-700">
+                            <a href="{{ path('app_tableau_edit', {'id': tableau.id}) }}" class="hover:animate-pulse">
+                                <i class="fas fa-edit"></i>
                             </a>
-                        </div>
-                        <div>
                             <a href="{{ path('app_tableau_delete', {'id': tableau.id}) }}"
-                               class="danger transition px-3 py-1 rounded-md"
-                               onclick="return confirm('Are you sure you want to delete this item?');">Supprimer</a>
+                               onclick="return confirm('Are you sure you want to delete this item?');"
+                               class="hover:animate-pulse">
+                                <i class="fas fa-trash"></i>
+                            </a>
                         </div>
                     </a>
                 </div>

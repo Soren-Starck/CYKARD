@@ -11,9 +11,9 @@
         <div class="my-4">
             {{ form_widget(form, {'attr': {'class': 'parentVBox'}}) }}
         </div>
-        <div class="flex flex-row items-center justify-between">
-            <a class="danger px-3 py-1 rounded-md" href="{{ path('app_tableaux') }}">Annuler</a>
-            <button class="">{{ button_label|default('Créer') }}</button>
+        <div class="flex flex-row items-center justify-between gap-2">
+            <a class="btnSecondary text-sm w-full" href="{{ path('app_tableaux') }}">Annuler</a>
+            <button class="btnPrimary">{{ button_label|default('Créer') }}</button>
         </div>
         {{ form_end(form) }}
     </div>

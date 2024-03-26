@@ -26,12 +26,13 @@ input[type=checkbox]{
     @apply accent-neutral-900 shadow border border-neutral-900 rounded-sm my-2 w-4 h-4 bg-neutral-900 hover:cursor-pointer;
 }
 
-button[type=submit]{
-    @apply transition w-full bg-neutral-900 hover:bg-neutral-800 text-gray-50 rounded-md shadow font-medium text-sm px-4 py-2 h-9;
+button[type=submit],
+.btnPrimary{
+    @apply transition w-full bg-neutral-900 hover:bg-neutral-700 text-gray-50 rounded-md shadow font-medium text-sm px-4 py-2 h-9;
 }
 
-button{
-    @apply transition border-2 font-medium border-neutral-900 rounded-md shadow text-neutral-900 px-4 py-2 h-8 flex flex-row items-center gap-2 hover:bg-neutral-900 hover:text-gray-50;
+.btnSecondary{
+    @apply transition border-2 font-medium border-neutral-900 rounded-md shadow text-neutral-900 px-4 py-2 h-9 flex flex-row items-center gap-2 hover:bg-neutral-900 hover:text-gray-50 justify-center;
 }
 
 .VBox {
@@ -60,6 +61,10 @@ h2{
 
 .danger {
     @apply text-red-500 bg-red-100 hover:bg-red-200 hover:text-red-600;
+}
+
+.success {
+    @apply text-green-500 bg-green-100 hover:bg-green-200 hover:text-green-600;
 }
 
 .icon {
