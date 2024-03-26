@@ -72,7 +72,7 @@ class TableauRepository
 
     public function findTableauColonnes(string $login, int $id): array
     {
-        return $this->db
+        return( $this->db
             ->table('tableau')
             ->select('tableau', [
                 'tableau.id',
@@ -84,12 +84,14 @@ class TableauRepository
                 'carte.titrecarte',
                 'carte.descriptifcarte',
                 'carte.couleurcarte',
+                'user_carte.user_login as user_carte_login',
                 'user_tableau.user_login',
                 'user_tableau.user_role'
             ])
             ->leftJoin('user_tableau', 'tableau.id = user_tableau.tableau_id')
             ->leftJoin('colonne', 'tableau.id = colonne.tableau_id')
             ->leftJoin('carte', 'colonne.id = carte.colonne_id')
+            ->leftJoin('user_carte', 'carte.id = user_carte.carte_id')
             ->where('user_tableau.user_login', '=', 'userLogin')
             ->where('tableau.id', '=', 'tableauId')
             ->bind('userLogin', $login)
@@ -106,21 +108,12 @@ class TableauRepository
                     'NULL',
                     'NULL',
                     'NULL',
+                    'NULL',
                     'user_login',
                     'user_role'
                 ])
                 ->where('tableau_id', '=', 'tableauId')
-                ->bind('tableauId', $id)->getQuery())->fetchAll();
-
-//        $result2 = $this->db
-//            ->table('user_tableau')
-//            ->select('user_tableau', ['user_login', 'user_role'])
-//            ->where('tableau_id', '=', 'tableauId')
-//            ->bind('tableauId', $id)
-//            ->fetchAll();
-
-//        dd(array_merge($result1, $result2));
-//        return (array_merge($result1, $result2));
+                ->bind('tableauId', $id)->getQuery())->fetchAll());
     }
 
     public function createTableauFromDbResponse(array $dbResponse): Tableau
@@ -148,6 +141,7 @@ class TableauRepository
                 $carte->setDescriptifcarte($row['descriptifcarte']);
                 $carte->setCouleurcarte($row['couleurcarte']);
                 $carte->setColonne($colonnes[$row['colonne_id']]);
+                $carte->setUserLogin($row['user_carte_login']);
                 $colonnes[$row['colonne_id']]->addCarte($carte);
             }
 

@@ -153,6 +153,7 @@ class Tableau implements \JsonSerializable
                     'descriptifcarte' => $carte->getDescriptifcarte(),
                     'couleurcarte' => $carte->getCouleurcarte(),
                     'colonne_id' => $carte->getColonne()->getId(),
+                    'user_carte_login' => $carte->getUserLogin(),
                 ];
             }
 

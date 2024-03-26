@@ -19,7 +19,8 @@ class CarteRepository
     public function find(int $id): array
     {
         return $this->db
-            ->table('carte')
+            ->table('carte')->select('carte', ['id', 'titrecarte', 'descriptifcarte', 'couleurcarte', 'colonne_id', 'user_login as user_carte_login'])
+            ->leftJoin('user_carte', 'carte.id = user_carte.carte_id')
             ->where('id', '=', 'id')
             ->bind('id', $id)
             ->fetchAll();
