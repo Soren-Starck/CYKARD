@@ -17,8 +17,20 @@
     <link rel="stylesheet" href="{{ asset('assets/styles/trellostyle.css') }}">
 </head>
 <body>
+
+<!-- Messages Flash -->
+{% if app.flashes %}
+    <div class="alert alert-success">
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}
+
 <header class="w-full shadow flex flex-row justify-between backdrop-blur-md h-12">
-    <div class="my-auto ml-5 drop-shadow-sm font-extrabold text-xl">BLYAT-CARD</div>
+    <a href="{{ path('app_accueil') }}" class="my-auto ml-5 drop-shadow-sm font-extrabold text-xl whitespace-nowrap">BLYAT-CARD</a>
     <nav class="flex flex-row justify-end my-auto">
         <ul>
             <li>

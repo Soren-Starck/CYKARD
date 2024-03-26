@@ -10,7 +10,7 @@
         </div>
         <div class="tableaux grid grid-cols-4 gap-4">
             {% for tableau in tableaux %}
-                <div class="flex flex-col shadow rounded-md border w-1/6 p-3 justify-around items-center">
+                <div class="flex flex-col shadow overflow-hidden rounded-md border w-1/6 p-3 justify-around items-center">
                     <a
                             href="{{ path('app_tableau_show', {'id': tableau.id}) }}">
                         <div>
