@@ -3,10 +3,10 @@
 {% block title %}{{ pagetitle }}{% endblock %}
 
 {% block body %}
-    <div><p>Bienvenue sur <strong>Trello-Trollé</strong>!</p></div>
+    <div><p>Bienvenue sur <strong>BLYAT-CARD</strong>!</p></div>
     <div>
-        {% if app.user %}
-            <span><a class="underline text-blue-700 hover:text-blue-800" href="{{ path('app_tableaux') }}">Consulter mes tableaux</a></span>
+        {% if is_user_logged_in() %}
+            <span><a class="link" href="{{ path('app_tableaux') }}">Consulter mes tableaux</a></span>
         {% else %}
             <p>
                 Pour créer des tableaux, commencez par vous
