@@ -153,4 +153,10 @@ class QueryBuilder
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function union(string $query): self
+    {
+        $this->query .= ' UNION ' . $query;
+        return $this;
+    }
+
 }

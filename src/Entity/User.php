@@ -63,9 +63,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->tableau = new ArrayCollection();
     }
 
-    public function getLogin(): ?string
+    public function getLogin(): string
     {
-        return $this->login;
+        return (string) $this->login;
     }
 
     public function setLogin(string $login): static

@@ -114,8 +114,10 @@ class Tableau implements \JsonSerializable
 
     public function addUser(string $user_login, string $user_role): static
     {
-            $this->users->add($user_login, $user_role);
-
+        $user = new User();
+        $user->setLogin($user_login);
+        $user->setRoles([$user_role]);
+        $this->users->add($user);
         return $this;
     }
 
@@ -162,11 +164,25 @@ class Tableau implements \JsonSerializable
             ];
         }
 
+        $users = [];
+
+        foreach ($this->getUsers() as $user) {
+            $users[] = [
+                'login' => $user->getLogin(),
+                'role' => $user->getRoles()[0],
+            ];
+        }
+
+        $users = array_map("unserialize", array_unique(array_map("serialize", $users)));
+        $users = array_values($users);
+
         return [
             'id' => $this->getId(),
             'codetableau' => $this->getCodetableau(),
             'titretableau' => $this->getTitretableau(),
             'colonnes' => $colonnes,
+            'users' => $users,
         ];
     }
+
 }

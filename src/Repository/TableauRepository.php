@@ -94,7 +94,33 @@ class TableauRepository
             ->where('tableau.id', '=', 'tableauId')
             ->bind('userLogin', $login)
             ->bind('tableauId', $id)
-            ->fetchAll();
+            ->union($this->db
+                ->table('user_tableau')
+                ->select('user_tableau', [
+                    'NULL',
+                    'NULL',
+                    'NULL',
+                    'NULL',
+                    'NULL',
+                    'NULL',
+                    'NULL',
+                    'NULL',
+                    'NULL',
+                    'user_login',
+                    'user_role'
+                ])
+                ->where('tableau_id', '=', 'tableauId')
+                ->bind('tableauId', $id)->getQuery())->fetchAll();
+
+//        $result2 = $this->db
+//            ->table('user_tableau')
+//            ->select('user_tableau', ['user_login', 'user_role'])
+//            ->where('tableau_id', '=', 'tableauId')
+//            ->bind('tableauId', $id)
+//            ->fetchAll();
+
+//        dd(array_merge($result1, $result2));
+//        return (array_merge($result1, $result2));
     }
 
     public function createTableauFromDbResponse(array $dbResponse): Tableau
@@ -106,7 +132,7 @@ class TableauRepository
 
         $colonnes = [];
         foreach ($dbResponse as $row) {
-            if ($row['colonne_id'] !== null) {
+            if (array_key_exists('colonne_id', $row) && $row['colonne_id'] !== null) {
                 $colonne = new Colonne();
                 $colonne->setId($row['colonne_id']);
                 $colonne->setTitrecolonne($row['titrecolonne']);
@@ -115,7 +141,7 @@ class TableauRepository
                 $colonne->setTableau($tableau);
             }
 
-            if ($row['carte_id'] !== null) {
+            if (array_key_exists('carte_id', $row) &&  $row['carte_id'] !== null) {
                 $carte = new Carte();
                 $carte->setId($row['carte_id']);
                 $carte->setTitrecarte($row['titrecarte']);
@@ -125,7 +151,7 @@ class TableauRepository
                 $colonnes[$row['colonne_id']]->addCarte($carte);
             }
 
-            if ($row['user_login'] !== null && $row['user_role'] !== null) {
+            if (array_key_exists('user_login', $row) && array_key_exists('user_role', $row) && $row['user_login'] !== null && $row['user_role'] !== null) {
                 $tableau->addUser($row['user_login'], $row['user_role']);
             }
 
