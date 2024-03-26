@@ -123,7 +123,7 @@ use PDO;
         return $this->pdo->lastInsertId();
     }
 
-    public function delete(string $string, array $array)
+    public function delete(string $string, array $array): void
     {
         $wherePart = [];
         foreach ($array as $column => $value) {

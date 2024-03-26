@@ -112,12 +112,9 @@ class Tableau implements \JsonSerializable
         return $this->users;
     }
 
-    public function addUser(User $user): static
+    public function addUser(string $user_login, string $user_role): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addTableau($this);
-        }
+            $this->users->add($user_login, $user_role);
 
         return $this;
     }
@@ -153,12 +150,14 @@ class Tableau implements \JsonSerializable
                     'titrecarte' => $carte->getTitrecarte(),
                     'descriptifcarte' => $carte->getDescriptifcarte(),
                     'couleurcarte' => $carte->getCouleurcarte(),
+                    'colonne_id' => $carte->getColonne()->getId(),
                 ];
             }
 
             $colonnes[] = [
                 'id' => $colonne->getId(),
                 'titrecolonne' => $colonne->getTitrecolonne(),
+                'tableau_id' => $colonne->getTableau()->getId(),
                 'cartes' => $cartes,
             ];
         }

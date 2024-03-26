@@ -131,7 +131,14 @@ class Carte
             'id' => $this->id,
             'titrecarte' => $this->titrecarte,
             'descriptifcarte' => $this->descriptifcarte,
-            'couleurcarte' => $this->couleurcarte
+            'couleurcarte' => $this->couleurcarte,
+            'colonne_id' => $this->colonne->getId(),
         ];
+    }
+
+    public function setColonneId(int $colonne_id): void
+    {
+        $this->colonne = new Colonne();
+        $this->colonne->setId($colonne_id);
     }
 }

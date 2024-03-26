@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Carte;
-use App\Entity\Colonne;
 use App\Lib\Database\Database;
 use Exception;
 
@@ -26,75 +25,71 @@ class CarteRepository
             ->fetchAll();
     }
 
-    public function findAssign(int $id): array
-    {
-        return $this->db
-            ->table('user_carte')
-            ->where('carte_id', '=', 'id')
-            ->bind('id', $id)
-            ->fetchAll();
-    }
-
-    public function updateCard(int $id, string $titrecarte, string $descriptifcarte, string $couleurcarte, int $colonne_id): bool
-    {
-           try {
-                $this->db->update('carte', [
-                    'titrecarte' => $titrecarte,
-                    'descriptifcarte' => $descriptifcarte,
-                    'couleurcarte' => $couleurcarte,
-                    'colonne_id' => $colonne_id,
-                ], [
-                    'id' => $id,
-                ]);
-                return true;
-            } catch (Exception $e) {
-                return false;
-            }
-    }
-
-    public function verifyUserCarte(int $id, ?string $login): bool
-    {
-        return $this->db
-            ->table('user_carte')
-            ->where('carte_id', '=', 'id')
-            ->where('user_login', '=', 'login')
-            ->bind('id', $id)
-            ->bind('login', $login)
-            ->fetchAll() !== [];
-    }
-
-    public function deleteCard(int $id): bool
+    public function create(string $titre, string|null $descriptif, string|null $couleur, int $colonne_id): ?Carte
     {
         try {
-            $this->db->delete('carte', [
-                'id' => $id,
-            ]);
-            return true;
-        } catch (Exception $e) {
-            return false;
-        }
-    }
-
-    public function createCard(mixed $titre, mixed $descriptif, mixed $couleur, int $colonne_id): ?Carte
-    {
-        try {
-            $this->db->insert('carte', [
+            $params = [
                 'titrecarte' => $titre,
                 'descriptifcarte' => $descriptif,
                 'couleurcarte' => $couleur,
                 'colonne_id' => $colonne_id,
-            ]);
+            ];
+            $params = array_filter($params);
+            $columns = implode(', ', array_keys($params));
+            $values = ':' . implode(', :', array_keys($params));
+            $query = "INSERT INTO carte ($columns) VALUES ($values)";
+            $this->db->raw($query, $params);
             $carte = new Carte();
             $carte->setId($this->db->lastInsertId());
             $carte->setTitrecarte($titre);
-            $carte->setDescriptifcarte($descriptif);
-            $carte->setCouleurcarte($couleur);
+            $carte->setDescriptifcarte($descriptif ?? '');
+            $carte->setCouleurcarte($couleur ?? '#ffffff');
+            $carte->setColonneId($colonne_id);
             return $carte;
         } catch (Exception $e) {
             return null;
         }
     }
-
+    public function verifyUserTableauByCard(int $id, ?string $login): bool
+    {
+        return $this->db
+                ->table('carte')
+                ->leftJoin('colonne', 'carte.colonne_id = colonne.id')
+                ->join('tableau', 'colonne.tableau_id = tableau.id')
+                ->join('user_tableau', 'tableau.id = user_tableau.tableau_id')
+                ->where('carte.id', '=', 'id')
+                ->where('user_tableau.user_login', '=', 'login')
+                ->bind('id', $id)
+                ->bind('login', $login)
+                ->fetchAll() !== [];
+    }
+    public function verifyUserTableauByCardAndAccess(int $id, ?string $login): bool
+    {
+        return $this->db
+                ->table('carte')
+                ->leftJoin('colonne', 'carte.colonne_id = colonne.id')
+                ->join('tableau', 'colonne.tableau_id = tableau.id')
+                ->join('user_tableau', 'tableau.id = user_tableau.tableau_id')
+                ->where('carte.id', '=', 'id')
+                ->where('user_tableau.user_login', '=', 'login')
+                ->where('user_tableau.user_role', '!=', 'role')
+                ->bind('id', $id)
+                ->bind('login', $login)
+                ->bind('role', 'USER_READ')
+                ->fetchAll() !== [];
+    }
+    public function updateCardWithAssign(int $id, array $data, string $login): bool
+    {
+        try {
+            $updateData = array_intersect_key($data, array_flip(['titrecarte', 'descriptifcarte', 'couleurcarte', 'colonne_id']));
+            if (!empty($updateData)) $this->db->update('carte', $updateData, ['id' => $id]);
+            if (isset($data['assign'])) $this->assignCard($id, $login);
+            else if (isset($data['unassign'])) $this->unassignCard($id, $login);
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
     public function assignCard(int $idCard, ?string $login): array
     {
         try {
@@ -110,7 +105,6 @@ class CarteRepository
             return [];
         }
     }
-
     public function unassignCard(int $id, ?string $login): bool
     {
         try {
@@ -124,77 +118,13 @@ class CarteRepository
         }
     }
 
-    public function deleteAssigns(int $id): bool
+    public function delete(int $id): bool
     {
         try {
-            $this->db->delete('user_carte', [
-                'carte_id' => $id,
-            ]);
+            $this->db->delete('carte', ['id' => $id,]);
             return true;
         } catch (Exception $e) {
             return false;
         }
-    }
-
-    public function getAll(): array
-    {
-        $array = $this->db
-            ->table('carte')
-            ->fetchAll();
-        return $this->constructArray($array);
-    }
-
-    public function verifyUserColonne($id_colonne, string $login): bool
-    {
-        return $this->db
-            ->table('colonne')
-            ->where('id', '=', 'id_colonne')
-            ->where('tableau_id', '=', 'tableau_id')
-            ->bind('id_colonne', $id_colonne)
-            ->bind('tableau_id', $login)
-            ->fetchAll() !== [];
-    }
-
-    public function findByColonne(int $id_colonne, string $login): array
-    {
-        return $this->db
-            ->table('carte')
-            ->where('colonne_id', '=', 'id_colonne')
-            ->where('user_login', '=', 'login')
-            ->bind('id_colonne', $id_colonne)
-            ->bind('login', $login)
-            ->fetchAll();
-    }
-
-    /**
-     * @param array $array
-     * @return array
-     */
-    public function constructArray(array $array): array
-    {
-        $cards = [];
-        foreach ($array as $item) {
-            $carte = new Carte();
-            $carte->setId($item['id']);
-            $carte->setTitrecarte($item['titrecarte']);
-            $carte->setDescriptifcarte($item['descriptifcarte']);
-            $carte->setCouleurcarte($item['couleurcarte']);
-            $cards[] = $carte;
-        }
-        return $cards;
-    }
-
-    public function verifyUserTableauByCard(int $id, ?string $login) : bool
-    {
-        return $this->db
-                ->table('carte')
-                ->leftJoin('colonne', 'carte.colonne_id = colonne.id')
-                ->join('tableau', 'colonne.tableau_id = tableau.id')
-                ->join('user_tableau', 'tableau.id = user_tableau.tableau_id')
-                ->where('carte.id', '=', 'id')
-                ->where('user_tableau.user_login', '=', 'login')
-                ->bind('id', $id)
-                ->bind('login', $login)
-                ->fetchAll() !== [];
     }
 }

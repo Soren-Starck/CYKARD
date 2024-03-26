@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\Carte;
+use App\Entity\Colonne;
+use App\Entity\Tableau;
 use App\Lib\Database\Database;
 
-class TableauRepository implements AbstractRepository
+class TableauRepository
 {
     private Database $db;
 
@@ -23,11 +26,15 @@ class TableauRepository implements AbstractRepository
             ->fetchAll();
     }
 
-    public function findAll(): array
+    public function join(string $codetableau, string $login): false|array
     {
-        return $this->db
-            ->table('gozzog.tableau')
-            ->fetchAll();
+        try {
+            $tableau = $this->db->table('tableau')->select('tableau', ['id', 'titretableau', 'codetableau'])->where('codetableau', '=', 'codetableau')->bind('codetableau', $codetableau)->fetchAll();
+            $this->db->insert('user_tableau', ['user_login' => $login, 'tableau_id' => $tableau[0]['id'], 'user_role' => 'USER_READ']);
+            return $tableau;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     public function editTitreTableau($id, $titre): bool
@@ -51,16 +58,6 @@ class TableauRepository implements AbstractRepository
                 ->fetchAll() !== [];
     }
 
-    public function delete(mixed $id): bool
-    {
-        try {
-            $this->db->delete('tableau', ['id' => $id]);
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-
     public function create(mixed $titre, ?string $login): array|bool
     {
         try {
@@ -76,7 +73,20 @@ class TableauRepository implements AbstractRepository
     public function findTableauColonnes(string $login, int $id): array
     {
         return $this->db
-            ->table('tableau')->select('tableau', ['tableau.id', 'tableau.codetableau', 'tableau.titretableau', 'colonne.id as colonne_id', 'colonne.titrecolonne', 'carte.id as id_carte', 'carte.titrecarte', 'carte.descriptifcarte', 'carte.couleurcarte'])
+            ->table('tableau')
+            ->select('tableau', [
+                'tableau.id',
+                'tableau.codetableau',
+                'tableau.titretableau',
+                'colonne.id as colonne_id',
+                'colonne.titrecolonne',
+                'carte.id as carte_id',
+                'carte.titrecarte',
+                'carte.descriptifcarte',
+                'carte.couleurcarte',
+                'user_tableau.user_login',
+                'user_tableau.user_role'
+            ])
             ->leftJoin('user_tableau', 'tableau.id = user_tableau.tableau_id')
             ->leftJoin('colonne', 'tableau.id = colonne.tableau_id')
             ->leftJoin('carte', 'colonne.id = carte.colonne_id')
@@ -85,5 +95,75 @@ class TableauRepository implements AbstractRepository
             ->bind('userLogin', $login)
             ->bind('tableauId', $id)
             ->fetchAll();
+    }
+
+    public function createTableauFromDbResponse(array $dbResponse): Tableau
+    {
+        $tableau = new Tableau();
+        $tableau->setId($dbResponse[0]['id']);
+        $tableau->setCodetableau($dbResponse[0]['codetableau']);
+        $tableau->setTitretableau($dbResponse[0]['titretableau']);
+
+        $colonnes = [];
+        foreach ($dbResponse as $row) {
+            if ($row['colonne_id'] !== null) {
+                $colonne = new Colonne();
+                $colonne->setId($row['colonne_id']);
+                $colonne->setTitrecolonne($row['titrecolonne']);
+                $tableau->addColonne($colonne);
+                $colonnes[$row['colonne_id']] = $colonne;
+                $colonne->setTableau($tableau);
+            }
+
+            if ($row['carte_id'] !== null) {
+                $carte = new Carte();
+                $carte->setId($row['carte_id']);
+                $carte->setTitrecarte($row['titrecarte']);
+                $carte->setDescriptifcarte($row['descriptifcarte']);
+                $carte->setCouleurcarte($row['couleurcarte']);
+                $carte->setColonne($colonnes[$row['colonne_id']]);
+                $colonnes[$row['colonne_id']]->addCarte($carte);
+            }
+
+            if ($row['user_login'] !== null && $row['user_role'] !== null) {
+                $tableau->addUser($row['user_login'], $row['user_role']);
+            }
+
+        }
+        return $tableau;
+    }
+
+    public function editUsersTableau(int $id, mixed $userslogins): bool
+    {
+        try {
+            foreach ($userslogins as $login) {
+                $this->db->delete('user_tableau', ['tableau_id' => $id, 'user_login' => $login]);
+            }
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function delete(mixed $id): bool
+    {
+        try {
+            $this->db->delete('tableau', ['id' => $id]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function editUserRoleTableau(int $id, array $userrole): bool
+    {
+        try {
+            foreach ($userrole as $login => $role) {
+                $this->db->update('user_tableau', ['user_role' => $role], ['tableau_id' => $id, 'user_login' => $login]);
+            }
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
