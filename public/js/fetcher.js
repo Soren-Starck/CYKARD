@@ -39,9 +39,4 @@ export function mutate(route) {
         for (const cb of events[route].callbacks)
             cb(data)
     })()
-}/*
-
-window.addEventListener('focus', () => {
-    for (const event of Object.keys(events))
-        mutate(event)
-});*/
+}

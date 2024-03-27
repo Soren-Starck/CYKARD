@@ -1,9 +1,11 @@
-import {ReactiveComponent} from "../reactive.js";
+import {loadComponent, ReactiveComponent} from "../reactive.js";
 import {fetcher} from "../fetcher.js";
+import {Column} from "./column.js";
 
 export class Columns extends ReactiveComponent {
     onMount() {
-        //loadComponent("column", Column)
+        loadComponent("column", Column)
+
         fetcher("/tableau/" + this.props.table, (data) =>
             this.setState({
                 data

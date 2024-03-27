@@ -38,5 +38,6 @@ export class ReactiveComponent extends HTMLElement {
 }
 
 export function loadComponent(name, component) {
+    if (window.customElements.get("react-" + name)) return
     customElements.define("react-" + name, component)
 }

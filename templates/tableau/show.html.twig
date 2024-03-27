@@ -7,11 +7,9 @@
 {% block components %}
     <script type="module">
         import {Columns} from "/js/components/columns.js";
-        import {Column} from "/js/components/column.js";
         import {loadComponent} from "/js/reactive.js";
 
         loadComponent("columns", Columns)
-        loadComponent("column", Column)
     </script>
 {% endblock %}
 
