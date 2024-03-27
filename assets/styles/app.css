@@ -172,7 +172,7 @@ h2 {
     }
 }
 #notificationContainer {
-    @apply flex flex-col items-end;
+    @apply flex flex-col items-end my-3 mx-4;
 }
 
 .notification {
