@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use AllowDynamicProperties;
 use App\Repository\CarteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CarteRepository::class)]
+#[AllowDynamicProperties] #[ORM\Entity(repositoryClass: CarteRepository::class)]
 class Carte
 {
 
@@ -123,5 +124,32 @@ class Carte
         }
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'titrecarte' => $this->titrecarte,
+            'descriptifcarte' => $this->descriptifcarte,
+            'couleurcarte' => $this->couleurcarte,
+            'colonne_id' => $this->colonne->getId(),
+        ];
+    }
+
+    public function setColonneId(int $colonne_id): void
+    {
+        $this->colonne = new Colonne();
+        $this->colonne->setId($colonne_id);
+    }
+
+    public function setUserLogin(string|null $userLogin): void
+    {
+        $this->userLogin = $userLogin;
+    }
+
+    public function getUserLogin(): string|null
+    {
+        return $this->userLogin;
     }
 }

@@ -20,26 +20,21 @@ class ColonneController extends GeneriqueController
         $this->colonneRepository = $colonneRepository;
     }
 
-    #[Route('/api/tableau/{tableau_id}/colonnes', name: 'app_colonne_api_show', requirements: ['tableau_id' => Requirement::DIGITS], methods: ['GET'])]
-    public function show(Request $request, $tableau_id): Response
-    {
-        return $this->json($this->colonneRepository->findByTableau($this->getLoginFromJwt($request), $tableau_id) ?? ['error' => 'No colonne found'], 404);
-    }
-
     #[Route('/api/colonne/{id}/modify', name: 'app_colonne_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
-    public function modify(Request $request, $id): Response
+    public function modify(Request $request, int $id): Response
     {
         $login = $this->getLoginFromJwt($request);
         if (!$this->colonneRepository->verifyUserTableauByColonne($login, $id)) return $this->json(['error' => 'Access Denied'], 403);
         $data = json_decode($request->getContent(), true);
-        $titre = $data['TitreColonne'];
+        $titre = $data['titrecolonne'];
         if (!$titre) return $this->json(['error' => 'TitreColonne is required'], 400);
-        $this->colonneRepository->editTitreColonne($id, $titre);
+        $dbResponse = $this->colonneRepository->editTitreColonne($id, $titre);
+        if (!$dbResponse) return $this->json(['error' => 'Error editing colonne'], 500);
         return $this->json($this->colonneRepository->findByTableauAndColonne($login, $id), 200);
     }
 
     #[Route('/api/colonne/{id}/delete', name: 'app_colonne_api_delete', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]
-    public function delete(Request $request, $id): Response
+    public function delete(Request $request, int $id): Response
     {
         $login = $this->getLoginFromJwt($request);
         if (!$this->colonneRepository->verifyUserTableauByColonne($login, $id)) return $this->json(['error' => 'Access Denied'], 403);
@@ -49,7 +44,7 @@ class ColonneController extends GeneriqueController
     }
 
     #[Route('/api/tableau/{tableau_id}/colonne', name: 'app_colonne_api_create', methods: ['POST'])]
-    public function create(Request $request, $tableau_id): Response
+    public function create(Request $request, int $tableau_id): Response
     {
         $login = $this->getLoginFromJwt($request);
         $data = json_decode($request->getContent(), true);

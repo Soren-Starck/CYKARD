@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Lib\Security\JsonWebToken;
+use App\Lib\Security\JWT\JsonWebToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 

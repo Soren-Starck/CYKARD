@@ -37,9 +37,14 @@ class ColonneRepository
             ->bind('colonneId', $id)
             ->fetchAll();
     }
-    public function editTitreColonne($id, mixed $titre): void
+    public function editTitreColonne($id, mixed $titre): bool
     {
-        $this->db->update('colonne', ['titrecolonne' => $titre], ['id' => $id]);
+        try {
+            $this->db->update('colonne', ['titrecolonne' => $titre], ['id' => $id]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
     public function verifyUserTableauByColonne(?string $login, $id): bool
     {

@@ -112,13 +112,12 @@ class Tableau implements \JsonSerializable
         return $this->users;
     }
 
-    public function addUser(User $user): static
+    public function addUser(string $user_login, string $user_role): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addTableau($this);
-        }
-
+        $user = new User();
+        $user->setLogin($user_login);
+        $user->setRoles([$user_role]);
+        $this->users->add($user);
         return $this;
     }
 
@@ -153,21 +152,38 @@ class Tableau implements \JsonSerializable
                     'titrecarte' => $carte->getTitrecarte(),
                     'descriptifcarte' => $carte->getDescriptifcarte(),
                     'couleurcarte' => $carte->getCouleurcarte(),
+                    'colonne_id' => $carte->getColonne()->getId(),
+                    'user_carte_login' => $carte->getUserLogin(),
                 ];
             }
 
             $colonnes[] = [
                 'id' => $colonne->getId(),
                 'titrecolonne' => $colonne->getTitrecolonne(),
+                'tableau_id' => $colonne->getTableau()->getId(),
                 'cartes' => $cartes,
             ];
         }
+
+        $users = [];
+
+        foreach ($this->getUsers() as $user) {
+            $users[] = [
+                'login' => $user->getLogin(),
+                'role' => $user->getRoles()[0],
+            ];
+        }
+
+        $users = array_map("unserialize", array_unique(array_map("serialize", $users)));
+        $users = array_values($users);
 
         return [
             'id' => $this->getId(),
             'codetableau' => $this->getCodetableau(),
             'titretableau' => $this->getTitretableau(),
             'colonnes' => $colonnes,
+            'users' => $users,
         ];
     }
+
 }

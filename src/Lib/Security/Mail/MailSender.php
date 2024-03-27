@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Lib\Security;
+namespace App\Lib\Security\Mail;
 
 use Exception;
 

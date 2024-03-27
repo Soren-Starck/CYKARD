@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Lib\Security;
+namespace App\Lib\Security\UserConnection;
 
 use App\Lib\Database\Database;
 use App\Lib\HTTP\Cookie;
 use App\Lib\HTTP\Session;
+use App\Lib\Security\JWT\JsonWebToken;
 
 class ConnexionUtilisateur
 {
