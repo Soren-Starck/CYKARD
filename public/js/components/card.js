@@ -12,9 +12,16 @@ export class Card extends ReactiveComponent {
         });
     }
 
+    drag(event) {
+        if (!this.state.data) return
+        const dt = this.state.data
+        dt.from = parseInt(this.props.new_column_id)
+        event.dataTransfer.setData("text", JSON.stringify(dt));
+    }
+
     render() {
         if (!this.state.data) return "";
-        return `<div class="shadow rounded-md border p-2 col-span-1 flex">
+        return `<div id="card-${this.props.card_id}" class="shadow rounded-md border p-2 col-span-1 flex" draggable="true" ondragstart="drag">
             <p>${this.state.data.titrecarte}</p>
         </div>
         `;

@@ -48,7 +48,8 @@ class TableauController extends GeneriqueController
             if (count($tableau) === 0) return $this->json(['error' => 'No tableau found'], 404);
             return $this->render('tableau/show.html.twig', [
                 'pagetitle' => 'Feur',
-                "titretableau" => $tableau[0]["titretableau"]
+                "titretableau" => $tableau[0]["titretableau"],
+                "idtableau" => $id,
             ]);
         }
         return $this->redirectToRoute('app_login');

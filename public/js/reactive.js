@@ -24,12 +24,15 @@ export class ReactiveComponent extends HTMLElement {
 
     _render() {
         this.innerHTML = this.render();
-
-        const elements = this.querySelectorAll("[data-onclick]");
-        for (const element of elements) {
-            const value = element.getAttribute("data-onclick");
-            element.onclick = () => this[value]();
-        }
+        if (this.children.length === 0) return;
+        const child = this.children[0];
+        const attributes = Array.from(child.attributes).map(attr => attr.name);
+        attributes.forEach(attr => {
+            if (attr.startsWith("on")) {
+                const value = child.getAttribute(attr);
+                child[attr] = (e) => this[value](e);
+            }
+        });
     }
 
     render() {

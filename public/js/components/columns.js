@@ -14,9 +14,11 @@ export class Columns extends ReactiveComponent {
 
     render() {
         if (!this.state.data) return "";
+
         const columns = this.state.data.colonnes.map(col => `
             <react-column table="${this.props.table}" column_id="${col.id}"></react-column>
         `).join("")
+
         return `<div class="grid grid-cols-4 gap-2">
             ${columns}
         </div>`;
