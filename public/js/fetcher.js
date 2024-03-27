@@ -1,14 +1,11 @@
-import CookiesCrous from "./cookies-crous.js";
 import {API} from "./api.js";
 
 const events = {}
 
-async function getData(route) {
-    const cache = CookiesCrous.get("fetch_" + route);
-    if (cache) return JSON.parse(cache);
+async function fetchData(route) {
     const data = await API.get(route)
-    CookiesCrous.set("fetch_" + route, JSON.stringify(data));
-    return data;
+    events[route].data = data
+    return data
 }
 
 /**
@@ -16,17 +13,14 @@ async function getData(route) {
  * @param callback {function}
  * @param timeout {number}
  */
-export function fetcher(route, callback, timeout = 0) {
-    document.addEventListener("fetch" + route, async () => {
-        try {
-            const data = await getData(route);
-            callback(data)
-        } catch (e) {
-            console.log(e)
-        }
-    });
-    events[route] = true
-    callEvent(route)
+export async function fetcher(route, callback, timeout = 0) {
+    if (events[route])
+        events[route].callbacks.push(callback)
+    else
+        events[route] = {callbacks: [callback], data: null}
+
+    if (events[route].data) callback(events[route].data)
+    else callCallback(callback, await fetchData(route))
     if (timeout > 0) {
         setTimeout(() => {
             mutate(route)
@@ -34,16 +28,20 @@ export function fetcher(route, callback, timeout = 0) {
     }
 }
 
-function callEvent(route) {
-    document.dispatchEvent(new CustomEvent("fetch" + route));
+function callCallback(callback, data) {
+    if (data) callback(data)
 }
 
 export function mutate(route) {
-    CookiesCrous.delete("fetch_" + route)
-    callEvent(route);
-}
+    (async () => {
+        const data = await fetchData(route)
+        if (!data) return
+        for (const cb of events[route].callbacks)
+            cb(data)
+    })()
+}/*
 
 window.addEventListener('focus', () => {
     for (const event of Object.keys(events))
         mutate(event)
-});
+});*/

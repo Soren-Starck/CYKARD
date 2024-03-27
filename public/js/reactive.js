@@ -1,5 +1,6 @@
 export class ReactiveComponent extends HTMLElement {
     props = {};
+    state = {};
 
     constructor() {
         super();
@@ -9,6 +10,7 @@ export class ReactiveComponent extends HTMLElement {
         );
 
         this.onMount()
+        this._render()
     }
 
     onMount() {

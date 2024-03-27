@@ -4,6 +4,18 @@
 
 {% block title %}{{ titretableau }}{% endblock %}
 
+{% block components %}
+    <script type="module">
+        import {Columns} from "/js/components/columns.js";
+        import {Column} from "/js/components/column.js";
+        import {loadComponent} from "/js/reactive.js";
+
+        loadComponent("columns", Columns)
+        loadComponent("column", Column)
+    </script>
+{% endblock %}
+
 {% block body %}
     <h1>{{ titretableau }}</h1>
+    <react-columns table="18"></react-columns>
 {% endblock %}

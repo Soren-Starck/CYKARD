@@ -1,4 +1,5 @@
 import CookiesCrous from "./cookies-crous.js";
+import {Notif} from "./notifications.js";
 
 const host = "http://localhost:8000/api";
 
@@ -23,7 +24,8 @@ async function actions(method, route, data) {
         });
         return await res.json()
     } catch (e) {
-        console.log(e)
+        console.error(e)
+        Notif.error("Erreur", "Une erreur est survenue lors du chargement des données", route + method)
     }
     return null
 }
