@@ -36,5 +36,5 @@ export class ReactiveComponent extends HTMLElement {
 }
 
 export function loadComponent(name, component) {
-    customElements.define("blyat-" + name, component)
+    customElements.define("react-" + name, component)
 }

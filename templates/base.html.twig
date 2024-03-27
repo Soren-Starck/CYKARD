@@ -13,14 +13,6 @@
         {{ encore_entry_script_tags('app') }}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
-    <script type="module">
-        import {API} from "./js/api.js"
-
-        (async () => {
-            const data = await API.get("/tableau/18")
-            console.log(data)
-        })()
-    </script>
     <link rel="stylesheet" href="{{ asset('assets/styles/navstyle.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/styles/trellostyle.css') }}">
 </head>
