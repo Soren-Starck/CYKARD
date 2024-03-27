@@ -5,6 +5,7 @@
         "@symfony/webpack-encore": "4.6.1",
         "autoprefixer": "^10.4.18",
         "core-js": "3.36.0",
+      "concurrently": "^8.2.2",
         "postcss": "^8.4.35",
         "postcss-loader": "^7.0.0",
         "regenerator-runtime": "0.14.1",
@@ -16,11 +17,12 @@
     "license": "UNLICENSED",
     "private": true,
     "scripts": {
+      "all": "concurrently 'npm run dev' 'npm run watch'",
         "dev": "php -S localhost:8000 -t public",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
     },
-    "dependencies": {
-        "@fortawesome/fontawesome-free": "^6.5.1"
-    }
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.5.1"
+  }
 }
