@@ -1,5 +1,5 @@
 import {loadComponent, ReactiveComponent} from "../reactive.js";
-import {fetcher} from "../fetcher.js";
+import {fetcher, mutate} from "../fetcher.js";
 import {Card} from "./card.js";
 import {API} from "../api.js";
 
@@ -19,10 +19,7 @@ export class Column extends ReactiveComponent {
     drop(e) {
         e.preventDefault();
         const card = JSON.parse(e.dataTransfer.getData("text"));
-        console.log("from", card.from)
-        console.log("to", this.props.column_id)
         if (card.from === parseInt(this.props.column_id)) return
-        // check if card is already in column
         if (this.state.cards.find(c => c.id === card.id)) return
         document.getElementById(`card-${card.id}`).parentElement.remove()
         API.update(`/carte/${card.id}/modify`, {
@@ -31,8 +28,7 @@ export class Column extends ReactiveComponent {
         this.setState({
             cards: [...this.state.cards, card]
         })
-        //mutate(`/tableau/${this.props.table}`)
-        //console.log("drop card ", e.dataTransfer.getData("text"), " to column ", this.props.column_id)
+        mutate(`/tableau/${this.props.table}`)
     }
 
     allowDrop(e) {

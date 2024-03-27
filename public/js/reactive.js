@@ -1,19 +1,32 @@
 export class ReactiveComponent extends HTMLElement {
     props = {};
     state = {};
+    child = ""
 
     constructor() {
         super();
 
-        Array.from(this.attributes).forEach(
-            (attr) => (this.props[attr.nodeName] = attr.nodeValue)
-        );
+        this._loadProps()
+
+        this.child = this.innerHTML
+
+        const observer = new MutationObserver(() => {
+            this._loadProps();
+            this._render();
+        });
+        observer.observe(this, {attributes: true});
 
         this.onMount()
         this._render()
     }
 
     onMount() {
+    }
+
+    _loadProps() {
+        Array.from(this.attributes).forEach(
+            (attr) => (this.props[attr.nodeName] = attr.nodeValue)
+        );
     }
 
     setState(state, value) {
