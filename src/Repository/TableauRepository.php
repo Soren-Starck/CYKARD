@@ -61,14 +61,14 @@ class TableauRepository
     public function verifyUserTableauAccess(string $login, mixed $id): array
     {
         return $this->db
-                ->table('user_tableau')->select('user_tableau', ['user_role'])
-                ->where('user_login', '=', 'login')
-                ->where('tableau_id', '=', 'id')
-                ->where('user_role', '!=', 'role')
-                ->bind('login', $login)
-                ->bind('id', $id)
-                ->bind('role', 'USER_READ')
-                ->fetchAll();
+            ->table('user_tableau')->select('user_tableau', ['user_role'])
+            ->where('user_login', '=', 'login')
+            ->where('tableau_id', '=', 'id')
+            ->where('user_role', '!=', 'role')
+            ->bind('login', $login)
+            ->bind('id', $id)
+            ->bind('role', 'USER_READ')
+            ->fetchAll();
     }
 
     public function create(mixed $titre, ?string $login): array|bool
@@ -85,7 +85,7 @@ class TableauRepository
 
     public function findTableauColonnes(string $login, int $id): array
     {
-        return( $this->db
+        return ($this->db
             ->table('tableau')
             ->select('tableau', [
                 'tableau.id',
@@ -129,6 +129,24 @@ class TableauRepository
                 ->bind('tableauId', $id)->getQuery())->fetchAll());
     }
 
+    public function findById(string $login, int $id): array
+    {
+        return $this->db
+            ->table('tableau')
+            ->select('tableau', [
+                'tableau.id',
+                'tableau.titretableau',
+                'user_tableau.user_login',
+                'user_tableau.user_role'
+            ])
+            ->leftJoin('user_tableau', 'tableau.id = user_tableau.tableau_id')
+            ->where('user_tableau.user_login', '=', 'userLogin')
+            ->where('tableau.id', '=', 'tableauId')
+            ->bind('userLogin', $login)
+            ->bind('tableauId', $id)
+            ->fetchAll();
+    }
+
     public function createTableauFromDbResponse(array $dbResponse): Tableau
     {
         $tableau = new Tableau();
@@ -147,7 +165,7 @@ class TableauRepository
                 $colonne->setTableau($tableau);
             }
 
-            if (array_key_exists('carte_id', $row) &&  $row['carte_id'] !== null) {
+            if (array_key_exists('carte_id', $row) && $row['carte_id'] !== null) {
                 $carte = new Carte();
                 $carte->setId($row['carte_id']);
                 $carte->setTitrecarte($row['titrecarte']);
