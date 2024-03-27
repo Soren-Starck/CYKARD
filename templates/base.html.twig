@@ -16,9 +16,22 @@
     <link rel="stylesheet" href="{{ asset('assets/styles/navstyle.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/styles/trellostyle.css') }}">
 </head>
-<body>
-<header>
-    <nav>
+<body class="overflow-x-hidden">
+
+<!-- Messages Flash -->
+{% if app.flashes %}
+    <div class="alert alert-success">
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<header class="w-full shadow flex flex-row justify-between backdrop-blur-md h-12">
+    <a href="{{ path('app_accueil') }}" class="my-auto ml-5 drop-shadow-sm font-extrabold text-xl whitespace-nowrap">BLYAT-CARD</a>
+    <nav class="flex flex-row justify-end my-auto">
         <ul>
             <li>
                 <a href="{{ path('app_accueil') }}">Accueil</a>
@@ -26,13 +39,12 @@
             {% if not is_user_logged_in() %}
                 <li>
                     <a class="flex flex-row gap-2 items-center justify-center" href="{{ path('app_login') }}">
-                        Connexion <img alt="login" src="{{ asset('assets/img/enter.png') }}">
+                        Connexion
                     </a>
                 </li>
                 <li>
                     <a class="flex flex-row gap-2 items-center justify-center" href="{{ path('app_register') }}">
-                        Inscription <img alt="S'inscrire" title="S'inscrire"
-                                         src="{{ asset('assets/img/add-user.png') }}">
+                        Inscription
                     </a>
                 </li>
             {% else %}
@@ -42,37 +54,94 @@
                     </li>
                     <li>
                         <a href="{{ path('app_account') }}">
-                            Mon compte (<span>{{ app_user.currentUser }}</span>) <img alt="logout"
-                                                                                      src="{{ asset('assets/img/user.png') }}">
+                            <i class="fas fa-user mt-1 mr-1"></i>
+                            Mon compte (<span>{{ app_user.currentUser }}</span>)
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('app_logout') }}">
-                            Déconnexion <img alt="logout" src="{{ asset('assets/img/logout.png') }}">
+                        <a href="{{ path('app_logout') }}" class="danger">
+                            Déconnexion
                         </a>
                     </li>
                 {% endif %}
             {% endif %}
         </ul>
     </nav>
-    <div>
-        {% for type, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ type }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-    </div>
 </header>
-<main>
+
+<div>
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+<main class="mt-10">
     {% block body %}{% endblock %}
+
+    <script>
+    function notif(state, title, message) {
+        let notif = document.createElement('div');
+        notif.classList.add(state, 'move-up', 'notification');
+        let titleH1 = document.createElement('h2');
+        titleH1.innerText = title;
+        notif.appendChild(titleH1);
+        if (message) {
+            let messageP = document.createElement('p');
+            messageP.innerText = message;
+            notif.appendChild(messageP);
+        }
+        let crossButton = document.createElement('i');
+        crossButton.classList.add('fas', 'fa-times', 'cross-button');
+        notif.appendChild(crossButton);
+        crossButton.addEventListener('click', () => {
+            notif.style.opacity = '0';
+            notif.style.maxHeight = '0';
+            notif.style.margin = '0';
+            notif.classList.add('move-out');
+            setTimeout(() => {
+                notif.remove();
+            }, 300);
+        });
+        document.getElementById('notificationContainer').prepend(notif);
+        setTimeout(() => {
+            notif.style.opacity = '0';
+            notif.style.maxHeight = '0';
+            notif.style.margin = '0';
+            notif.classList.add('move-out');
+            setTimeout(() => {
+                notif.remove();
+            }, 300);
+        }, 6000);
+    }
+
+    function notifTEST() {
+        let random = Math.floor(Math.random() * 3);
+        let message = 'contenu de la notif voila voila';
+        if (random === 0) {
+            notif('success', 'hello world', message);
+        } else if (random === 1) {
+            notif('error', 'hello world', message);
+        } else {
+            notif('warning', 'hello world');
+        }
+        console.log('Notif');
+    }
+</script>
+
+<button onclick="notifTEST()">Notif</button>
+
+<div id="notificationContainer" class="fixed bottom-0 right-0 z-20 w-[200px]"></div>
+
 </main>
 
-<footer>
-    <p>
-        Copyright Trello-Trollé Company
-    </p>
+<footer class="w-full p-5 border shadow flex flex-row justify-center">
+    <h1>
+        Copyright @2024 BLYAT-CARD Company
+    </h1>
 </footer>
 </body>
 </html>
