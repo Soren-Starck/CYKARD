@@ -145,9 +145,17 @@ class Tableau implements \JsonSerializable
     {
         $colonnes = [];
         foreach ($this->getColonnes() as $colonne) {
-            $cartes = [];
+            if (!isset($colonnes[$colonne->getId()])) {
+                $colonnes[$colonne->getId()] = [
+                    'id' => $colonne->getId(),
+                    'titrecolonne' => $colonne->getTitrecolonne(),
+                    'tableau_id' => $colonne->getTableau()->getId(),
+                    'cartes' => [],
+                ];
+            }
+
             foreach ($colonne->getCartes() as $carte) {
-                $cartes[] = [
+                $colonnes[$colonne->getId()]['cartes'][] = [
                     'id' => $carte->getId(),
                     'titrecarte' => $carte->getTitrecarte(),
                     'descriptifcarte' => $carte->getDescriptifcarte(),
@@ -156,17 +164,9 @@ class Tableau implements \JsonSerializable
                     'user_carte_login' => $carte->getUserLogin(),
                 ];
             }
-
-            $colonnes[] = [
-                'id' => $colonne->getId(),
-                'titrecolonne' => $colonne->getTitrecolonne(),
-                'tableau_id' => $colonne->getTableau()->getId(),
-                'cartes' => $cartes,
-            ];
         }
 
         $users = [];
-
         foreach ($this->getUsers() as $user) {
             $users[] = [
                 'login' => $user->getLogin(),
@@ -181,9 +181,8 @@ class Tableau implements \JsonSerializable
             'id' => $this->getId(),
             'codetableau' => $this->getCodetableau(),
             'titretableau' => $this->getTitretableau(),
-            'colonnes' => $colonnes,
+            'colonnes' => array_values($colonnes),
             'users' => $users,
         ];
     }
-
 }
