@@ -90,15 +90,15 @@ class TableauController extends GeneriqueController
     public function modify(Request $request, int $id): Response
     {
         $login = $this->getLoginFromJwt($request);
-        if (!$this->tableauRepository->verifyUserTableau($login, $id)) return $this->json(['error' => 'Access Denied'], 403);
+        $role = $this->tableauRepository->verifyUserTableauAccess($login, $id);
+        if ($role == []) return $this->json(['error' => 'Access Denied'], 403);
         $data = json_decode($request->getContent(), true);
-        $dbResponse = array();
         if (array_key_exists('titretableau', $data)) {
             if (!$data['titretableau']) return $this->json(['error' => 'Titre is required'], 400);
             $dbResponse = $this->tableauRepository->editTitreTableau($id, $data['titretableau']);
-        } else if (array_key_exists('userslogins', $data) && !!$data['userslogins']) {
+        } else if (array_key_exists('userslogins', $data) && !!$data['userslogins'] && $role[0]['user_role'] == 'USER_ADMIN') {
             $dbResponse = $this->tableauRepository->editUsersTableau($id, $data['userslogins']);
-        } else if (array_key_exists('userrole', $data) && !!$data['userrole']) {
+        } else if (array_key_exists('userrole', $data) && !!$data['userrole'] && $role[0]['user_role'] == 'USER_ADMIN') {
             $dbResponse = $this->tableauRepository->editUserRoleTableau($id, $data['userrole']);
         } else return $this->json(['error' => 'Invalid request'], 400);
         if (!$dbResponse) return $this->json(['error' => 'Error editing tableau'], 500);

@@ -43,7 +43,7 @@ class CarteRepository
             $carte = new Carte();
             $carte->setId($this->db->lastInsertId());
             $carte->setTitrecarte($titre);
-            $carte->setDescriptifcarte($descriptif ?? '');
+            $carte->setDescriptifcarte($descriptif ?? null);
             $carte->setCouleurcarte($couleur ?? '#ffffff');
             $carte->setColonneId($colonne_id);
             return $carte;

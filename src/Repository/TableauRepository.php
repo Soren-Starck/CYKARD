@@ -58,6 +58,19 @@ class TableauRepository
                 ->fetchAll() !== [];
     }
 
+    public function verifyUserTableauAccess(string $login, mixed $id): array
+    {
+        return $this->db
+                ->table('user_tableau')->select('user_tableau', ['user_role'])
+                ->where('user_login', '=', 'login')
+                ->where('tableau_id', '=', 'id')
+                ->where('user_role', '!=', 'role')
+                ->bind('login', $login)
+                ->bind('id', $id)
+                ->bind('role', 'USER_READ')
+                ->fetchAll();
+    }
+
     public function create(mixed $titre, ?string $login): array|bool
     {
         try {
