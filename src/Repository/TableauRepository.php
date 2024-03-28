@@ -7,7 +7,7 @@ use App\Entity\Colonne;
 use App\Entity\Tableau;
 use App\Lib\Database\Database;
 
-class TableauRepository
+class TableauRepository implements AbstractRepository
 {
     private Database $db;
 
@@ -131,10 +131,17 @@ class TableauRepository
 
     public function createTableauFromDbResponse(array $dbResponse): Tableau
     {
+        $index = 0;
+        foreach ($dbResponse as $key => $value) {
+            if ($value['id'] !== null) {
+                $index = $key;
+                break;
+            }
+        }
         $tableau = new Tableau();
-        $tableau->setId($dbResponse[0]['id']);
-        $tableau->setCodetableau($dbResponse[0]['codetableau']);
-        $tableau->setTitretableau($dbResponse[0]['titretableau']);
+        $tableau->setId($dbResponse[$index]['id']);
+        $tableau->setCodetableau($dbResponse[$index]['codetableau']);
+        $tableau->setTitretableau($dbResponse[$index]['titretableau']);
 
         $colonnes = [];
         foreach ($dbResponse as $row) {
