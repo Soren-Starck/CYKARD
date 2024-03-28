@@ -84,16 +84,19 @@ use PDO;
 
     public function insert(string $table, array $data): void
     {
-        $columns = array_keys($data);
-        $placeholders = array_map(fn($item) => ':' . $item, $columns);
+        $keys = array_keys($data);
+        $fields = implode(', ', $keys);
+        $placeholders = ':' . implode(', :', $keys);
 
-        $sql = sprintf(
-            'INSERT INTO %s (%s) VALUES (%s)',
-            $table,
-            implode(', ', $columns),
-            implode(', ', $placeholders)
-        );
-        $this->execute($sql, $data);
+        $query = "INSERT INTO \"$table\" ($fields) VALUES ($placeholders)";
+
+        $stmt = $this->pdo->prepare($query);
+
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(':' . $key, $value);
+        }
+
+        $stmt->execute();
     }
 
     public function update(string $table, array $data, array $where): void
