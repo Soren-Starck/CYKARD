@@ -5,13 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ pagetitle }}</title>
     {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
         {{ encore_entry_link_tags('app') }}
         <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-    {% endblock %}
-
-    {% block javascripts %}
-        {{ encore_entry_script_tags('app') }}
-        {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
     <link rel="stylesheet" href="{{ asset('assets/styles/navstyle.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/styles/trellostyle.css') }}">
