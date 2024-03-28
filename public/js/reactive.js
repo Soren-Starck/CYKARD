@@ -38,18 +38,24 @@ export class ReactiveComponent extends HTMLElement {
     _render() {
         this.innerHTML = this.render();
         if (this.children.length === 0) return;
-        const child = this.children[0];
-        const attributes = Array.from(child.attributes).map(attr => attr.name);
+        for (const child of this.children)
+            this._bind(child)
+    }
+
+    _bind(element) {
+        const attributes = Array.from(element.attributes).map(attr => attr.name);
         attributes.forEach(attr => {
             if (attr.startsWith("on")) {
-                const value = child.getAttribute(attr);
+                const value = element.getAttribute(attr);
                 if (this[value] === undefined) return
-                child[attr] = (e) => {
+                element[attr] = (e) => {
                     if (e) this[value](e);
                     else this[value]();
                 }
             }
         });
+        for (const el of element.children)
+            this._bind(el)
     }
 
     render() {
