@@ -2,6 +2,15 @@
 
 {% block title %}{{ pagetitle }}{% endblock %}
 
+{% block components %}
+    <script type="module">
+        import {Popup} from "/js/components/popup.js";
+        import {loadComponent} from "/js/reactive.js";
+
+        loadComponent("popup", Popup)
+    </script>
+{% endblock %}
+
 {% block body %}
     <div class="my-auto flex flex-col xl:flex-row justify-center gap-5 h-full">
         <div class="my-auto mx-auto xl:mx-0 w-full xl:w-1/2">
@@ -112,4 +121,5 @@
             </div>
         </div>
     </div>
+    <react-popup  visible=true></react-popup>
 {% endblock %}
