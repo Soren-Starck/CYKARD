@@ -5,7 +5,7 @@
 {% block body %}
     <div><p>Bienvenue sur <strong>Trello-Trollé</strong>!</p></div>
     <div>
-        {% if app.user %}
+        {% if app_user.currentUser %}
             <span><a class="underline text-blue-700 hover:text-blue-800" href="{{ path('app_tableaux') }}">Consulter mes tableaux</a></span>
         {% else %}
             <p>
