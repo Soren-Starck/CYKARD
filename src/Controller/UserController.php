@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class UserController extends AbstractController
+class UserController extends GeneriqueController
 {
 
     #[Route('/api/me', methods: ['GET'])]

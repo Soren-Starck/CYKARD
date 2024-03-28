@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class BaseController extends AbstractController
+class BaseController extends GeneriqueController
 {
 
     #[Route('/', name: 'app_base')]

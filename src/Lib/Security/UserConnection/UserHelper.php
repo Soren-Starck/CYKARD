@@ -3,6 +3,7 @@
 namespace App\Lib\Security\UserConnection;
 
 use App\Lib\HTTP\Session;
+use App\Repository\UserRepository;
 
 class UserHelper
 {
@@ -14,7 +15,7 @@ class UserHelper
 
     public static function doesUserHaveRole(string $role): bool
     {
-        $roles = ConnexionUtilisateur::getRoles();
+        $roles = UserRepository::getRoles();
         return in_array($role, $roles[0]['roles']);
     }
 

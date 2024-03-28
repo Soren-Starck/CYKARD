@@ -8,6 +8,7 @@ use App\Entity\Tableau;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
 use App\Repository\TableauRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -17,17 +18,19 @@ use Symfony\Component\Routing\Requirement\Requirement;
 class TableauController extends GeneriqueController
 {
     private TableauRepository $tableauRepository;
+    private UserRepository $userRepository;
 
-    public function __construct(TableauRepository $tableauRepository)
+    public function __construct(TableauRepository $tableauRepository, UserRepository $userRepository)
     {
         $this->tableauRepository = $tableauRepository;
+        $this->userRepository = $userRepository;
     }
     #[Route('/tableaux', name: 'app_tableaux')]
     public function listTableaux(): Response
     {
         if (UserHelper::isUserLoggedIn()) {
             $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-            if (!str_contains(ConnexionUtilisateur::getRoles()[0]['roles'], 'ROLE_USER'))
+            if (!str_contains($this->userRepository->getRoles()[0]['roles'], 'ROLE_USER'))
                 throw new AccessDeniedHttpException('Access Denied');
             $tableaux = $this->tableauRepository->findByUser($login);
             return $this->render('tableau/list.html.twig', [
@@ -78,14 +81,6 @@ class TableauController extends GeneriqueController
         ]);
     }
 
-    #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
-    public function show(Request $request, int $id): Response
-    {
-        $tableau = $this->tableauRepository->findTableauColonnes($this->getLoginFromJwt($request), $id);
-        if (!$tableau) return $this->json(['error' => 'No tableau found'], 404);
-        return $this->json($this->tableauRepository->createTableauFromDbResponse($tableau)->toArray(), 200);
-    }
-
     #[Route('/api/tableau/{id}/modify', name: 'app_tableau_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
     public function modify(Request $request, int $id): Response
     {
@@ -103,6 +98,14 @@ class TableauController extends GeneriqueController
         } else return $this->json(['error' => 'Invalid request'], 400);
         if (!$dbResponse) return $this->json(['error' => 'Error editing tableau'], 500);
         return $this->show($request, $id);
+    }
+
+    #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
+    public function show(Request $request, int $id): Response
+    {
+        $tableau = $this->tableauRepository->findTableauColonnes($this->getLoginFromJwt($request), $id);
+        if (!$tableau) return $this->json(['error' => 'No tableau found'], 404);
+        return $this->json($this->tableauRepository->createTableauFromDbResponse($tableau)->toArray(), 200);
     }
 
     #[Route('/api/tableau/{id}/delete', name: 'app_tableau_api_delete', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]

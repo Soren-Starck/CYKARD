@@ -51,16 +51,6 @@ class ConnexionUtilisateur
             return null;
     }
 
-    public static function verifierCredentials(string $login, string $password): bool
-    {
-        $user = Database::getInstance()->table('gozzog.user')
-            ->where('login', '=', 'login')
-            ->bind('login', $login)
-            ->fetchAll();
-        if (empty($user)) return false;
-        return MotDePasse::verifier($password, $user[0]['password']);
-    }
-
     public static function getRoles(): array
     {
         $roles = Database::getInstance()->table('gozzog.user')

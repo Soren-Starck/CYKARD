@@ -26,7 +26,7 @@ services:
       - { name: twig.extension }
 
   App\Lib\Security\RateLimiter\RateLimiter:
-    arguments: [ 200, 7200 ]
+    arguments: [ 400, 7200 ]
 
   App\Lib\Security\RateLimiter\RateLimitListener:
     tags:
