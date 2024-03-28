@@ -2,90 +2,31 @@
 
 namespace App\Entity;
 
-use App\Repository\TableauRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Attribute\Groups;
+use ArrayObject;
 
-#[ORM\Entity(repositoryClass: TableauRepository::class)]
+
 class Tableau implements \JsonSerializable
 {
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Groups(['tableau.index'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['tableau.index'])]
     private ?string $codetableau = null;
-
-    #[ORM\Column(length: 50)]
-    #[Groups(['tableau.show'])]
     private ?string $titretableau = null;
 
-    #[ORM\OneToMany(targetEntity: Colonne::class, mappedBy: 'tableau', orphanRemoval: true)]
-    private Collection $colonnes;
+    private ArrayObject $colonnes;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'tableau')]
-    private Collection $users;
+    private ArrayObject $users;
 
     public function __construct()
     {
-        $this->colonnes = new ArrayCollection();
-        $this->users = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function getCodetableau(): ?string
-    {
-        return $this->codetableau;
-    }
-
-    public function setCodetableau(string $codetableau): static
-    {
-        $this->codetableau = $codetableau;
-
-        return $this;
-    }
-
-    public function getTitretableau(): ?string
-    {
-        return $this->titretableau;
-    }
-
-    public function setTitretableau(string $titretableau): static
-    {
-        $this->titretableau = $titretableau;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Colonne>
-     */
-    public function getColonnes(): Collection
-    {
-        return $this->colonnes;
+        $this->colonnes = new ArrayObject();
+        $this->users = new ArrayObject();
     }
 
     public function addColonne(Colonne $colonne): static
     {
-        if (!$this->colonnes->contains($colonne)) {
-            $this->colonnes->add($colonne);
+        if (!in_array($colonne, (array) $this->colonnes, true)) {
+            $this->colonnes->append($colonne);
             $colonne->setTableau($this);
         }
 
@@ -94,8 +35,9 @@ class Tableau implements \JsonSerializable
 
     public function removeColonne(Colonne $colonne): static
     {
-        if ($this->colonnes->removeElement($colonne)) {
-            // set the owning side to null (unless already changed)
+        $index = array_search($colonne, (array) $this->colonnes, true);
+        if (false !== $index) {
+            $this->colonnes->offsetUnset($index);
             if ($colonne->getTableau() === $this) {
                 $colonne->setTableau(null);
             }
@@ -104,27 +46,20 @@ class Tableau implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
     public function addUser(string $user_login, string $user_role): static
     {
         $user = new User();
         $user->setLogin($user_login);
         $user->setRoles([$user_role]);
-        $this->users->add($user);
+        $this->users->append($user);
         return $this;
     }
 
     public function removeUser(User $user): static
     {
-        if ($this->users->removeElement($user)) {
-            $user->removeTableau($this);
+        $index = array_search($user, (array) $this->users, true);
+        if (false !== $index) {
+            $this->users->offsetUnset($index);
         }
 
         return $this;
@@ -184,5 +119,57 @@ class Tableau implements \JsonSerializable
             'colonnes' => array_values($colonnes),
             'users' => $users,
         ];
+    }
+
+    /**
+     * @return ArrayObject<int, Colonne>
+     */
+    public function getColonnes(): ArrayObject
+    {
+        return $this->colonnes;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayObject<int, User>
+     */
+    public function getUsers(): ArrayObject
+    {
+        return $this->users;
+    }
+
+    public function getCodetableau(): ?string
+    {
+        return $this->codetableau;
+    }
+
+    public function setCodetableau(string $codetableau): static
+    {
+        $this->codetableau = $codetableau;
+
+        return $this;
+    }
+
+    public function getTitretableau(): ?string
+    {
+        return $this->titretableau;
+    }
+
+    public function setTitretableau(string $titretableau): static
+    {
+        $this->titretableau = $titretableau;
+
+        return $this;
     }
 }

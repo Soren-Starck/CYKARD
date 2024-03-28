@@ -2,69 +2,48 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use ArrayObject;
 
-
-#[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
-#[UniqueEntity(fields: ['login'], message: 'There is already an account with this login')]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User
 {
 
-    #[ORM\Id]
-    #[ORM\Column(length: 180)]
     private ?string $login = null;
 
     /**
      * @var list<string> The user roles
      */
-    #[ORM\Column]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $verificationToken = null;
 
-    #[ORM\ManyToMany(targetEntity: Carte::class, inversedBy: 'users')]
-    private Collection $carte;
+    private ArrayObject $carte;
 
-    #[ORM\ManyToMany(targetEntity: Tableau::class, inversedBy: 'users')]
-    private Collection $tableau;
+    private ArrayObject $tableau;
 
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $apiToken = null;
 
     public function __construct()
     {
-        $this->carte = new ArrayCollection();
-        $this->tableau = new ArrayCollection();
+        $this->carte = new ArrayObject();
+        $this->tableau = new ArrayObject();
     }
 
     public function getLogin(): string
     {
-        return (string) $this->login;
+        return (string)$this->login;
     }
 
     public function setLogin(string $login): static
@@ -81,24 +60,19 @@ class User
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->login;
+        return (string)$this->login;
     }
 
     /**
+     * @return list<string>
      * @see UserInterface
      *
-     * @return list<string>
      */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
-        if ($this->isVerified) {
-            $roles[] = 'ROLE_VERIFIED';
-        }
-
+        if ($this->isVerified) $roles[] = 'ROLE_VERIFIED';
         return array_unique($roles);
     }
 
@@ -127,14 +101,6 @@ class User
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials(): void
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
 
     public function getNom(): ?string
     {
@@ -184,17 +150,17 @@ class User
     }
 
     /**
-     * @return Collection<int, Carte>
+     * @return ArrayObject<int, Carte>
      */
-    public function getCarte(): Collection
+    public function getCarte(): ArrayObject
     {
         return $this->carte;
     }
 
     public function addCarte(Carte $carte): static
     {
-        if (!$this->carte->contains($carte)) {
-            $this->carte->add($carte);
+        if (!in_array($carte, (array)$this->carte, true)) {
+            $this->carte->append($carte);
         }
 
         return $this;
@@ -202,23 +168,26 @@ class User
 
     public function removeCarte(Carte $carte): static
     {
-        $this->carte->removeElement($carte);
+        $index = array_search($carte, (array)$this->carte, true);
+        if (false !== $index) {
+            $this->carte->offsetUnset($index);
+        }
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Tableau>
+     * @return ArrayObject<int, Tableau>
      */
-    public function getTableau(): Collection
+    public function getTableau(): ArrayObject
     {
         return $this->tableau;
     }
 
     public function addTableau(Tableau $tableau): static
     {
-        if (!$this->tableau->contains($tableau)) {
-            $this->tableau->add($tableau);
+        if (!in_array($tableau, (array)$this->tableau, true)) {
+            $this->tableau->append($tableau);
         }
 
         return $this;
@@ -226,7 +195,10 @@ class User
 
     public function removeTableau(Tableau $tableau): static
     {
-        $this->tableau->removeElement($tableau);
+        $index = array_search($tableau, (array)$this->tableau, true);
+        if (false !== $index) {
+            $this->tableau->offsetUnset($index);
+        }
 
         return $this;
     }
