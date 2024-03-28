@@ -21,8 +21,9 @@ export class Card extends ReactiveComponent {
 
     render() {
         if (!this.state.data) return "";
-        return `<div id="card-${this.props.card_id}" class="shadow rounded-md border p-2 col-span-1 flex" draggable="true" ondragstart="drag">
-            <p>${this.state.data.titrecarte}</p>
+        return `<div id="card-${this.props.card_id}" class="shadow rounded-md border p-2 flex flex-col gap-1" draggable="true" ondragstart="drag" style="background: ${this.state.data.couleurcarte}">
+            <p class="font-bold">${this.state.data.titrecarte}</p>
+            <p>${this.state.data.descriptifcarte}</p>
         </div>
         `;
     }

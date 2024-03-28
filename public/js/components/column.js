@@ -42,8 +42,14 @@ export class Column extends ReactiveComponent {
             <react-card table="${this.props.table}" column_id="${carte.colonne_id}" new_column_id="${this.props.column_id}" card_id="${carte.id}"></react-card>
         `).join("")
 
-        return `<div ondrop="drop" ondragover="allowDrop" class="shadow rounded-md border p-2 col-span-1 flex flex-col gap-2">
-            <p>${this.state.column.titrecolonne}</p>
+        return `<div ondrop="drop" ondragover="allowDrop" class="min-w-[300px] min-h-full shadow rounded-md border p-2 col-span-1 flex flex-col gap-2">
+            <div class="flex justify-between">
+                <p>${this.state.column.titrecolonne}</p>
+                <div>
+                    <i class="fa-solid fa-pen"></i>
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+            </div>
             <div class="flex flex-col gap-1">
                 ${cards}
             </div>

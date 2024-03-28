@@ -46,17 +46,5 @@ export class API {
     static async remove(route) {
         return await actions("DELETE", route)
     }
-
-    static formHandler(id, callback) {
-        const form = document.getElementById(id)
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const formData = new FormData(form);
-            const formDataObject = {};
-            for (let [key, value] of formData.entries())
-                formDataObject[key] = value;
-            callback(formDataObject)
-        })
-    }
 }
 

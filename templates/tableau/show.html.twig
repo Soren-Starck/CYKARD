@@ -14,6 +14,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ titretableau }}</h1>
+    <div class="w-full flex justify-between">
+        <h1>{{ titretableau }}</h1>
+        <i class="fa-solid fa-gear"></i>
+    </div>
     <react-columns table="{{ idtableau }}"></react-columns>
 {% endblock %}
