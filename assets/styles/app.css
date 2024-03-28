@@ -13,6 +13,10 @@ nav > ul > li > a {
     @apply drop-shadow-sm text-stone-500 hover:text-stone-900 transition w-fit px-2 py-1 font-normal hover:bg-gray-100 rounded-lg whitespace-nowrap flex flex-row active:text-neutral-900;
 }
 
+#usermenu > a{
+    @apply w-full hover:bg-gray-100 px-5 py-3;
+}
+
 .container {
     @apply shadow rounded-xl border border-neutral-200 p-5;
 }

@@ -13,7 +13,14 @@
         {{ encore_entry_script_tags('app') }}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
-    {% block components %}{% endblock %}
+    {% block components %}
+        <script type="module">
+            import {Navbaruserpanel} from "/js/components/navbaruserpanel.js";
+            import {loadComponent} from "/js/reactive.js";
+
+            loadComponent("navbaruserpanel", Navbaruserpanel)
+        </script>
+    {% endblock %}
     <link rel="stylesheet" href="{{ asset('assets/styles/navstyle.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/styles/trellostyle.css') }}">
 </head>
@@ -53,16 +60,8 @@
                     <li>
                         <a href="{{ path('app_tableaux') }}">Mes tableaux</a>
                     </li>
-                    <li>
-                        <a href="{{ path('app_account') }}">
-                            <i class="fas fa-user mt-1 mr-1"></i>
-                            Mon compte (<span>{{ app_user.currentUser }}</span>)
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ path('app_logout') }}" class="danger">
-                            Déconnexion
-                        </a>
+                    <li class="mr-5">
+                        <react-navbaruserpanel showmenu=false logout-url="{{ path('app_logout') }}" account-url="{{ path('app_account') }}" current-user="{{ app_user.currentUser }}"></react-navbaruserpanel>
                     </li>
                 {% endif %}
             {% endif %}
