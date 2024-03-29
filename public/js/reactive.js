@@ -37,6 +37,7 @@ export class ReactiveComponent extends HTMLElement {
 
     _render() {
         this.innerHTML = this.render();
+        this.afterRender()
         if (this.children.length === 0) return;
         for (const child of this.children)
             this._bind(child)
@@ -56,6 +57,10 @@ export class ReactiveComponent extends HTMLElement {
         });
         for (const el of element.children)
             this._bind(el)
+    }
+
+    afterRender() {
+
     }
 
     render() {

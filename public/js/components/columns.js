@@ -8,13 +8,17 @@ export class Columns extends ReactiveComponent {
         loadComponent("column", Column)
 
         fetcher("/tableau/" + this.props.table, (data) => {
-            this.setState({data})
+            const left = document.getElementById("columns-container")
+            this.setState({
+                data,
+                left: left ? left.scrollLeft : 0
+            })
             const columns = {}
             for (const column of data.colonnes)
                 columns[column.id] = column
             Store.clear("columns")
             Store.set("columns", columns)
-        }/*, 30*/);
+        }, 30);
     }
 
     render() {
@@ -34,7 +38,7 @@ export class Columns extends ReactiveComponent {
             <react-column table="${this.props.table}" column_id="${col.id}"></react-column>
         `).join("")
 
-        return `<div class="w-full grow !h-full overflow-auto py-6">
+        return `<div class="w-full grow !h-full overflow-auto py-6" id="columns-container">
                 <div class="flex gap-3 min-h-[500px]">
                     ${columns}
                     <div class="cursor-pointer shadow rounded-md flex-1 shrink-0 !min-w-[200px] min-h-full flex justify-center items-center border border-dashed">
@@ -43,5 +47,11 @@ export class Columns extends ReactiveComponent {
                 </div>
             </div>
         `;
+    }
+
+    afterRender() {
+        const left = document.getElementById("columns-container")
+        if (!left) return
+        left.scrollLeft = this.state.left
     }
 }

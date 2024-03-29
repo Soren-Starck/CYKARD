@@ -126,7 +126,9 @@ class TableauRepository implements AbstractRepository
                     'user_role'
                 ])
                 ->where('tableau_id', '=', 'tableauId')
-                ->bind('tableauId', $id)->getQuery())->fetchAll());
+                ->bind('tableauId', $id)
+                ->getQuery())
+            ->fetchAll());
     }
 
     public function findById(string $login, int $id): array
