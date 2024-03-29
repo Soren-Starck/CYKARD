@@ -1,15 +1,20 @@
 import {loadComponent, ReactiveComponent} from "../reactive.js";
 import {fetcher} from "../fetcher.js";
 import {Column} from "./column.js";
+import {Store} from "../store.js";
 
 export class Columns extends ReactiveComponent {
     onMount() {
         loadComponent("column", Column)
 
-        fetcher("/tableau/" + this.props.table, (data) =>
-            this.setState({
-                data
-            }), 30);
+        fetcher("/tableau/" + this.props.table, (data) => {
+            this.setState({data})
+            const columns = {}
+            for (const column of data.colonnes)
+                columns[column.id] = column
+            Store.clear("columns")
+            Store.set("columns", columns)
+        }/*, 30*/);
     }
 
     render() {
@@ -29,8 +34,8 @@ export class Columns extends ReactiveComponent {
             <react-column table="${this.props.table}" column_id="${col.id}"></react-column>
         `).join("")
 
-        return `<div class="w-full overflow-auto py-6">
-                <div class="flex gap-3">
+        return `<div class="w-full grow !h-full overflow-auto py-6">
+                <div class="flex gap-3 min-h-[500px]">
                     ${columns}
                     <div class="cursor-pointer shadow rounded-md flex-1 shrink-0 !min-w-[200px] min-h-full flex justify-center items-center border border-dashed">
                         <i class="fa-solid fa-plus fa-2xl text-zinc-500"></i>
