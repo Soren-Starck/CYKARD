@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Route;
 
+use App\Controller\GeneriqueController;
 use App\Entity\User;
 use App\Lib\Security\UserConnection\MotDePasse;
 use App\Repository\UserRepository;
