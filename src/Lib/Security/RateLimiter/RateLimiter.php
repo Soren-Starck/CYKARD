@@ -41,16 +41,6 @@ class RateLimiter
         return true;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function getCurrentRequests(string $ip): int
-    {
-        $ip = $this->sanitizeIp($ip);
-        $item = $this->cache->getItem($ip);
-        return $item->isHit() ? $item->get() : 0;
-    }
-
     private function sanitizeIp(string $ip): string
     {
         return preg_replace('/[^a-zA-Z0-9_]/', '_', $ip);
