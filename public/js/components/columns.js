@@ -30,7 +30,7 @@ export class Columns extends ReactiveComponent {
         `).join("")
 
         return `<div class="w-full overflow-auto py-6">
-                <div class="flex gap-2">
+                <div class="flex gap-3">
                     ${columns}
                     <div class="cursor-pointer shadow rounded-md flex-1 shrink-0 !min-w-[200px] min-h-full flex justify-center items-center border border-dashed">
                         <i class="fa-solid fa-plus fa-2xl text-zinc-500"></i>
