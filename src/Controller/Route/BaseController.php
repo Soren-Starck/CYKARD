@@ -13,7 +13,7 @@ class BaseController extends GeneriqueController
     #[Route('/', name: 'app_base')]
     public function index(): Response
     {
-        return $this->render('base/accueil.html.twig', [
+        return $this->renderTwig('base/accueil.html.twig', [
             'pagetitle' => 'Accueil',
         ]);
     }

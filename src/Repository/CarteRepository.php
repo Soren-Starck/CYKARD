@@ -7,7 +7,7 @@ use App\Lib\Database\Database;
 use Exception;
 
 
-class CarteRepository
+class CarteRepository implements I_CarteRepository
 {
     private Database $db;
 

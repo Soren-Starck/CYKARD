@@ -30,9 +30,9 @@ class SecurityController extends GeneriqueController
                 $jwt = ConnexionUtilisateur::connecter($loginUtilisateur);
                 Cookie::enregistrer('jwt', $jwt);
                 Cookie::lire('jwt');
-                return $this->redirectToRoute('app_base');
+                return $this->redirect('app_base');
             } else {
-                return $this->render('security/login.html.twig', [
+                return $this->renderTwig('security/login.html.twig', [
                     'last_username' => $lastUsername,
                     'error' => [
                         'messageKey' => 'Invalid credentials',
@@ -42,7 +42,7 @@ class SecurityController extends GeneriqueController
                 ]);
             }
         }
-        return $this->render('security/login.html.twig', [
+        return $this->renderTwig('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => false,
             'pagetitle' => 'login'
@@ -53,6 +53,6 @@ class SecurityController extends GeneriqueController
     public function logout(): Response
     {
         ConnexionUtilisateur::deconnecter();
-        return $this->redirectToRoute('app_login');
+        return $this->redirect('app_login');
     }
 }

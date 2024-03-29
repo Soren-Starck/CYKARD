@@ -7,7 +7,7 @@ use App\Lib\Database\Database;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\MotDePasse;
 
-class UserRepository implements AbstractRepository
+class UserRepository implements I_UserRepository
 {
     private Database $db;
 

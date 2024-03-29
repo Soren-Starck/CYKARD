@@ -19,8 +19,16 @@ class UserController extends GeneriqueController
     #[Route('/account', name: 'app_account')]
     public function account(): Response
     {
-        return $this->render('user/account.html.twig', [
+        return $this->renderTwig('user/account.html.twig', [
             'pagetitle' => 'Mon compte'
+        ]);
+    }
+
+    #[Route('/RouteTest', name: 'app_test')]
+    public function test(): Response
+    {
+        return $this->renderTwig('user/test.html.twig', [
+            'pagetitle' => 'Test'
         ]);
     }
 

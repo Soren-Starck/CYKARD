@@ -25,12 +25,12 @@ class TableauController extends GeneriqueController
             if (!str_contains($this->userRepository->getRoles()[0]['roles'], 'ROLE_USER'))
                 throw new AccessDeniedHttpException('Access Denied');
             $tableaux = $this->tableauRepository->findByUser($login);
-            return $this->render('tableau/list.html.twig', [
+            return $this->renderTwig('tableau/list.html.twig', [
                 'tableaux' => $tableaux,
                 'pagetitle' => 'Liste des tableaux',
             ]);
         } else {
-            return $this->redirectToRoute('app_login');
+            return $this->redirect('app_login');
         }
     }
     #[Route('/tableau/{id}', name: 'app_tableau_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
@@ -66,7 +66,7 @@ class TableauController extends GeneriqueController
 
         foreach ($colonnes as $colonne) $tableauObject->addColonne($colonne);
 
-        return $this->render('tableau/show.html.twig', [
+        return $this->renderTwig('tableau/show.html.twig', [
             'tableau' => $tableauObject,
             'colonnes' => $colonnes,
             'pagetitle' => 'Tableau',

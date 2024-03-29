@@ -44,10 +44,10 @@ class RegistrationController extends GeneriqueController
 
                 $this->userRepository->createUser($user);
 
-                return $this->redirectToRoute('app_login');
+                return $this->redirect('app_login');
             }
         }
-        return $this->render('registration/register.html.twig', [
+        return $this->renderTwig('registration/register.html.twig', [
             'pagetitle' => 'Register',
             'errors' => $errors
         ]);
@@ -57,6 +57,6 @@ class RegistrationController extends GeneriqueController
     public function verifyEmail(string $token): Response
     {
         $this->userRepository->verifyUser($token);
-        return $this->redirectToRoute('app_login');
+        return $this->redirect('app_login');
     }
 }

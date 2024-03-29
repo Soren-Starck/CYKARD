@@ -7,7 +7,7 @@ use App\Entity\Colonne;
 use App\Entity\Tableau;
 use App\Lib\Database\Database;
 
-class TableauRepository implements AbstractRepository
+class TableauRepository implements I_TableauRepository
 {
     private Database $db;
 
