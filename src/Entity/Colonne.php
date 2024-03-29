@@ -2,33 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\ColonneRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use ArrayObject;
 
-#[ORM\Entity(repositoryClass: ColonneRepository::class)]
 class Colonne
 {
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
     private ?string $titrecolonne = null;
 
-    #[ORM\ManyToOne(inversedBy: 'colonnes')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Tableau $tableau = null;
 
-    #[ORM\OneToMany(targetEntity: Carte::class, mappedBy: 'colonne', orphanRemoval: true)]
-    private Collection $cartes;
+    private ArrayObject $cartes;
 
     public function __construct()
     {
-        $this->cartes = new ArrayCollection();
+        $this->cartes = new ArrayObject();
     }
 
     public function getId(): ?int
@@ -68,17 +57,17 @@ class Colonne
     }
 
     /**
-     * @return Collection<int, Carte>
+     * @return ArrayObject<int, Carte>
      */
-    public function getCartes(): Collection
+    public function getCartes(): ArrayObject
     {
         return $this->cartes;
     }
 
     public function addCarte(Carte $carte): static
     {
-        if (!$this->cartes->contains($carte)) {
-            $this->cartes->add($carte);
+        if (!in_array($carte, (array) $this->cartes, true)) {
+            $this->cartes->append($carte);
             $carte->setColonne($this);
         }
 
@@ -87,8 +76,9 @@ class Colonne
 
     public function removeCarte(Carte $carte): static
     {
-        if ($this->cartes->removeElement($carte)) {
-            // set the owning side to null (unless already changed)
+        $index = array_search($carte, (array) $this->cartes, true);
+        if (false !== $index) {
+            $this->cartes->offsetUnset($index);
             if ($carte->getColonne() === $this) {
                 $carte->setColonne(null);
             }

@@ -3,52 +3,25 @@
 namespace App\Entity;
 
 use AllowDynamicProperties;
-use App\Repository\CarteRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
+use ArrayObject;
 
-#[AllowDynamicProperties] #[ORM\Entity(repositoryClass: CarteRepository::class)]
-class Carte
+#[AllowDynamicProperties] class Carte
 {
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
     private ?string $titrecarte = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descriptifcarte = null;
 
-    #[ORM\Column(length: 7)]
     private ?string $couleurcarte = null;
 
-    #[ORM\ManyToOne(inversedBy: 'cartes')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Colonne $colonne = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'carte')]
-    private Collection $users;
+    private ArrayObject $users;
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
+        $this->users = new ArrayObject();
     }
 
     public function getTitrecarte(): ?string
@@ -100,17 +73,17 @@ class Carte
     }
 
     /**
-     * @return Collection<int, User>
+     * @return ArrayObject<int, User>
      */
-    public function getUsers(): Collection
+    public function getUsers(): ArrayObject
     {
         return $this->users;
     }
 
     public function addUser(User $user): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
+        if (!in_array($user, (array) $this->users, true)) {
+            $this->users->append($user);
             $user->addCarte($this);
         }
 
@@ -119,7 +92,9 @@ class Carte
 
     public function removeUser(User $user): static
     {
-        if ($this->users->removeElement($user)) {
+        $index = array_search($user, (array) $this->users, true);
+        if (false !== $index) {
+            $this->users->offsetUnset($index);
             $user->removeCarte($this);
         }
 
@@ -137,6 +112,18 @@ class Carte
         ];
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function setColonneId(int $colonne_id): void
     {
         $this->colonne = new Colonne();
@@ -152,4 +139,5 @@ class Carte
     {
         return $this->userLogin;
     }
+
 }

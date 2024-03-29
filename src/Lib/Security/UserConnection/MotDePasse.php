@@ -17,7 +17,6 @@ class MotDePasse
 
     public static function genererChaineAleatoire(int $nbCaracteres = 22): string
     {
-        $octetsAleatoires = random_bytes(ceil($nbCaracteres * 6 / 8));
-        return substr(bin2hex($octetsAleatoires), 0, $nbCaracteres);
+        return substr(bin2hex(random_bytes(ceil($nbCaracteres * 6 / 8))), 0, $nbCaracteres);
     }
 }
