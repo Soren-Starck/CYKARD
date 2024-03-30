@@ -6,17 +6,18 @@ use App\Controller\GeneriqueController;
 use App\Entity\User;
 use App\Lib\Security\UserConnection\MotDePasse;
 use App\Repository\UserRepository;
+use App\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends GeneriqueController
 {
-    private UserRepository $userRepository;
+    private UserService $userService;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserService $userService)
     {
-        $this->userRepository = $userRepository;
+        $this->userService = $userService;
     }
 
     #[Route('/register', name: 'app_register')]
@@ -42,7 +43,7 @@ class RegistrationController extends GeneriqueController
                 $user->setVerificationToken($motDePasse->genererChaineAleatoire(32));
                 $user->setRoles(['ROLE_USER']);
 
-                $this->userRepository->createUser($user);
+                $this->userService->createUser($user);
 
                 return $this->redirect('app_login');
             }
@@ -56,7 +57,7 @@ class RegistrationController extends GeneriqueController
     #[Route('/verify/email/{token}', name: 'app_verify_email')]
     public function verifyEmail(string $token): Response
     {
-        $this->userRepository->verifyUser($token);
+        $this->userService->verifyUser($token);
         return $this->redirect('app_login');
     }
 }

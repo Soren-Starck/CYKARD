@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Repository\TableauRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TableauService extends GeneriqueService
 {
@@ -30,7 +32,7 @@ class TableauService extends GeneriqueService
         return $this->showTableau($login, $id);
     }
 
-    public function showTableau(string $login , int $id): array
+    public function showTableau(string $login, int $id): array
     {
         $tableau = $this->tableauRepository->findTableauColonnes($login, $id);
         if (!$tableau) return ['error' => 'No tableau found', 'status' => 404];
@@ -61,5 +63,12 @@ class TableauService extends GeneriqueService
         if (!$tableau) return ['error' => 'Error joining tableau', 'status' => 500];
         $tableau[0]['colonnes'] = [];
         return $tableau[0];
+    }
+
+    public function getTableaux(string $login, array $roles): array
+    {
+        if (!str_contains($roles[0]['roles'], 'ROLE_USER'))
+            throw new AccessDeniedHttpException('Access Denied');
+        return $this->tableauRepository->findByUser($login);
     }
 }

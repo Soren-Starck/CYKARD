@@ -6,17 +6,18 @@ use App\Controller\GeneriqueController;
 use App\Lib\HTTP\Cookie;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Repository\UserRepository;
+use App\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class SecurityController extends GeneriqueController
 {
-    private UserRepository $userRepository;
+    private UserService $userService;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserService $userService)
     {
-        $this->userRepository = $userRepository;
+        $this->userService = $userService;
     }
 
     #[Route(path: '/login', name: 'app_login')]
@@ -26,7 +27,7 @@ class SecurityController extends GeneriqueController
         if ($request->isMethod('POST')) {
             $loginUtilisateur = $lastUsername;
             $password = $request->request->get('password');
-            if ($this->userRepository->verifierCredentials($loginUtilisateur, $password)) {
+            if ($this->userService->verifierCredentials($loginUtilisateur, $password)) {
                 $jwt = ConnexionUtilisateur::connecter($loginUtilisateur);
                 Cookie::enregistrer('jwt', $jwt);
                 Cookie::lire('jwt');

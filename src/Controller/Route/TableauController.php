@@ -6,6 +6,7 @@ use App\Controller\GeneriqueController;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
 use App\Repository\TableauRepository;
+use App\Service\TableauService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -14,27 +15,24 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 class TableauController extends GeneriqueController
 {
-    private TableauRepository $tableauRepository;
+    private TableauService $tableauService;
 
-    public function __construct(TableauRepository $tableauRepository)
+    public function __construct(TableauService $tableauService)
     {
-        $this->tableauRepository = $tableauRepository;
+        $this->tableauService = $tableauService;
     }
 
     #[Route('/tableaux', name: 'app_tableaux')]
-    public function listTableaux(): Response
+    public function listTableaux(Request $request): Response
     {
         if (UserHelper::isUserLoggedIn()) {
-            $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-            if (!str_contains(ConnexionUtilisateur::getRoles()[0]['roles'], 'ROLE_USER'))
-                throw new AccessDeniedHttpException('Access Denied');
-            $tableaux = $this->tableauRepository->findByUser($login);
-            return $this->render('tableau/list.html.twig', [
+            $tableaux = $this->tableauService->getTableaux($this->getLoginFromJwt($request),ConnexionUtilisateur::getRoles());
+            return $this->renderTwig('tableau/list.html.twig', [
                 'tableaux' => $tableaux,
                 'pagetitle' => 'Liste des tableaux',
             ]);
         } else {
-            return $this->redirectToRoute('app_login');
+            return $this->redirect('app_login');
         }
     }
 
@@ -42,16 +40,12 @@ class TableauController extends GeneriqueController
     public function showTableau(Request $request, int $id): Response
     {
         if (UserHelper::isUserLoggedIn()) {
-            $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-            if (!str_contains(ConnexionUtilisateur::getRoles()[0]['roles'], 'ROLE_USER'))
-                throw new AccessDeniedHttpException('Access Denied');
-            $tableau = $this->tableauRepository->findById($login, $id);
-            if (count($tableau) === 0) return $this->json(['error' => 'No tableau found'], 404);
-            return $this->render('tableau/show.html.twig', [
+            $tableau = $this->tableauService->showTableau($this->getLoginFromJwt($request), $id);
+            return $this->renderTwig('tableau/show.html.twig', [
                 'pagetitle' => $tableau[0]["titretableau"],
                 "idtableau" => $id,
             ]);
         }
-        return $this->redirectToRoute('app_login');
+        return $this->redirect('app_login');
     }
 }
