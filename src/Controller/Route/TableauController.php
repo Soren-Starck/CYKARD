@@ -3,12 +3,9 @@
 namespace App\Controller\Route;
 
 use App\Controller\GeneriqueController;
-use App\Entity\Carte;
-use App\Entity\Colonne;
-use App\Entity\Tableau;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
-use App\Service\TableauService;
+use App\Repository\TableauRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -17,60 +14,44 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 class TableauController extends GeneriqueController
 {
+    private TableauRepository $tableauRepository;
+
+    public function __construct(TableauRepository $tableauRepository)
+    {
+        $this->tableauRepository = $tableauRepository;
+    }
+
     #[Route('/tableaux', name: 'app_tableaux')]
     public function listTableaux(): Response
     {
         if (UserHelper::isUserLoggedIn()) {
             $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
-            if (!str_contains($this->userRepository->getRoles()[0]['roles'], 'ROLE_USER'))
+            if (!str_contains(ConnexionUtilisateur::getRoles()[0]['roles'], 'ROLE_USER'))
                 throw new AccessDeniedHttpException('Access Denied');
             $tableaux = $this->tableauRepository->findByUser($login);
-            return $this->renderTwig('tableau/list.html.twig', [
+            return $this->render('tableau/list.html.twig', [
                 'tableaux' => $tableaux,
                 'pagetitle' => 'Liste des tableaux',
             ]);
         } else {
-            return $this->redirect('app_login');
+            return $this->redirectToRoute('app_login');
         }
     }
-    #[Route('/tableau/{id}', name: 'app_tableau_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
-    public function showTableau(int $id): Response
+
+    #[Route('/tableaux/{id}', name: 'app_tableau_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
+    public function showTableau(Request $request, int $id): Response
     {
-        $tableau_colonnes = $this->tableauRepository->findTableauColonnes($this->getUser(), $id);
-        $tableauObject = null;
-        $colonnes = [];
-        foreach ($tableau_colonnes as $item) {
-            if (!$tableauObject) {
-                $tableauObject = new Tableau();
-                $tableauObject->setId($id);
-                $tableauObject->setCodetableau($item['codetableau']);
-                $tableauObject->setTitretableau($item['titretableau']);
-            }
-
-            $colonne = new Colonne();
-            if ($item['colonne_id'] !== null) $colonne->setId($item['colonne_id']);
-            if ($item['titrecolonne'] !== null) $colonne->setTitrecolonne($item['titrecolonne']);
-            $colonne->setTableau($tableauObject);
-
-            if ($item['id']) {
-                $carte = new Carte();
-                $carte->setId($item['id']);
-                $carte->setTitrecarte($item['titrecarte']);
-                $carte->setDescriptifcarte($item['descriptifcarte']);
-                $carte->setCouleurcarte($item['couleurcarte']);
-                $carte->setColonne($colonne);
-                $colonne->addCarte($carte);
-            }
-            $colonnes[$item['colonne_id']] = $colonne;
+        if (UserHelper::isUserLoggedIn()) {
+            $login = ConnexionUtilisateur::getLoginUtilisateurConnecte();
+            if (!str_contains(ConnexionUtilisateur::getRoles()[0]['roles'], 'ROLE_USER'))
+                throw new AccessDeniedHttpException('Access Denied');
+            $tableau = $this->tableauRepository->findById($login, $id);
+            if (count($tableau) === 0) return $this->json(['error' => 'No tableau found'], 404);
+            return $this->render('tableau/show.html.twig', [
+                'pagetitle' => $tableau[0]["titretableau"],
+                "idtableau" => $id,
+            ]);
         }
-
-        foreach ($colonnes as $colonne) $tableauObject->addColonne($colonne);
-
-        return $this->renderTwig('tableau/show.html.twig', [
-            'tableau' => $tableauObject,
-            'colonnes' => $colonnes,
-            'pagetitle' => 'Tableau',
-        ]);
+        return $this->redirectToRoute('app_login');
     }
-
 }

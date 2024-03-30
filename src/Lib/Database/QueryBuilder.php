@@ -155,8 +155,7 @@ class QueryBuilder
 
     public function union(string $query): self
     {
-        $this->query .= ' UNION ' . $query;
+        $this->query = sprintf('(%s) UNION (%s)', $this->query, $query);
         return $this;
     }
-
 }

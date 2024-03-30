@@ -5,14 +5,25 @@
 {% block title %}My Account{% endblock %}
 
 {% block body %}
-    <h1>My Account</h1>
+    <div class="container w-1/3 m-auto">
+        <form method="post">
+            <h1 class="h3 mb-3">Mon compte</h1>
+            <div class="VBox">
+                <label for="inputLogin">Identifiant</label>
+                <input type="text" value="{{ user.login }}" name="login" id="inputLogin" class="form-control"
+                       autocomplete="username" required autofocus>
+                <label for="inputEmail">Email</label>
+                <input type="email" name="email" id="inputEmail" value="{{ user.email }}" class="form-control"
+                       autocomplete="current-password"
+                       required>
 
-    <p>Nom: {{ app.user.nom }}</p>
-    <p>Prenom: {{ app.user.prenom }}</p>
-
-    <p>Username: {{ app.user.login }}</p>
-    <p>Email: {{ app.user.email }}</p>
-
-    <a href="{{ path('app_account_edit') }}">Edit</a>
-    <a href="{{ path('app_account_delete') }}">Delete</a>
+                {% if user.is_verified == false %}
+                    <div class="alert-static alert-danger">Votre compte n'est pas encore vérifié. Merci de vérifier
+                        votre boîte
+                        mail.
+                    </div>
+                {% endif %}
+            </div>
+        </form>
+    </div>
 {% endblock %}
