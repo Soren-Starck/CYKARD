@@ -28,7 +28,6 @@ export class Column extends ReactiveComponent {
         API.update(`/carte/${card.id}/modify`, {
             colonne_id: parseInt(this.props.column_id)
         })
-        // mutate(`/tableau/${this.props.table}`)
     }
 
     allowDrop(e) {
@@ -58,10 +57,7 @@ export class Column extends ReactiveComponent {
         return `<div ondrop="drop" ondragover="allowDrop" class="min-w-[300px] min-h-full shadow rounded-md border-2 p-2 col-span-1 flex flex-col gap-2 group">
     <div class="flex justify-between">
         <p class="ml-1 font-bold">${this.state.column.titrecolonne}</p>
-        <div>
-            <i onclick="modify" class="cursor-pointer transition fa-solid fa-pen opacity-0 group-hover:opacity-100"></i>
-            <i onclick="newCard" class="cursor-pointer transition fa-solid fa-plus opacity-0 group-hover:opacity-100"></i>
-        </div>
+        <i onclick="modify" class="cursor-pointer transition fa-solid fa-pen opacity-0 group-hover:opacity-100"></i>
     </div>
     <div class="flex flex-col gap-2">
         ${cards}
