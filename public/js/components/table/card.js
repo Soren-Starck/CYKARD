@@ -30,7 +30,7 @@ export class Card extends ReactiveComponent {
 
     render() {
         if (!this.state.data) return "";
-        return `<div onclick="editCard" class="hover:opacity-70 transition relative bg-white shadow rounded-md border-2 p-2 flex flex-col gap-1 hover:cursor-grab active:cursor-grabbing group" draggable="true" ondragstart="drag" style="border-color: ${this.state.data.couleurcarte === '#ffffff' ? '#e5e7eb' : this.state.data.couleurcarte}">
+        return `<div onclick="editCard" class="hover:opacity-70 hover:!border-blue-600 transition relative bg-white shadow rounded-md border-2 p-2 flex flex-col gap-1 hover:cursor-grab active:cursor-grabbing group" draggable="true" ondragstart="drag" style="border-color: ${this.state.data.couleurcarte === '#ffffff' ? '#e5e7eb' : this.state.data.couleurcarte}">
             <div class="w-14 h-3 rounded-full absolute top-3 right-4" style="background: ${this.state.data.couleurcarte}"></div>
             <p class="font-bold">${this.state.data.titrecarte}</p>
             <p>${this.state.data.descriptifcarte ?? ""}</p>

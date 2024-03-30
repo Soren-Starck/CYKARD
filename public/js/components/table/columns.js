@@ -55,11 +55,11 @@ export class Columns extends ReactiveComponent {
         `).join("")
 
         return `<div class="w-full flex justify-between">
-                <h1>${this.state.title}</h1>
+                <h1 class="font-bold">${this.state.title}</h1>
                 <i onclick="settings" class="cursor-pointer fa-solid fa-gear"></i>
             </div>
             <div class="w-full grow !h-full overflow-auto py-6" id="columns-container">
-                <div class="flex gap-3 min-h-[500px]">
+                <div class="flex gap-4 min-h-[500px]">
                     ${columns}
                     <div onclick="newColumn" class="relative cursor-pointer transition hover:bg-slate-50 shadow p-2 rounded-md flex-1 shrink-0 !max-w-[300px] min-h-full border-2 border-dashed">
                         <p class="w-24 h-4 rounded-md shadow bg-slate-200"></p>
