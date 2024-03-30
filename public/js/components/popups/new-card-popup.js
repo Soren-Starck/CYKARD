@@ -18,6 +18,8 @@ export class NewCardPopup extends Popup {
             <input type="text" id="title" name="titrecarte" required>
             <label for="description">Description</label>
             <textarea id="description" name="descriptifcarte"></textarea>
+            <label for="color">Couleur</label>
+            <input type="color" id="color" name="couleurcarte">
             <button type="submit">Créer</button>
         </form>
         `)
