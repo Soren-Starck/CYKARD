@@ -4,14 +4,20 @@ import {ColumnStore} from "../../stores/column-store.js";
 
 export class EditCard extends Popup {
     submit(e) {
+        const action = e.submitter.name
         const data = API.formHandler(e)
-        API.update(`/carte/${this.props.card_id}/modify`, data)
-        ColumnStore.modifyCard(this.props.column_id, this.props.card_id, (card) => {
-            card.titrecarte = data.titrecarte
-            card.descriptifcarte = data.descriptifcarte
-            card.couleurcarte = data.couleurcarte
-            return card
-        })
+        if (action === "delete") {
+            API.remove(`/carte/${this.props.card_id}/delete`)
+            ColumnStore.deleteCard(this.props.column_id, this.props.card_id)
+        } else {
+            API.update(`/carte/${this.props.card_id}/modify`, data)
+            ColumnStore.modifyCard(this.props.column_id, this.props.card_id, (card) => {
+                card.titrecarte = data.titrecarte
+                card.descriptifcarte = data.descriptifcarte
+                card.couleurcarte = data.couleurcarte
+                return card
+            })
+        }
         this.close()
     }
 
@@ -24,7 +30,10 @@ export class EditCard extends Popup {
             <textarea id="description" name="descriptifcarte">${this.props.description}</textarea>
             <label for="color">Couleur</label>
             <input type="color" id="color" name="couleurcarte" value="${this.props.color}">
-            <button type="submit">Modifier</button>
+            <div class="flex flex-row gap-4 w-full justify-between">
+            <button class="w-full" type="submit">Modifier</button>
+            <button class="w-full !bg-red-100 !text-red-500" type="submit" name="delete">Supprimer</button>
+            </div>
         </form>
         `)
     }

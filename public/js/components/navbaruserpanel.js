@@ -6,6 +6,7 @@ export class Navbaruserpanel extends ReactiveComponent {
     }
 
     render() {
+        console.log("rendering Navbaruserpanel : ", this.props.showmenu);
         return `
             <div onclick="toggleMenu" class="text-xl hover:cursor-pointer drop-shadow-sm text-stone-500 hover:text-stone-900 transition w-fit p-1 font-normal hover:bg-gray-100 rounded-lg whitespace-nowrap flex flex-row active:text-neutral-900">
                 <i class="fas fa-user-circle"></i>
