@@ -18,7 +18,7 @@
   "private": true,
   "scripts": {
     "all": "concurrently 'npm run dev' 'npm run watch'",
-    "dev": "php -S 0.0.0.0:8000 -t public",
+    "dev": "php -S localhost:8000 -t public",
     "watch": "encore dev --watch",
     "build": "encore production --progress"
   },
