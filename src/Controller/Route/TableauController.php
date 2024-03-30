@@ -3,13 +3,9 @@
 namespace App\Controller\Route;
 
 use App\Controller\GeneriqueController;
-use App\Entity\Carte;
-use App\Entity\Colonne;
-use App\Entity\Tableau;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
 use App\Repository\TableauRepository;
-use App\Service\TableauService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -53,7 +49,6 @@ class TableauController extends GeneriqueController
             if (count($tableau) === 0) return $this->json(['error' => 'No tableau found'], 404);
             return $this->render('tableau/show.html.twig', [
                 'pagetitle' => $tableau[0]["titretableau"],
-                "titretableau" => $tableau[0]["titretableau"],
                 "idtableau" => $id,
             ]);
         }

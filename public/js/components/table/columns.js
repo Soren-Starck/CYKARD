@@ -2,6 +2,7 @@ import {loadComponent, ReactiveComponent} from "../../reactive.js";
 import {fetcher} from "../../fetcher.js";
 import {Column} from "./column.js";
 import {Store} from "../../store.js";
+import {openPopup} from "../popup.js";
 
 export class Columns extends ReactiveComponent {
     onMount() {
@@ -11,6 +12,7 @@ export class Columns extends ReactiveComponent {
             const left = document.getElementById("columns-container")
             this.setState({
                 data,
+                title: data.titretableau,
                 left: left ? left.scrollLeft : 0
             })
             const columns = {}
@@ -18,7 +20,16 @@ export class Columns extends ReactiveComponent {
                 columns[column.id] = column
             Store.clear("columns")
             Store.set("columns", columns)
+            Store.set("table", data.titretableau)
         }, 30);
+
+        Store.subscribe("table", (table) => {
+            this.setState({title: table})
+        })
+    }
+
+    settings() {
+        openPopup("settings-popup", {table: this.props.table})
     }
 
     render() {
@@ -38,7 +49,11 @@ export class Columns extends ReactiveComponent {
             <react-column table="${this.props.table}" column_id="${col.id}"></react-column>
         `).join("")
 
-        return `<div class="w-full grow !h-full overflow-auto py-6" id="columns-container">
+        return `<div class="w-full flex justify-between">
+                <h1>${this.state.title}</h1>
+                <i onclick="settings" class="cursor-pointer fa-solid fa-gear"></i>
+            </div>
+            <div class="w-full grow !h-full overflow-auto py-6" id="columns-container">
                 <div class="flex gap-3 min-h-[500px]">
                     ${columns}
                     <div class="cursor-pointer shadow rounded-md flex-1 shrink-0 !min-w-[200px] min-h-full flex justify-center items-center border border-dashed">
