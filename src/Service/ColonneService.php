@@ -17,11 +17,9 @@ class ColonneService extends GeneriqueService
         $this->tableauRepository = $tableauRepository;
     }
 
-    public function modifyColonne(Request $request, int $id): array
+    public function modifyColonne(mixed $data,string $login, int $id): array
     {
-        $login = $this->getLoginFromJwt($request);
         if (!$this->colonneRepository->verifyUserTableauByColonne($login, $id)) return ['error' => 'Access Denied', 'status' => 403];
-        $data = json_decode($request->getContent(), true);
         $titre = $data['titrecolonne'];
         if (!$titre) return ['error' => 'TitreColonne is required', 'status' => 400];
         $dbResponse = $this->colonneRepository->editTitreColonne($id, $titre);
@@ -29,19 +27,16 @@ class ColonneService extends GeneriqueService
         return $this->colonneRepository->findByTableauAndColonne($login, $id);
     }
 
-    public function deleteColonne(Request $request, int $id): array
+    public function deleteColonne(string $login, int $id): array
     {
-        $login = $this->getLoginFromJwt($request);
         if (!$this->colonneRepository->verifyUserTableauByColonne($login, $id)) return ['error' => 'Access Denied', 'status' => 403];
         $dbResponse = $this->colonneRepository->delete($id);
         if (!$dbResponse) return ['error' => 'Error deleting colonne', 'status' => 500];
         return [];
     }
 
-    public function createColonne(Request $request, int $tableau_id): array
+    public function createColonne(mixed $data, string $login, int $tableau_id): array
     {
-        $login = $this->getLoginFromJwt($request);
-        $data = json_decode($request->getContent(), true);
         $titre = $data['TitreColonne'];
         if (!$titre || !$tableau_id) return ['error' => 'TitreColonne and TableauId are required', 'status' => 400];
         if (!$this->tableauRepository->verifyUserTableau($login, $tableau_id)) return ['error' => 'Access Denied', 'status' => 403];

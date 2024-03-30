@@ -14,12 +14,10 @@ class TableauService extends GeneriqueService
         $this->tableauRepository = $tableauRepository;
     }
 
-    public function modifyTableau(Request $request, int $id): array
+    public function modifyTableau(mixed $data, string $login, int $id): array
     {
-        $login = $this->getLoginFromJwt($request);
         $role = $this->tableauRepository->verifyUserTableauAccess($login, $id);
         if ($role == []) return ['error' => 'Access Denied', 'status' => 403];
-        $data = json_decode($request->getContent(), true);
         if (array_key_exists('titretableau', $data)) {
             if (!$data['titretableau']) return ['error' => 'Titre is required', 'status' => 400];
             $dbResponse = $this->tableauRepository->editTitreTableau($id, $data['titretableau']);
@@ -29,29 +27,26 @@ class TableauService extends GeneriqueService
             $dbResponse = $this->tableauRepository->editUserRoleTableau($id, $data['userrole']);
         } else return ['error' => 'Invalid request', 'status' => 400];
         if (!$dbResponse) return ['error' => 'Error editing tableau', 'status' => 500];
-        return $this->showTableau($request, $id);
+        return $this->showTableau($login, $id);
     }
 
-    public function showTableau(Request $request, int $id): array
+    public function showTableau(string $login , int $id): array
     {
-        $tableau = $this->tableauRepository->findTableauColonnes($this->getLoginFromJwt($request), $id);
+        $tableau = $this->tableauRepository->findTableauColonnes($login, $id);
         if (!$tableau) return ['error' => 'No tableau found', 'status' => 404];
         return $this->tableauRepository->createTableauFromDbResponse($tableau)->toArray();
     }
 
-    public function deleteTableau(Request $request, int $id): array
+    public function deleteTableau(string $login, int $id): array
     {
-        $login = $this->getLoginFromJwt($request);
         if (!$this->tableauRepository->verifyUserTableau($login, $id)) return ['error' => 'Access Denied', 'status' => 403];
         $dbResponse = $this->tableauRepository->delete($id);
         if (!$dbResponse) return ['error' => 'Error deleting tableau', 'status' => 500];
         return [];
     }
 
-    public function createTableau(Request $request): array
+    public function createTableau(mixed $data, string $login): array
     {
-        $login = $this->getLoginFromJwt($request);
-        $data = json_decode($request->getContent(), true);
         if (!array_key_exists('titretableau', $data) || !$data['titretableau']) return ['error' => 'Titre is required', 'status' => 400];
         $tableau = $this->tableauRepository->create($data['titretableau'], $login);
         if (!$tableau) return ['error' => 'Error creating tableau', 'status' => 500];
@@ -59,10 +54,9 @@ class TableauService extends GeneriqueService
         return $tableau[0];
     }
 
-    public function joinTableau(Request $request, string $codetableau): array
+    public function joinTableau(string $login, string $codetableau): array
     {
         if (!$codetableau || strlen($codetableau) !== 16) return ['error' => 'Invalid codetableau', 'status' => 400];
-        $login = $this->getLoginFromJwt($request);
         $tableau = $this->tableauRepository->join($codetableau, $login);
         if (!$tableau) return ['error' => 'Error joining tableau', 'status' => 500];
         $tableau[0]['colonnes'] = [];
