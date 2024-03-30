@@ -15,7 +15,7 @@ export class NewCardPopup extends Popup {
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
             <label for="title">Titre</label>
-            <input type="text" id="title" name="titrecarte" required>
+            <input type="text" id="title" name="titrecarte" required autofocus>
             <label for="description">Description</label>
             <textarea id="description" name="descriptifcarte"></textarea>
             <label for="color">Couleur</label>

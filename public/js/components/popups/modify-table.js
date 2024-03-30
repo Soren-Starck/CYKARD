@@ -14,7 +14,7 @@ export class ModifyTable extends Popup {
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
             <label for="title">Titre</label>
-            <input type="text" id="title" value="${Store.get("table")}" name="titretableau" required>
+            <input type="text" id="title" value="${Store.get("table")}" name="titretableau" required autofocus>
             <button type="submit">Modifier</button>
         </form>
         `)

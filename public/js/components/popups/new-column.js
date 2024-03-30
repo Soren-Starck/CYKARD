@@ -16,7 +16,7 @@ export class NewColumn extends Popup {
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
             <label for="title">Titre</label>
-            <input type="text" id="title" name="TitreColonne" required>
+            <input type="text" id="title" name="TitreColonne" required autofocus>
             <button type="submit" name="modify">Créer</button>
         </form>
         `)

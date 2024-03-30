@@ -23,7 +23,7 @@ export class ModifyColumn extends Popup {
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
             <label for="title">Titre</label>
-            <input type="text" id="title" value="${this.props.name}" name="titrecolonne" required>
+            <input type="text" id="title" value="${this.props.name}" name="titrecolonne" required autofocus>
             <button type="submit" name="modify">Modifier</button>
             <button type="submit" name="delete">Supprimer</button>
         </form>

@@ -15,7 +15,7 @@ export class NewTable extends Popup {
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
             <label for="title">Titre</label>
-            <input type="text" id="title" name="titretableau" required>
+            <input type="text" id="title" name="titretableau" required autofocus>
             <button type="submit">Créer</button>
         </form>
         `)
