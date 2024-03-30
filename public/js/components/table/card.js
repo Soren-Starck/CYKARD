@@ -1,5 +1,5 @@
-import {ReactiveComponent} from "../reactive.js";
-import {Store} from "../store.js";
+import {ReactiveComponent} from "../../reactive.js";
+import {Store} from "../../store.js";
 
 export class Card extends ReactiveComponent {
     onMount() {

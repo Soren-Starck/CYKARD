@@ -1,9 +1,9 @@
-import {loadComponent, ReactiveComponent} from "../reactive.js";
+import {loadComponent, ReactiveComponent} from "../../reactive.js";
 import {Card} from "./card.js";
-import {API} from "../api.js";
-import {Store} from "../store.js";
-import {ColumnStore} from "../stores/column-store.js";
-import {mutate} from "../fetcher.js";
+import {API} from "../../api.js";
+import {Store} from "../../store.js";
+import {ColumnStore} from "../../stores/column-store.js";
+import {openPopup} from "../popup.js";
 
 export class Column extends ReactiveComponent {
     onMount() {
@@ -28,11 +28,24 @@ export class Column extends ReactiveComponent {
         API.update(`/carte/${card.id}/modify`, {
             colonne_id: parseInt(this.props.column_id)
         })
-        mutate(`/tableau/${this.props.table}`)
+        // mutate(`/tableau/${this.props.table}`)
     }
 
     allowDrop(e) {
         e.preventDefault()
+    }
+
+    newCard() {
+        openPopup("new-card-popup", {
+            column_id: this.props.column_id
+        })
+    }
+
+    modify() {
+        openPopup("modify-column-popup", {
+            column_id: this.props.column_id,
+            name: this.state.column.titrecolonne
+        })
     }
 
     render() {
@@ -46,8 +59,8 @@ export class Column extends ReactiveComponent {
     <div class="flex justify-between">
         <p class="ml-1 font-bold">${this.state.column.titrecolonne}</p>
         <div>
-            <i class="transition fa-solid fa-pen opacity-0 group-hover:opacity-100"></i>
-            <i class="transition fa-solid fa-plus opacity-0 group-hover:opacity-100"></i>
+            <i onclick="modify" class="cursor-pointer transition fa-solid fa-pen opacity-0 group-hover:opacity-100"></i>
+            <i onclick="newCard" class="cursor-pointer transition fa-solid fa-plus opacity-0 group-hover:opacity-100"></i>
         </div>
     </div>
     <div class="flex flex-col gap-2">

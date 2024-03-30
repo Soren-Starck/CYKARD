@@ -1,7 +1,7 @@
-import {loadComponent, ReactiveComponent} from "../reactive.js";
-import {fetcher} from "../fetcher.js";
+import {loadComponent, ReactiveComponent} from "../../reactive.js";
+import {fetcher} from "../../fetcher.js";
 import {Column} from "./column.js";
-import {Store} from "../store.js";
+import {Store} from "../../store.js";
 
 export class Columns extends ReactiveComponent {
     onMount() {

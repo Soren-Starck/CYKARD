@@ -46,5 +46,13 @@ export class API {
     static async remove(route) {
         return await actions("DELETE", route)
     }
+
+    static formHandler(event) {
+        event.preventDefault()
+        const formData = new FormData(event.target)
+        const data = {}
+        formData.forEach((value, key) => data[key] = value)
+        return data
+    }
 }
 

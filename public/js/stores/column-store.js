@@ -18,4 +18,20 @@ export class ColumnStore {
         Store.set("columns", columns)
         return true
     }
+
+    static addCard(column_id, card) {
+        if (typeof column_id === "string") column_id = parseInt(column_id)
+        const columns = Store.get("columns")
+        const column = columns[column_id]
+        column.cartes = [...column.cartes, card]
+        Store.set("columns", columns)
+    }
+
+    static modifyColumn(column_id, callback) {
+        const column = this.getColumn(column_id)
+        const newColumn = callback(column)
+        const columns = Store.get("columns")
+        columns[column_id] = newColumn
+        Store.set("columns", columns)
+    }
 }
