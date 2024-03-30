@@ -9,7 +9,7 @@ export class Column extends ReactiveComponent {
     onMount() {
         loadComponent("card", Card)
 
-        Store.subscribe("columns", (columns) => {
+        Store.subscribeOnce("columns", (columns) => {
             const column = columns[parseInt(this.props.column_id)]
             if (!column) return
             this.setState({

@@ -22,6 +22,7 @@ async function actions(method, route, data) {
                 body: JSON.stringify(data)
             } : {})
         });
+        if (res.status === 204) return null
         return await res.json()
     } catch (e) {
         console.error(e)

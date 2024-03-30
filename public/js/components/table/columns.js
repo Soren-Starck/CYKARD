@@ -11,20 +11,21 @@ export class Columns extends ReactiveComponent {
         fetcher("/tableau/" + this.props.table, (data) => {
             const left = document.getElementById("columns-container")
             this.setState({
-                data,
-                title: data.titretableau,
                 left: left ? left.scrollLeft : 0
             })
             const columns = {}
             for (const column of data.colonnes)
                 columns[column.id] = column
-            Store.clear("columns")
             Store.set("columns", columns)
             Store.set("table", data.titretableau)
         }, 30);
 
         Store.subscribe("table", (table) => {
             this.setState({title: table})
+        })
+
+        Store.subscribe("columns", (columns) => {
+            this.setState({columns: Object.values(columns)})
         })
     }
 
@@ -33,7 +34,7 @@ export class Columns extends ReactiveComponent {
     }
 
     render() {
-        if (!this.state.data) return `
+        if (!this.state.columns) return `
 <div class="text-center h-[80vh] flex justify-center items-center">
 <div role="status" class="my-auto">
     <svg aria-hidden="true" class="inline w-12 h-12 text-gray-200 animate-spin dark:text-gray-50 fill-neutral-900" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -45,7 +46,7 @@ export class Columns extends ReactiveComponent {
 </div>
         `;
 
-        const columns = this.state.data.colonnes.map(col => `
+        const columns = this.state.columns.map(col => `
             <react-column table="${this.props.table}" column_id="${col.id}"></react-column>
         `).join("")
 

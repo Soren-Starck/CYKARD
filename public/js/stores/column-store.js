@@ -34,4 +34,9 @@ export class ColumnStore {
         columns[column_id] = newColumn
         Store.set("columns", columns)
     }
+
+    static deleteColumn(column_id) {
+        if (typeof column_id === "string") column_id = parseInt(column_id)
+        Store.removeByIndex("columns", column_id)
+    }
 }

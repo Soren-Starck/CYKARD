@@ -60,7 +60,6 @@ export class ReactiveComponent extends HTMLElement {
     }
 
     afterRender() {
-
     }
 
     render() {
