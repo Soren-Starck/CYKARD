@@ -15,6 +15,7 @@ export class NewColumn extends Popup {
             API.update(`/carte/${card.id}/modify`, {
                 colonne_id: result.id
             })
+            this.removeAttribute("card")
         }
         this.close()
     }

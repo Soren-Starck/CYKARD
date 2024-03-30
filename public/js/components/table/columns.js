@@ -37,12 +37,12 @@ export class Columns extends ReactiveComponent {
         openPopup("new-column-popup", {table: this.props.table})
     }
 
-    drop(e) {
+    dropNewColumn(e) {
         e.preventDefault();
         openPopup("new-column-popup", {table: this.props.table, card: e.dataTransfer.getData("text")})
     }
 
-    allowDrop(e) {
+    allowDropNewCol(e) {
         e.preventDefault()
     }
 
@@ -69,7 +69,7 @@ export class Columns extends ReactiveComponent {
             <div class="w-full grow !h-full overflow-auto py-6" id="columns-container">
                 <div class="flex gap-4 min-h-[500px]">
                     ${columns}
-                    <div ondrop="drop" ondragover="allowDrop" onclick="newColumn" class="relative cursor-pointer transition hover:bg-slate-50 shadow p-2 rounded-md flex-1 shrink-0 !max-w-[300px] min-w-[300px] min-h-full border-2 border-dashed">
+                    <div ondrop="dropNewColumn" ondragover="allowDropNewCol" onclick="newColumn" class="relative cursor-pointer transition hover:bg-slate-50 shadow p-2 rounded-md flex-1 shrink-0 !max-w-[300px] min-w-[300px] min-h-full border-2 border-dashed">
                         <p class="w-24 h-4 rounded-md shadow bg-slate-200"></p>
                         <i class="fa-solid fa-plus fa-2xl text-slate-200  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
                     </div>
