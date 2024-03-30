@@ -36,6 +36,8 @@ export class ColumnStore {
     }
 
     static modifyCard(column_id, card_id, callback) {
+        card_id = parseInt(card_id)
+        column_id = parseInt(column_id)
         const column = this.getColumn(column_id)
         const card = column.cartes.find(c => c.id === card_id)
         const newCard = callback(card)

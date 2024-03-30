@@ -23,7 +23,7 @@ export class EditCard extends Popup {
             <label for="description">Description</label>
             <textarea id="description" name="descriptifcarte">${this.props.description}</textarea>
             <label for="color">Couleur</label>
-            <input type="color" id="color" name="color" value="${this.props.color}">
+            <input type="color" id="color" name="couleurcarte" value="${this.props.color}">
             <button type="submit">Modifier</button>
         </form>
         `)
