@@ -18,10 +18,11 @@ class CarteApiController extends GeneriqueController
     {
         $this->carteService = $carteService;
     }
+
     #[Route('/api/carte/{id}/modify', name: 'app_carte_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
     public function modify(Request $request, int $id): Response
     {
-        $result = $this->carteService->modifyCarte($request, $id);
+        $result = $this->carteService->modifyCarte($this->getLoginFromJwt($request), $id, json_decode($request->getContent(), true));
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
     }
@@ -29,7 +30,7 @@ class CarteApiController extends GeneriqueController
     #[Route('/api/carte/{id}', name: 'app_carte_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
     public function show(Request $request, int $id): Response
     {
-        $result = $this->carteService->showCarte($request, $id);
+        $result = $this->carteService->showCarte($this->getLoginFromJwt($request), $id);
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
     }
@@ -37,7 +38,7 @@ class CarteApiController extends GeneriqueController
     #[Route('/api/carte/{id}/delete', name: 'app_carte_api_delete', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]
     public function delete(Request $request, int $id): Response
     {
-        $result = $this->carteService->deleteCarte($request, $id);
+        $result = $this->carteService->deleteCarte($this->getLoginFromJwt($request), $id);
         if (isset($result['error'])) {
             return $this->json(['error' => $result['error']], $result['status']);
         }
@@ -47,7 +48,8 @@ class CarteApiController extends GeneriqueController
     #[Route('/api/colonne/{colonne_id}/carte', name: 'app_carte_api_create', requirements: ['colonne_id' => Requirement::DIGITS], methods: ['POST'])]
     public function create(Request $request, int $colonne_id): Response
     {
-        $result = $this->carteService->createCarte($request, $colonne_id);
+        $data = json_decode($request->getContent(), true);
+        $result = $this->carteService->createCarte($data, $this->getLoginFromJwt($request), $colonne_id);
         if (isset($result['error'])) {
             return $this->json(['error' => $result['error']], $result['status']);
         }

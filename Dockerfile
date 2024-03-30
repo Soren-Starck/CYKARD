@@ -22,4 +22,4 @@ RUN npm install
 
 RUN npm run build
 
-CMD ["npm", "run", "dev"]
+CMD "php -S 0.0.0.0:8000 -t public"
