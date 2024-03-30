@@ -61,8 +61,9 @@ export class Columns extends ReactiveComponent {
             <div class="w-full grow !h-full overflow-auto py-6" id="columns-container">
                 <div class="flex gap-3 min-h-[500px]">
                     ${columns}
-                    <div onclick="newColumn" class="cursor-pointer shadow rounded-md flex-1 shrink-0 !min-w-[200px] min-h-full flex justify-center items-center border border-dashed">
-                        <i class="fa-solid fa-plus fa-2xl text-zinc-500"></i>
+                    <div onclick="newColumn" class="relative cursor-pointer transition hover:bg-slate-50 shadow p-2 rounded-md flex-1 shrink-0 !max-w-[300px] min-h-full border-2 border-dashed">
+                        <p class="w-24 h-4 rounded-md shadow bg-slate-200"></p>
+                        <i class="fa-solid fa-plus fa-2xl text-slate-200  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
                     </div>
                 </div>
             </div>
