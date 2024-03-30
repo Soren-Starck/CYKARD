@@ -35,6 +35,17 @@ export class ColumnStore {
         Store.set("columns", columns)
     }
 
+    static modifyCard(column_id, card_id, callback) {
+        const column = this.getColumn(column_id)
+        const card = column.cartes.find(c => c.id === card_id)
+        const newCard = callback(card)
+        const columns = Store.get("columns")
+        const newColumn = {...column}
+        newColumn.cartes = column.cartes.map(c => c.id === card_id ? newCard : c)
+        columns[column_id] = newColumn
+        Store.set("columns", columns)
+    }
+
     static deleteColumn(column_id) {
         if (typeof column_id === "string") column_id = parseInt(column_id)
         Store.removeByIndex("columns", column_id)
