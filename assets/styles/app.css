@@ -226,3 +226,37 @@ h2 {
 .warning {
     @apply text-yellow-600 bg-yellow-100;
 }
+
+.popups {
+    animation: popups 0.3s;
+    transition: all 0.2s ease-in-out;
+}
+
+@keyframes popups {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.01);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.BackgroundBlur {
+    animation: BackgroundBlur 0.3s;
+    transition: all 0.2s ease-in-out;
+}
+
+@keyframes BackgroundBlur {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
