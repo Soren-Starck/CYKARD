@@ -11,11 +11,13 @@
         import {NewCardPopup} from "/js/components/popups/new-card-popup.js";
         import {ModifyColumn} from "/js/components/popups/modify-column.js";
         import {ModifyTable} from "/js/components/popups/modify-table.js";
+        import {NewColumn} from "/js/components/popups/new-column.js";
 
         loadComponent("columns", Columns)
         loadComponent("new-card", NewCardPopup)
         loadComponent("modify-column", ModifyColumn)
         loadComponent("settings", ModifyTable)
+        loadComponent("new-column", NewColumn)
     </script>
 {% endblock %}
 
@@ -24,4 +26,5 @@
     <react-new-card visible="false" id="new-card-popup" title="Créer une nouvelle carte"></react-new-card>
     <react-modify-column visible="false" id="modify-column-popup" title="Modifier une colonne"></react-modify-column>
     <react-settings visible="false" id="settings-popup" title="Modifier le tableau"></react-settings>
+    <react-new-column visible="false" id="new-column-popup" title="Créer une nouvelle colonne"></react-new-column>
 {% endblock %}

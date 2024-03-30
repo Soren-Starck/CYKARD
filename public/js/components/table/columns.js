@@ -33,6 +33,10 @@ export class Columns extends ReactiveComponent {
         openPopup("settings-popup", {table: this.props.table})
     }
 
+    newColumn() {
+        openPopup("new-column-popup", {table: this.props.table})
+    }
+
     render() {
         if (!this.state.columns) return `
 <div class="text-center h-[80vh] flex justify-center items-center">
@@ -57,7 +61,7 @@ export class Columns extends ReactiveComponent {
             <div class="w-full grow !h-full overflow-auto py-6" id="columns-container">
                 <div class="flex gap-3 min-h-[500px]">
                     ${columns}
-                    <div class="cursor-pointer shadow rounded-md flex-1 shrink-0 !min-w-[200px] min-h-full flex justify-center items-center border border-dashed">
+                    <div onclick="newColumn" class="cursor-pointer shadow rounded-md flex-1 shrink-0 !min-w-[200px] min-h-full flex justify-center items-center border border-dashed">
                         <i class="fa-solid fa-plus fa-2xl text-zinc-500"></i>
                     </div>
                 </div>

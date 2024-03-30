@@ -39,4 +39,10 @@ export class ColumnStore {
         if (typeof column_id === "string") column_id = parseInt(column_id)
         Store.removeByIndex("columns", column_id)
     }
+
+    static addColumn(column) {
+        const columns = Store.get("columns")
+        columns[column.id] = column
+        Store.set("columns", columns)
+    }
 }
