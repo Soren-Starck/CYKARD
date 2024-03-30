@@ -22,7 +22,7 @@ class CarteApiController extends GeneriqueController
     #[Route('/api/carte/{id}/modify', name: 'app_carte_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
     public function modify(Request $request, int $id): Response
     {
-        $result = $this->carteService->modifyCarte($this->getLoginFromJwt($request), $id);
+        $result = $this->carteService->modifyCarte($this->getLoginFromJwt($request), $id, json_decode($request->getContent(), true));
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
     }
@@ -49,7 +49,7 @@ class CarteApiController extends GeneriqueController
     public function create(Request $request, int $colonne_id): Response
     {
         $data = json_decode($request->getContent(), true);
-        $result = $this->carteService->createCarte($data , $this->getLoginFromJwt($request), $colonne_id);
+        $result = $this->carteService->createCarte($data, $this->getLoginFromJwt($request), $colonne_id);
         if (isset($result['error'])) {
             return $this->json(['error' => $result['error']], $result['status']);
         }
