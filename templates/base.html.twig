@@ -11,16 +11,15 @@
 
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
-       {# {% block importmap %}{{ importmap('app') }}{% endblock %}#}
+        {# {% block importmap %}{{ importmap('app') }}{% endblock %} #}
     {% endblock %}
-    {% block components %}
-        <script type="module">
-            import {Navbaruserpanel} from "/js/components/navbaruserpanel.js";
-            import {loadComponent} from "/js/reactive.js";
+    {% block components %}{% endblock %}
+    <script type="module">
+        import {Navbaruserpanel} from "/js/components/navbaruserpanel.js";
+        import {loadComponent} from "/js/reactive.js";
 
-            loadComponent("navbaruserpanel", Navbaruserpanel)
-        </script>
-    {% endblock %}
+        loadComponent("navbaruserpanel", Navbaruserpanel)
+    </script>
     <link rel="stylesheet" href="{{ asset('assets/styles/navstyle.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/styles/trellostyle.css') }}">
 </head>
@@ -56,14 +55,14 @@
                     </a>
                 </li>
             {% else %}
-                {% if is_user_logged_in() %}
-                    <li>
-                        <a href="{{ path('app_tableaux') }}">Mes tableaux</a>
-                    </li>
-                    <li class="mr-5">
-                        <react-navbaruserpanel showmenu=false logout-url="{{ path('app_logout') }}" account-url="{{ path('app_account') }}" current-user="{{ app_user.currentUser }}"></react-navbaruserpanel>
-                    </li>
-                {% endif %}
+                <li>
+                    <a href="{{ path('app_tableaux') }}">Mes tableaux</a>
+                </li>
+                <li class="mr-5">
+                    <react-navbaruserpanel showmenu=false logout-url="{{ path('app_logout') }}"
+                                           account-url="{{ path('app_account') }}"
+                                           current-user="{{ app_user.currentUser }}"></react-navbaruserpanel>
+                </li>
             {% endif %}
         </ul>
     </nav>

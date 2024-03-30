@@ -28,7 +28,6 @@ export class Column extends ReactiveComponent {
         API.update(`/carte/${card.id}/modify`, {
             colonne_id: parseInt(this.props.column_id)
         })
-        // mutate(`/tableau/${this.props.table}`)
     }
 
     allowDrop(e) {
@@ -55,17 +54,20 @@ export class Column extends ReactiveComponent {
             <react-card column_id="${carte.colonne_id}" card_id="${carte.id}"></react-card>
         `).join("")
 
-        return `<div ondrop="drop" ondragover="allowDrop" class="min-w-[300px] min-h-full shadow rounded-md border p-2 col-span-1 flex flex-col gap-2 group">
+        return `<div ondrop="drop" ondragover="allowDrop" class="min-w-[300px] min-h-full shadow rounded-md border-2 p-2 col-span-1 flex flex-col gap-2 group">
     <div class="flex justify-between">
         <p class="ml-1 font-bold">${this.state.column.titrecolonne}</p>
-        <div>
-            <i onclick="modify" class="cursor-pointer transition fa-solid fa-pen opacity-0 group-hover:opacity-100"></i>
-            <i onclick="newCard" class="cursor-pointer transition fa-solid fa-plus opacity-0 group-hover:opacity-100"></i>
-        </div>
+        <i onclick="modify" class="cursor-pointer transition fa-solid fa-pen opacity-0 group-hover:opacity-100"></i>
     </div>
     <div class="flex flex-col gap-2">
         ${cards}
     </div>
+    <div onclick="newCard" class="group-hover:opacity-100 opacity-0 hover:bg-slate-50 transition relative bg-white shadow rounded-md border-dashed border-2 p-2 flex flex-col gap-1 hover:cursor-grab active:cursor-grabbing group">
+            <div class="w-14 h-3 rounded-full absolute top-3 right-7"></div>
+            <p class="w-10 h-4 rounded-md shadow bg-slate-200"></p>
+            <p class="w-20 h-4 rounded-md shadow bg-slate-200"></p>
+            <i class="fa-solid fa-plus fa-2xl text-slate-200 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
+        </div>
 </div>
         `;
     }

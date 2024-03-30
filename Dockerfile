@@ -1,14 +1,18 @@
-FROM php:latest
+FROM php:8.3-cli
 
-RUN apt-get update && apt-get install -y nodejs npm
+RUN apt-get update && apt-get install -y nodejs npm && \
+    apt-get install -y libpq-dev libicu-dev && \
+    docker-php-ext-install pdo pdo_pgsql intl
 
 WORKDIR /var/www/html
 
-ADD composer.json composer.lock ./
+ADD composer.json ./
+
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer install --no-scripts --no-interaction --no-autoloader --no-dev --prefer-dist --no-progress --no-suggest
+RUN composer install --no-scripts --no-interaction --no-progress --no-suggest
 
 ADD . .
 
@@ -16,4 +20,6 @@ EXPOSE 8000
 
 RUN npm install
 
-CMD ["npm", "run", "all"]
+RUN npm run build
+
+CMD ["npm", "run", "dev"]

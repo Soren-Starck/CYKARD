@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  trello:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: trello:latest
+    env_file:
+      - .env
+    environment:
+      - APP_ENV=prod
+    ports:
+      - "8000:8000"
+    container_name: Trello

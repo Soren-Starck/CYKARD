@@ -18,10 +18,8 @@
             <div class="mx-auto">
                 {% if is_user_logged_in() %}
                     <div class="flex flex-row justify-start gap-4 my-3">
-                        <a class="text-lg lg:text-xl xl:text-2xl whitespace-nowrap transition bg-neutral-900 hover:bg-neutral-700 text-gray-50 rounded-md shadow font-medium px-4 py-2"
-                           href="">Créer un tableau</a>
                         <a class="text-lg lg:text-xl xl:text-2xl whitespace-nowrap transition border-2 font-medium border-neutral-900 rounded-md shadow text-neutral-900 px-4 py-2 flex flex-row items-center gap-2 hover:bg-neutral-900 hover:text-gray-50 justify-center"
-                           href="{{ path('app_tableaux') }}">Consulter mes tableaux</a>
+                           href="{{ path('app_tableaux') }}">Voir mes tableaux</a>
                     </div>
                 {% else %}
                     <div class="flex flex-row justify-start gap-4 my-3">
