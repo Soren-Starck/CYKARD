@@ -4,3 +4,10 @@ vendor
 .gitignore
 compose.*
 README.md
+*.sql
+public/build
+.env
+Dockerfile
+docker-compose.yml
+.idea
+.git
