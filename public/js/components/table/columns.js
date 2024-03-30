@@ -25,7 +25,11 @@ export class Columns extends ReactiveComponent {
         })
 
         Store.subscribe("columns", (columns) => {
-            this.setState({columns: Object.values(columns)})
+            const left = document.getElementById("columns-container")
+            this.setState({
+                columns: Object.values(columns),
+                left: left ? left.scrollLeft : 0
+            })
         })
     }
 
