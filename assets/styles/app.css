@@ -13,7 +13,7 @@ nav > ul > li > a {
     @apply drop-shadow-sm text-stone-500 hover:text-stone-900 transition w-fit px-2 py-1 font-normal hover:bg-gray-100 rounded-lg whitespace-nowrap flex flex-row active:text-neutral-900;
 }
 
-#usermenu > a{
+#usermenu > a {
     @apply w-full hover:bg-gray-100 px-5 py-3;
 }
 
@@ -22,7 +22,8 @@ nav > ul > li > a {
 }
 
 input[type=text],
-input[type=password] {
+input[type=password],
+input[type=email] {
     @apply h-9 text-sm shadow-sm rounded-md border border-neutral-200 px-3 py-1 my-2 active:border-neutral-400;
 }
 
@@ -175,6 +176,7 @@ h2 {
         transform: scale(1);
     }
 }
+
 #notificationContainer {
     @apply flex flex-col items-end my-3 mx-4;
 }
@@ -202,7 +204,7 @@ h2 {
     transition: transform 0.3s ease-in-out;
 }
 
-.move-out{
+.move-out {
     transform: translateY(-100%);
     opacity: 0;
     transition: all 0.3s ease-in-out;
