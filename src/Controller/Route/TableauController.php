@@ -7,7 +7,6 @@ use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
 use App\Repository\TableauRepository;
 use App\Service\TableauService;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -16,10 +15,11 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 class TableauController extends GeneriqueController
 {
+    private TableauService $tableauService;
 
-    public function __construct(Container $container, private readonly TableauService $tableauService)
+    public function __construct(TableauService $tableauService)
     {
-        parent::__construct($container);
+        $this->tableauService = $tableauService;
     }
 
     #[Route('/tableaux', name: 'app_tableaux')]

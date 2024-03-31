@@ -14,10 +14,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class SecurityController extends GeneriqueController
 {
+    private UserService $userService;
 
-    public function __construct(Container $container, private readonly UserService $userService)
+    public function __construct(UserService $userService)
     {
-        parent::__construct($container);
+        $this->userService = $userService;
     }
 
     #[Route(path: '/login', name: 'app_login')]

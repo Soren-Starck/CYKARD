@@ -13,10 +13,6 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class GeneriqueController
 {
-    public function __construct(Container $container)
-    {
-        Conteneur::addService("container", $container);
-    }
 
     protected static function redirect(string $routeName = "", array $param = []): RedirectResponse
     {
