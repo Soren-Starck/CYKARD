@@ -3,8 +3,10 @@
 namespace App\Controller\Route;
 
 use App\Controller\GeneriqueController;
+use App\Lib\Flash\MessageFlash;
 use App\Lib\Route\AttributeRouteControllerLoader;
 use App\Lib\Route\Conteneur;
+use App\Lib\Security\UserConnection\UserHelper;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -27,13 +29,14 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Twig\TwigFunction;
 
 class RouteurURL
 {
 
     public static function traiterRequete()
     {
-        $twigLoader = new FilesystemLoader(dirname(__DIR__).'/../templates');
+        $twigLoader = new FilesystemLoader(dirname(__DIR__) . '/../templates');
         $twig = new Environment(
             $twigLoader,
             [
@@ -56,9 +59,35 @@ class RouteurURL
         $contexteRequete = (new RequestContext())->fromRequest($requete);
         $generateurUrl = new UrlGenerator($routes, $contexteRequete);
         $assistantUrl = new UrlHelper(new RequestStack(), $contexteRequete);
+
+        $functions = [
+            new TwigFunction('is_user_logged_in', [UserHelper::class, 'isUserLoggedIn']),
+            new TwigFunction('does_user_have_role', [UserHelper::class, 'doesUserHaveRole']),
+            new TwigFunction('encore_entry_link_tags', function (string $entryName) {
+                return '<link rel="stylesheet" href="/build/' . $entryName . '.css">';
+            }),
+            new TwigFunction('encore_entry_script_tags', function (string $entryName) {
+                return '<script src="/build/' . $entryName . '.js"></script>';
+            }),
+            new TwigFunction("path", function ($nomRoute, $parametres = []) use ($generateurUrl) {
+                return $generateurUrl->generate($nomRoute, $parametres);
+            }),
+           new TwigFunction("asset", function ($chemin) use ($assistantUrl) {
+               return $assistantUrl->getAbsoluteUrl($chemin);
+           }),
+        ];
+
+        foreach ($functions as $function) {
+            $twig->addFunction($function);
+        }
+
+        $twig->addGlobal("app", [
+            "flashes" => MessageFlash::lireTousMessages()
+        ]);
+
         Conteneur::addService("generateurUrl", $generateurUrl);
         Conteneur::addService("assistantUrl", $assistantUrl);
-        try{
+        try {
 
             $associateurUrl = new UrlMatcher($routes, $contexteRequete);
             $donneesRoute = $associateurUrl->match($requete->getPathInfo());
