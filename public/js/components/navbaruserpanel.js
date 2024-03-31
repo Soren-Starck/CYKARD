@@ -1,7 +1,15 @@
 import {ReactiveComponent} from "../reactive.js";
 
 export class Navbaruserpanel extends ReactiveComponent {
-    toggleMenu() {
+    onMount() {
+        window.onclick = (event) => {
+            if (this.props.showmenu === "true")
+                this.setAttribute("showmenu", "false");
+        }
+    }
+
+    toggleMenu(e) {
+        e.stopPropagation()
         this.setAttribute("showmenu", this.props.showmenu === "true" ? "false" : "true");
     }
 
