@@ -2,6 +2,7 @@
 
 namespace App\test\ServiceTest;
 
+use App\Entity\Carte;
 use App\Repository\I_CarteRepository;
 use App\Repository\I_ColonneRepository;
 use App\Service\CarteService;
@@ -101,5 +102,79 @@ class CarteServiceTest extends TestCase
             ['id' => 1],
             $this->carteService->showCarte($this->login, 1)
         );
+    }
+
+    public function testDeleteCarteCase1(): void
+    {
+        $this->carteRepositoryMock->method('verifyUserTableauByCardAndAccess')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'Access denied', 'status' => 403],
+            $this->carteService->deleteCarte($this->login, 1)
+        );
+    }
+    public function testDeleteCarteCase2(): void
+    {
+        $this->carteRepositoryMock->method('verifyUserTableauByCardAndAccess')->willReturn(true);
+        $this->carteRepositoryMock->method('delete')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'Error deleting the card', 'status' => 500],
+            $this->carteService->deleteCarte($this->login, 1)
+        );
+    }
+
+    public function testDeleteCarteCase3(): void
+    {
+        $this->carteRepositoryMock->method('verifyUserTableauByCardAndAccess')->willReturn(true);
+        $this->carteRepositoryMock->method('delete')->willReturn(true);
+        $this->assertEquals(
+            [],
+            $this->carteService->deleteCarte($this->login, 1)
+        );
+    }
+
+    public function testCreateCarteCase1(): void{
+        $data = ['titrecarte' => null];
+        $this->assertEquals(
+            ['error' => 'Titre de carte manquant', 'status' => 400],
+            $this->carteService->createCarte($data, $this->login, 1)
+        );
+    }
+
+    public function testCreateCarteCase2(): void{
+        $data = ['titrecarte' => 'titre'];
+        $this->colonneRepositoryMock->method('verifyUserTableauByColonne')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'Access denied', 'status' => 403],
+            $this->carteService->createCarte($data, $this->login, 1)
+        );
+    }
+
+    public function testCreateCarteCase3(): void{
+        $data = ['titrecarte' => 'titre'];
+        $this->colonneRepositoryMock->method('verifyUserTableauByColonne')->willReturn(true);
+        $this->carteRepositoryMock->method('create')->willReturn(null);
+        $this->assertEquals(
+            ['error' => 'Erreur lors de la création de la carte', 'status' => 500],
+            $this->carteService->createCarte($data, $this->login, 1)
+        );
+    }
+
+    public function testCreateCarteCase4(): void{
+        $data = ['titrecarte' => 'titre'];
+        $this->colonneRepositoryMock->method('verifyUserTableauByColonne')->willReturn(true);
+        $description = 'description';
+        $color = 'color';
+        $carte= new Carte();
+        $carte->setId(1);
+        $carte->setTitrecarte('titre');
+        $carte->setDescriptifcarte($description);
+        $carte->setCouleurcarte($color);
+        $carte->setColonneId(1);
+        $this->carteRepositoryMock->method('create')->willReturn($carte);
+        $this->assertEquals(
+            $carte->toArray(),
+            $this->carteService->createCarte($data, $this->login, 1)
+        );
+
     }
 }
