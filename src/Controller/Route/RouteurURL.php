@@ -18,7 +18,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Loader\AttributeDirectoryLoader;
@@ -34,7 +33,7 @@ use Twig\TwigFunction;
 class RouteurURL
 {
 
-    public static function traiterRequete()
+    public static function traiterRequete(): void
     {
         $twigLoader = new FilesystemLoader(dirname(__DIR__) . '/../templates');
         $twig = new Environment(
@@ -51,12 +50,12 @@ class RouteurURL
 
         Conteneur::addService('serializer', $serializer);
         $requete = Request::createFromGlobals();
-
-        $fileLocator = new FileLocator(dirname(__DIR__));
-        $attrClassLoader = new AttributeRouteControllerLoader();
-        $routes = (new AttributeDirectoryLoader($fileLocator, $attrClassLoader))->load(dirname(__DIR__));
-
         $contexteRequete = (new RequestContext())->fromRequest($requete);
+
+        $fileLocator = new FileLocator(__DIR__);
+        $attrClassLoader = new AttributeRouteControllerLoader();
+        $routes = (new AttributeDirectoryLoader($fileLocator, $attrClassLoader))->load(__DIR__);
+
         $generateurUrl = new UrlGenerator($routes, $contexteRequete);
         $assistantUrl = new UrlHelper(new RequestStack(), $contexteRequete);
 

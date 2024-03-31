@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ pagetitle }}</title>
     {% block stylesheets %}
-        {{ encore_entry_link_tags('app') }}
-        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+        {{ encore_entry_link_tags('app')|raw }}
+        <link rel="stylesheet" href="{{ asset('../assets/styles/app.css') }}">
     {% endblock %}
 
     {% block javascripts %}
-        {{ encore_entry_script_tags('app') }}
+        {{ encore_entry_script_tags('app')|raw }}
         {# {% block importmap %}{{ importmap('app') }}{% endblock %} #}
     {% endblock %}
     {% block components %}{% endblock %}
@@ -49,7 +49,7 @@
                     <a href="{{ path('app_accueil') }}">Accueil</a>
                 </li>
                 <li>
-                    <a class="flex flex-row gap-2 items-center justify-center" href="{{ path('app_login') }}">
+                    <a class="flex flex-row gap-2 items-center justify-center" href="{{ path('app_login' ) }}">
                         Connexion
                     </a>
                 </li>
