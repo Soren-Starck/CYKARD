@@ -6,4 +6,10 @@ export class UserStore {
         if (!me) return false
         return me.role !== "USER_READ"
     }
+
+    static isAdmin() {
+        const me = Store.get("me")
+        if (!me) return false
+        return me.role === "USER_ADMIN"
+    }
 }
