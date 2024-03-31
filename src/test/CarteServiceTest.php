@@ -1,13 +1,18 @@
 <?php
 
-namespace App\test\ServiceTest;
+namespace test;
 
 use App\Repository\I_CarteRepository;
 use App\Repository\I_ColonneRepository;
 use App\Service\CarteService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(CarteService::class)]
+#[UsesClass(I_CarteRepository::class)]
+#[UsesClass(I_ColonneRepository::class)]
 class CarteServiceTest extends TestCase
 {
     private I_CarteRepository $carteRepositoryMock;
