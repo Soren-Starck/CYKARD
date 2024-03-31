@@ -70,14 +70,16 @@ export class Columns extends ReactiveComponent {
                 <h1 class="font-bold">${this.state.title}</h1>
                 <i onclick="settings" class="cursor-pointer fa-solid fa-gear"></i>
             </div>
-            <div class="w-full grow !h-full overflow-auto py-6" id="columns-container">
-                <div class="flex gap-4 min-h-[500px]">
+            <div class="relative w-full grow !h-full py-6 mx-0" id="columns-container">
+            <div class="absolute z-10 top-0 left-0 h-full w-5 bg-gradient-to-r from-white to-transparent"></div>
+                <div class="flex gap-4 min-h-[500px] overflow-auto" id="columns-parent">
                     ${columns}
-                    <div ondrop="dropNewColumn" ondragover="allowDropNewCol" onclick="newColumn" class="relative cursor-pointer transition hover:bg-slate-50 shadow p-2 rounded-md flex-1 shrink-0 !max-w-[300px] min-w-[300px] min-h-full border-2 border-dashed">
+                    <div ondrop="dropNewColumn" ondragover="allowDropNewCol" onclick="newColumn" class="mr-5 relative cursor-pointer transition hover:bg-slate-50 shadow p-2 rounded-md flex-1 shrink-0 !max-w-[300px] min-w-[300px] min-h-full border-2 border-dashed">
                         <p class="w-24 h-4 rounded-md shadow bg-slate-200"></p>
                         <i class="fa-solid fa-plus fa-2xl text-slate-200  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
                     </div>
                 </div>
+                <div class="absolute z-10 top-0 right-0 h-full w-5 bg-gradient-to-r from-transparent to-white"></div>
             </div>
         `;
     }

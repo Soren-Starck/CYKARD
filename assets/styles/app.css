@@ -260,3 +260,7 @@ h2 {
         opacity: 1;
     }
 }
+
+#columns-parent > :first-child {
+    @apply ml-5;
+}
