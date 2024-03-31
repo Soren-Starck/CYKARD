@@ -67,7 +67,7 @@ export class ModifyTable extends Popup {
                 </button>
             </div>` : ""}
             ${userList}
-            <button type="submit" class="mt-5">Modifier</button>
+            ${isAdmin ? `<button type="submit" class="mt-5">Modifier</button>` : ""}
             ${!isAdmin ? `
                 <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="leave">Quitter</button>` : `
                 <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="delete">Supprimer</button>
