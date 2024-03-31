@@ -17,10 +17,11 @@ export class Columns extends ReactiveComponent {
             const columns = {}
             for (const column of data.colonnes)
                 columns[column.id] = column
+            Store.set("me", data.users.find(user => user.login === this.props.login))
             Store.set("columns", columns)
             Store.set("table", data.titretableau)
             Store.set("users", data.users)
-            Store.set("me", data.users.find(user => user.login === this.props.login))
+            console.log(data.users.find(user => user.login === this.props.login))
         }, 30);
 
         Store.subscribe("table", (table) => {
@@ -33,6 +34,10 @@ export class Columns extends ReactiveComponent {
                 columns: Object.values(columns),
                 left: left ? left.scrollLeft : 0
             })
+        })
+
+        Store.subscribe("me", () => {
+            this._render()
         })
     }
 

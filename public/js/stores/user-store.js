@@ -3,6 +3,7 @@ import {Store} from "../store.js";
 export class UserStore {
     static canModify() {
         const me = Store.get("me")
+        console.log(me)
         if (!me) return false
         return me.role !== "USER_READ"
     }
