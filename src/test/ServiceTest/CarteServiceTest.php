@@ -74,5 +74,32 @@ class CarteServiceTest extends TestCase
         );
     }
 
+    public function testShowCarteCase1(): void
+    {
+        $this->carteRepositoryMock->method('verifyUserTableauByCard')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'Access denied', 'status' => 403],
+            $this->carteService->showCarte($this->login, 1)
+        );
+    }
 
+    public function testShowCarteCase2(): void
+    {
+        $this->carteRepositoryMock->method('verifyUserTableauByCard')->willReturn(true);
+        $this->carteRepositoryMock->method('find')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'No carte found', 'status' => 404],
+            $this->carteService->showCarte($this->login, 1)
+        );
+    }
+
+    public function testShowCarteCase3(): void
+    {
+        $this->carteRepositoryMock->method('verifyUserTableauByCard')->willReturn(true);
+        $this->carteRepositoryMock->method('find')->willReturn([['id' => 1]]);
+        $this->assertEquals(
+            ['id' => 1],
+            $this->carteService->showCarte($this->login, 1)
+        );
+    }
 }

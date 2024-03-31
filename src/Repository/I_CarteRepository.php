@@ -6,7 +6,7 @@ use App\Entity\Carte;
 
 interface I_CarteRepository
 {
-    public function find(int $id): array;
+    public function find(int $id): array|false;
 
     public function create(string $titre, string|null $descriptif, string|null $couleur, int $colonne_id): ?Carte;
 
