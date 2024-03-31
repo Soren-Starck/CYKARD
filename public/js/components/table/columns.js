@@ -18,6 +18,7 @@ export class Columns extends ReactiveComponent {
                 columns[column.id] = column
             Store.set("columns", columns)
             Store.set("table", data.titretableau)
+            Store.set("users", data.users)
         }, 30);
 
         Store.subscribe("table", (table) => {
