@@ -52,23 +52,21 @@ class TableauService extends GeneriqueService
         if (!array_key_exists('titretableau', $data) || !$data['titretableau']) return ['error' => 'Titre is required', 'status' => 400];
         $tableau = $this->tableauRepository->create($data['titretableau'], $login);
         if (!$tableau) return ['error' => 'Error creating tableau', 'status' => 500];
-        $tableau[0]['colonnes'] = [];
-        return $tableau[0];
+        return $tableau->toArray();
     }
 
     public function joinTableau(string $login, string $codetableau): array
     {
-        if (!$codetableau || strlen($codetableau) !== 16) return ['error' => 'Invalid codetableau', 'status' => 400];
+        if (strlen($codetableau) !== 16) return ['error' => 'Invalid codetableau', 'status' => 400];
         $tableau = $this->tableauRepository->join($codetableau, $login);
         if (!$tableau) return ['error' => 'Error joining tableau', 'status' => 500];
-        $tableau[0]['colonnes'] = [];
-        return $tableau[0];
+        return $tableau->toArray();
     }
 
     public function getTableaux(string $login, array $roles): array
     {
         if (!str_contains($roles[0]['roles'], 'ROLE_USER'))
-            throw new AccessDeniedHttpException('Access Denied');
+            return ['error' => 'Access Denied', 'status' => 403];
         return $this->tableauRepository->findByUser($login);
     }
 }

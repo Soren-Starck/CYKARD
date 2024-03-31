@@ -92,6 +92,8 @@ class Colonne
         return [
             'id' => $this->id,
             'titrecolonne' => $this->titrecolonne,
+            'tableau_id' => $this->tableau->getId(),
+            'cartes' => [$this->cartes]
         ];
     }
 }

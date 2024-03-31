@@ -7,7 +7,7 @@ use App\Entity\Tableau;
 interface I_TableauRepository
 {
     public function findByUser(string $login): array;
-    public function join(string $codetableau, string $login): false|array;
+    public function join(string $codetableau, string $login): false|Tableau;
 
     public function editTitreTableau($id, $titre): bool;
 
@@ -15,7 +15,7 @@ interface I_TableauRepository
 
     public function verifyUserTableauAccess(string $login, mixed $id): array;
 
-    public function create(mixed $titre, ?string $login): array|bool;
+    public function create(mixed $titre, ?string $login): bool|Tableau;
 
     public function findTableauColonnes(string $login, int $id): array;
 
