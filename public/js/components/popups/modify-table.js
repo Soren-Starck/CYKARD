@@ -6,9 +6,12 @@ export class ModifyTable extends Popup {
     onMount() {
         Store.subscribe("users", (users) => {
             this.setState({
-                me: users.find(user => user.login === this.props.login),
                 users
             })
+        })
+
+        Store.subscribe("me", (me) => {
+            this.setState({me})
         })
     }
 
