@@ -1,7 +1,15 @@
 import {ReactiveComponent} from "../reactive.js";
 
 export class Navbaruserpanel extends ReactiveComponent {
-    toggleMenu() {
+    onMount() {
+        window.onclick = (event) => {
+            if (this.props.showmenu === "true")
+                this.setAttribute("showmenu", "false");
+        }
+    }
+
+    toggleMenu(e) {
+        e.stopPropagation()
         this.setAttribute("showmenu", this.props.showmenu === "true" ? "false" : "true");
     }
 
@@ -11,14 +19,14 @@ export class Navbaruserpanel extends ReactiveComponent {
                 <i class="fas fa-user-circle"></i>
             </div>
             ${this.props.showmenu === "true" ? `
-                <div id="usermenu" class="fixed top-14 right-7 w-fit h-fit rounded-md border bg-white shadow-md flex flex-col">
-                        <a href="${this.props['account-url']}">
-                            Mon compte (<span>${this.props['current-user']}</span>)
-                        </a>
+                <div id="usermenu" class="z-30 fixed top-14 right-7 w-fit h-fit rounded-md border bg-white shadow-md flex flex-col">
+                    <a href="${this.props['account-url']}">
+                        Mon compte (<span>${this.props['current-user']}</span>)
+                    </a>
                     <a href="${this.props['logout-url']}" class="">
-                            Se déconnecter
-                            <i class="fas fa-sign-out-alt ml-2"></i>
-                        </a>
+                        Se déconnecter
+                        <i class="fas fa-sign-out-alt ml-2"></i>
+                    </a>
                 </div>
             ` : ''}
         `;

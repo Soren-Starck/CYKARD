@@ -31,15 +31,16 @@ export class TableList extends ReactiveComponent {
                     <div class="transition absolute top-1 right-2 opacity-0 group-hover:opacity-100 text-neutral-700">
                         <i table_id="${table.id}" onclick="delete" class="cursor-pointer fas fa-trash"></i>
                     </div>
+                    ${table.user_role === "USER_ADMIN" ? `<p>Admin</p>` : (table.user_role === "USER_EDITOR" ? `<p>Editeur</p>` : `<p>Viewer</p>`)}
                 </a>
             </div>
         `).join("")
 
         return `
-        <react-delete-table id="delete-table" title="Êtes-vous sûr de vouloir supprimer ce tableau ?"></react-delete-table>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            ${tables}
-        </div>
-        `
+    <react-delete-table id="delete-table" title="Êtes-vous sûr de vouloir supprimer ce tableau ?"></react-delete-table>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        ${tables}
+    </div>
+    `
     }
 }
