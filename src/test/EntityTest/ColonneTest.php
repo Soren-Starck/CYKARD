@@ -101,4 +101,23 @@ class ColonneTest extends TestCase
         $colonne->removeCarte($carte);
         $this->assertEquals(0, $colonne->getCartes()->count());
     }
+
+    public function testToArray()
+    {
+        $colonne = new Colonne();
+        $tableau = new Tableau();
+        $tableau->setId(1);
+        $colonne->setTableau($tableau);
+        $carte = new Carte();
+        $colonne->addCarte($carte);
+        $arrayObjetckCarte= new \ArrayObject();
+        $arrayObjetckCarte->append($carte);
+        $this->assertEquals([
+            'id' => null,
+            'titrecolonne' => null,
+            'tableau_id' => 1,
+            'cartes' => [$arrayObjetckCarte
+                ],
+        ], $colonne->toArray());
+    }
 }
