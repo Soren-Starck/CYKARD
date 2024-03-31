@@ -9,6 +9,14 @@ export class NewColumn extends Popup {
         if (!result) return
         result.cartes = []
         ColumnStore.addColumn(result)
+        if (this.props.card) {
+            const card = JSON.parse(this.props.card)
+            ColumnStore.moveCard(card.from, result.id, card)
+            API.update(`/carte/${card.id}/modify`, {
+                colonne_id: result.id
+            })
+            this.removeAttribute("card")
+        }
         this.close()
     }
 
@@ -16,7 +24,7 @@ export class NewColumn extends Popup {
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
             <label for="title">Titre</label>
-            <input type="text" id="title" name="TitreColonne" required>
+            <input type="text" id="title" name="TitreColonne" value="Nouvelle colonne" required autofocus>
             <button type="submit" name="modify">Créer</button>
         </form>
         `)

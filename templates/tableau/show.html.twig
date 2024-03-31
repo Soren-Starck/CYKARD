@@ -12,12 +12,16 @@
         import {ModifyColumn} from "/js/components/popups/modify-column.js";
         import {ModifyTable} from "/js/components/popups/modify-table.js";
         import {NewColumn} from "/js/components/popups/new-column.js";
+        import {EditCard} from "/js/components/popups/edit-card.js";
+        import {Navbaruserpanel} from "/js/components/navbaruserpanel.js";
 
         loadComponent("columns", Columns)
         loadComponent("new-card", NewCardPopup)
         loadComponent("modify-column", ModifyColumn)
         loadComponent("settings", ModifyTable)
         loadComponent("new-column", NewColumn)
+        loadComponent("edit-card", EditCard)
+        loadComponent("navbaruserpanel", Navbaruserpanel)
     </script>
 {% endblock %}
 
@@ -27,4 +31,5 @@
     <react-modify-column visible="false" id="modify-column-popup" title="Modifier une colonne"></react-modify-column>
     <react-settings visible="false" id="settings-popup" title="Modifier le tableau"></react-settings>
     <react-new-column visible="false" id="new-column-popup" title="Créer une nouvelle colonne"></react-new-column>
+    <react-edit-card visible="false" id="edit-card-popup" title="Modifier une carte"></react-edit-card>
 {% endblock %}

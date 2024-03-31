@@ -2,34 +2,29 @@
 
 {% block title %}List of Tableaux{% endblock %}
 
+{% block components %}
+    <script type="module">
+        import {loadComponent} from "/js/reactive.js";
+        import {openPopup} from "/js/components/popup.js";
+        import {NewTable} from "/js/components/popups/new-table.js";
+        import {TableList} from "/js/components/table/table-list.js";
+
+        loadComponent("new-table", NewTable);
+        loadComponent("table-list", TableList);
+
+        document.getElementById("new-table").addEventListener("click", () => {
+            openPopup("new-table-popup")
+        })
+    </script>
+{% endblock %}
+
 {% block body %}
     <div class="w-1/2 mx-auto">
         <div class="flex flex-row justify-between mb-3">
             <h1>Mes tableaux ({{ tableaux|length }})</h1>
-            <a href="" title="Créer un nouveau tableau"><i
-                        class="fas fa-plus icon mt-1 mr-1"></i></a>
+            <i id="new-table" class="cursor-pointer fas fa-plus icon mt-1 mr-1"></i>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {% for tableau in tableaux %}
-                <div class="group relative h-20 flex flex-col hover:cursor-pointer overflow-hidden shadow rounded-md border w-full justify-around items-center bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,.2)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] bg-[position:-100%_0,0_0] bg-no-repeat hover:bg-[position:200%_0,0_0] hover:transition-[background-position_0s_ease] hover:duration-[1500ms]">
-                    <a href="/tableaux/{{ tableau.id }}"
-                       class="h-full w-full flex justify-around items-center">
-                        <div>
-                            <h2 class="mr-auto">{{ tableau.titretableau }}</h2>
-                        </div>
-                        <div class="transition absolute top-1 right-2 opacity-0 group-hover:opacity-100 text-neutral-700">
-                            <a href="" class="hover:animate-pulse">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href=""
-                               onclick="return confirm('Are you sure you want to delete this item?');"
-                               class="hover:animate-pulse">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
+        <react-new-table visible="false" id="new-table-popup" title="Créer un nouveau tableau"></react-new-table>
+        <react-table-list tables="{{ tableaux|json_encode() }}"></react-table-list>
     </div>
 {% endblock %}
