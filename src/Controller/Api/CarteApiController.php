@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Controller\GeneriqueController;
 use App\Service\CarteService;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -12,11 +13,9 @@ use Symfony\Component\Routing\Requirement\Requirement;
 class CarteApiController extends GeneriqueController
 {
 
-    private CarteService $carteService;
-
-    public function __construct(CarteService $carteService)
+    public function __construct(Container $container, private CarteService $carteService)
     {
-        $this->carteService = $carteService;
+        parent::__construct($container);
     }
 
     #[Route('/api/carte/{id}/modify', name: 'app_carte_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]

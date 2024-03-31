@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Controller\GeneriqueController;
 use App\Service\TableauService;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -11,11 +12,9 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 class TableauApiController extends GeneriqueController
 {
-    private TableauService $tableauService;
-
-    public function __construct(TableauService $tableauService)
+    public function __construct(Container $container, private TableauService $tableauService)
     {
-        $this->tableauService = $tableauService;
+        parent::__construct($container);
     }
 
     #[Route('/api/tableau/{id}/modify', name: 'app_tableau_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]

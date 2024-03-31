@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Controller\GeneriqueController;
 use App\Service\ColonneService;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -11,11 +12,9 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 class ColonneApiController extends GeneriqueController
 {
-    private ColonneService $colonneService;
-
-    public function __construct(ColonneService $colonneService)
+    public function __construct(Container $container, private ColonneService $colonneService)
     {
-        $this->colonneService = $colonneService;
+        parent::__construct($container);
     }
 
     #[Route('/api/colonne/{id}/modify', name: 'app_colonne_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]

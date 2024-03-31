@@ -8,16 +8,16 @@ use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
 use App\Repository\UserRepository;
 use App\Service\UserService;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class UserController extends GeneriqueController
 {
-    private UserService $userService;
 
-    public function __construct(UserService $userService)
+    public function __construct(Container $container, private readonly UserService $userService)
     {
-        $this->userService = $userService;
+        parent::__construct($container);
     }
 
     #[Route('/api/me', methods: ['GET'])]
