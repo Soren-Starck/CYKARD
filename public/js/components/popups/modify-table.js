@@ -61,7 +61,7 @@ export class ModifyTable extends Popup {
             <input type="text" id="title" value="${Store.get("table")}" name="titretableau" required autofocus>
             <label for="user">Utilisateurs</label>
             <div class="flex relative">
-                <input type="text" id="user" name="user" class="border !rounded-l px-4 py-2 w-full h-9">
+                <input placeholder="ajouter un utilisateur" type="text" id="user" name="user" class="border !rounded-l px-4 py-2 w-full h-9">
                 <button class="absolute right-0 border bg-slate-100 text-neutral-900 !rounded-r flex items-center h-9 px-4 py-2 my-2">
                     <i class="fas fa-search"></i>
                 </button>
