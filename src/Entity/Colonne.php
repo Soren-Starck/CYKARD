@@ -93,7 +93,7 @@ class Colonne
             'id' => $this->id,
             'titrecolonne' => $this->titrecolonne,
             'tableau_id' => $this->tableau->getId(),
-            'cartes' => [$this->cartes]
+            'cartes' => [$this->cartes],
         ];
     }
 }

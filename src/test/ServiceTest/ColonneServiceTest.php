@@ -3,9 +3,14 @@
 namespace App\test\ServiceTest;
 
 use App\Entity\Colonne;
+use App\Entity\Tableau;
 use App\Repository\I_ColonneRepository;
 use App\Repository\I_TableauRepository;
 use App\Service\ColonneService;
+use ArrayObject;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ColonneService::class)]
@@ -18,6 +23,9 @@ class ColonneServiceTest extends TestCase
     private ColonneService $colonneService;
     private string $login;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $this->colonneRepositoryMock = $this->createMock(I_ColonneRepository::class);
@@ -131,9 +139,13 @@ class ColonneServiceTest extends TestCase
         $colonne = new Colonne();
         $colonne->setId(1);
         $colonne->setTitrecolonne('titre');
+        $tableau = new Tableau();
+        $tableau->setId(1);
+        $tableau->setTitretableau('titre');
+        $colonne->setTableau($tableau);
         $this->colonneRepositoryMock->method('create')->willReturn($colonne);
         $this->assertEquals(
-            ['id' => 1, 'titrecolonne' => 'titre'],
+            ['id' => 1, 'titrecolonne' => 'titre', 'tableau_id' => 1, 'cartes' => [new ArrayObject()]],
             $this->colonneService->createColonne($data, $this->login, 1)
         );
     }
