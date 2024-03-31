@@ -1,6 +1,7 @@
 import {Popup} from "../popup.js";
 import {API} from "../../api.js";
 import {Store} from "../../store.js";
+import {UserStore} from "../../stores/user-store.js";
 
 export class ModifyTable extends Popup {
     onMount() {
@@ -38,17 +39,24 @@ export class ModifyTable extends Popup {
         console.log("leave")
     }
 
+    delete() {
+        console.log("delete")
+    }
+
     render() {
-        const userList = this.state.me && this.state.me.role !== "USER_ADMIN" ? this.state.users.map(user => `
+        const isAdmin = UserStore.isAdmin()
+
+        const userList = this.state.users ? this.state.users.map(user => `
             <div class="flex justify-between rounded-md bg-slate-100 px-3 py-1">
                 <p class="font-medium">${user.login}</p>
-                ${user.login === this.state.me.login ? "" : `
-                <i onclick="removeUser" data-login="${user.login}" class="mt-1 text-red-500 cursor-pointer fa-solid fa-trash"></i>`}
+                ${isAdmin ? `
+                <i onclick="removeUser" data-login="${user.login}" class="mt-1 text-red-500 cursor-pointer fa-solid fa-trash"></i>` : ""}
             </div>
         `).join("") : ""
 
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
+            ${isAdmin ? `
             <label for="title">Titre</label>
             <input type="text" id="title" value="${Store.get("table")}" name="titretableau" required autofocus>
             <label for="user">Utilisateurs</label>
@@ -57,11 +65,13 @@ export class ModifyTable extends Popup {
                 <button class="absolute right-0 border bg-slate-100 text-neutral-900 !rounded-r flex items-center h-9 px-4 py-2 my-2">
                     <i class="fas fa-search"></i>
                 </button>
-            </div>
+            </div>` : ""}
             ${userList}
             <button type="submit" class="mt-5">Modifier</button>
-            ${this.state.me && this.state.me.role !== "USER_ADMIN" ? `
-                <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="leave">Quitter</button>` : ""}
+            ${!isAdmin ? `
+                <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="leave">Quitter</button>` : `
+                <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="delete">Supprimer</button>
+                `}
         </form>
         `)
     }
