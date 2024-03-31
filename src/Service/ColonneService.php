@@ -3,15 +3,17 @@
 namespace App\Service;
 
 use App\Repository\ColonneRepository;
+use App\Repository\I_ColonneRepository;
+use App\Repository\I_TableauRepository;
 use App\Repository\TableauRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class ColonneService extends GeneriqueService
 {
-    private ColonneRepository $colonneRepository;
-    private TableauRepository $tableauRepository;
+    private I_ColonneRepository $colonneRepository;
+    private I_TableauRepository $tableauRepository;
 
-    public function __construct(ColonneRepository $colonneRepository, TableauRepository $tableauRepository)
+    public function __construct(I_ColonneRepository $colonneRepository, I_TableauRepository $tableauRepository)
     {
         $this->colonneRepository = $colonneRepository;
         $this->tableauRepository = $tableauRepository;

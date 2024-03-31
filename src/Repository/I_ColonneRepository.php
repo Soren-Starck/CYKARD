@@ -16,5 +16,5 @@ interface I_ColonneRepository
 
     public function delete($id): bool;
 
-    public function create(string $titre, int $tableau_id): ?Colonne;
+    public function create(string $titre, int $tableau_id): Colonne|bool|null;
 }
