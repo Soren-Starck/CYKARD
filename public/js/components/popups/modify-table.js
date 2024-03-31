@@ -48,8 +48,11 @@ export class ModifyTable extends Popup {
 
         const userList = this.state.users ? this.state.users.map(user => `
             <div class="flex justify-between rounded-md bg-slate-100 px-3 py-1">
-                <p class="font-medium">${user.login}</p>
-                ${isAdmin ? `
+                <div class="flex flex-col">
+                    <p class="font-medium">${user.login}</p>
+                    <span class="text-xs">${UserStore.roleToText(user.role)}</span>
+                </div>
+                ${isAdmin && !UserStore.isMe(user.login) ? `
                 <i onclick="removeUser" data-login="${user.login}" class="mt-1 text-red-500 cursor-pointer fa-solid fa-trash"></i>` : ""}
             </div>
         `).join("") : ""
