@@ -1,6 +1,6 @@
 <?php
 
-namespace test;
+namespace App\test\ServiceTest;
 
 use App\Repository\I_CarteRepository;
 use App\Repository\I_ColonneRepository;
