@@ -3,16 +3,19 @@
 namespace App\Controller\Route;
 
 use App\Controller\GeneriqueController;
-use App\Lib\AttributeRouteControllerLoader;
-use App\Lib\Conteneur;
-use App\Lib\Flash\MessageFlash;
-use App\Lib\Security\UserConnection\ConnexionUtilisateur;
+use App\Lib\Route\AttributeRouteControllerLoader;
+use App\Lib\Route\Conteneur;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\UrlHelper;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -24,14 +27,13 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
-use Twig\TwigFunction;
 
 class RouteurURL
 {
 
-    //TheFeed\Controleur\RouteurURL::traiterRequete(); rajouter ca dans un crontrollerFrontal.php avec un import de l'autoloader
-    public static function traiterRequete() {
-        $twigLoader = new FilesystemLoader(__DIR__ . '/../../templates');
+    public static function traiterRequete()
+    {
+        $twigLoader = new FilesystemLoader(dirname(__DIR__).'/../templates');
         $twig = new Environment(
             $twigLoader,
             [
@@ -47,9 +49,9 @@ class RouteurURL
         Conteneur::addService('serializer', $serializer);
         $requete = Request::createFromGlobals();
 
-        $fileLocator = new FileLocator(__DIR__);
+        $fileLocator = new FileLocator(dirname(__DIR__));
         $attrClassLoader = new AttributeRouteControllerLoader();
-        $routes = (new AttributeDirectoryLoader($fileLocator, $attrClassLoader))->load(__DIR__);
+        $routes = (new AttributeDirectoryLoader($fileLocator, $attrClassLoader))->load(dirname(__DIR__));
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);
         $generateurUrl = new UrlGenerator($routes, $contexteRequete);
@@ -69,14 +71,18 @@ class RouteurURL
             $resolveurDArguments = new ArgumentResolver();
             $arguments = $resolveurDArguments->getArguments($requete, $controleur);
             $response = call_user_func_array($controleur, $arguments);
-        } catch (MethodNotAllowedException $exception) {
-            // Remplacez xxx par le bon code d'erreur
+        } catch (BadRequestHttpException $exception) {
+            $response = GeneriqueController::renderError($exception->getMessage(), 400);
+        } catch (MethodNotAllowedHttpException $exception) {
             $response = GeneriqueController::renderError($exception->getMessage(), 405);
-        } catch (ResourceNotFoundException $exception) {
-            // Remplacez xxx par le bon code d'erreur
+        } catch (ResourceNotFoundException|NotFoundHttpException $exception) {
             $response = GeneriqueController::renderError($exception->getMessage(), 404);
+        } catch (AccessDeniedHttpException $exception) {
+            $response = GeneriqueController::renderError($exception->getMessage(), 403);
+        } catch (ServiceUnavailableHttpException $exception) {
+            $response = GeneriqueController::renderError($exception->getMessage(), 503);
         } catch (\Exception $exception) {
-            $response = GeneriqueController::renderError($exception->getMessage()) ;
+            $response = GeneriqueController::renderError($exception->getMessage());
         }
         $response->send();
     }

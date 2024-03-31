@@ -2,16 +2,19 @@ parameters:
   kernel.secret: 'cf2e819d173f6f2d9d0c8581fd4b8944ceaddbb899a5828a41a38d6dd354b715'
 
 services:
+  routing.loader:
+    class: App\Lib\Route\AttributeRouteControllerLoader
+
   _defaults:
     autowire: true
     autoconfigure: true
+    public: true
 
   App\:
     resource: '../src/'
     exclude:
       - '../src/DependencyInjection/'
       - '../src/Entity/'
-      - '../src/Kernel.php'
 
   App\Lib\Database\Database:
     arguments:

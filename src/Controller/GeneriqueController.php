@@ -2,20 +2,18 @@
 
 namespace App\Controller;
 
+use App\Lib\Route\Conteneur;
 use App\Lib\Security\JWT\JsonWebToken;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-use App\Lib\Conteneur;
 
 class GeneriqueController
 {
     protected static function redirect(string $routeName = "", array $param = []): RedirectResponse
     {
-        //Changer la méthode ControleurGenerique::rediriger() pour qu’elle prenne en entrée le nom d’une route et un tableau optionnel de paramètres pour les routes variables (mêmes arguments que $generateurUrl->generate()). Cette fonction doit maintenant rediriger vers l’URL absolue correspondante. Vous aurez besoin de récupérer un service du Conteneur.
         /** @var UrlGenerator $generateurUrl */
         $generateurUrl = Conteneur::getService("generateurUrl");
         return new RedirectResponse($generateurUrl->generate($routeName, $param));
