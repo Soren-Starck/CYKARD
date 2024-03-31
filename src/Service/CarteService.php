@@ -2,26 +2,24 @@
 
 namespace App\Service;
 
-use App\Repository\CarteRepository;
-use App\Repository\ColonneRepository;
-use Symfony\Component\HttpFoundation\Request;
+use App\Repository\I_CarteRepository;
+use App\Repository\I_ColonneRepository;
 
 class CarteService extends GeneriqueService
 {
-    private CarteRepository $carteRepository;
-    private ColonneRepository $colonneRepository;
+    private I_CarteRepository $carteRepository;
+    private I_ColonneRepository $colonneRepository;
 
-    public function __construct(CarteRepository $carteRepository, ColonneRepository $colonneRepository)
+    public function __construct(I_CarteRepository $carteRepository, I_ColonneRepository $colonneRepository)
     {
         $this->carteRepository = $carteRepository;
         $this->colonneRepository = $colonneRepository;
     }
 
 
-    public function modifyCarte(string $login, int $id): array
+    public function modifyCarte(mixed $data, string $login, int $id): array
     {
         if (!$this->carteRepository->verifyUserTableauByCardAndAccess($id, $login)) return ['error' => 'Access denied', 'status' => 403];
-        $data = json_decode($request->getContent(), true);
         if (array_key_exists('titrecarte', $data) && !$data['titrecarte']) return ['error' => 'Titre de carte manquant', 'status' => 400];
         $dbResponse = $this->carteRepository->updateCardWithAssign($id, $data, $login);
         if (!$dbResponse) return ['error' => 'Error updating the card', 'status' => 500];
