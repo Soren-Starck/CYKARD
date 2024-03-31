@@ -20,13 +20,13 @@ export class Navbaruserpanel extends ReactiveComponent {
             </div>
             ${this.props.showmenu === "true" ? `
                 <div id="usermenu" class="fixed top-14 right-7 w-fit h-fit rounded-md border bg-white shadow-md flex flex-col">
-                        <a href="${this.props['account-url']}">
-                            Mon compte (<span>${this.props['current-user']}</span>)
-                        </a>
+                    <a href="${this.props['account-url']}">
+                        Mon compte (<span>${this.props['current-user']}</span>)
+                    </a>
                     <a href="${this.props['logout-url']}" class="">
-                            Se déconnecter
-                            <i class="fas fa-sign-out-alt ml-2"></i>
-                        </a>
+                        Se déconnecter
+                        <i class="fas fa-sign-out-alt ml-2"></i>
+                    </a>
                 </div>
             ` : ''}
         `;
