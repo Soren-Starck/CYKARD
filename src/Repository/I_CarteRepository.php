@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Carte;
 
-interface I_CarteRepository
+interface I_CarteRepository extends AbstractRepository
 {
     public function find(int $id): array|false;
 

@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Tableau;
 
-interface I_TableauRepository
+interface I_TableauRepository extends AbstractRepository
 {
     public function findByUser(string $login): array;
     public function join(string $codetableau, string $login): false|Tableau;

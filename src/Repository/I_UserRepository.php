@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 
-interface I_UserRepository
+interface I_UserRepository extends AbstractRepository
 {
     public function getUserByLogin(string $login): array;
 

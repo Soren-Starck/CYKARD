@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Colonne;
 
-interface I_ColonneRepository
+interface I_ColonneRepository extends AbstractRepository
 {
     public function findByTableau(string $login, $id): array;
 
