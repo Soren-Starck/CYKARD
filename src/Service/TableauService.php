@@ -2,12 +2,9 @@
 
 namespace App\Service;
 
-use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Repository\TableauRepository;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class TableauService extends GeneriqueService implements ITableauService
+class TableauService extends GeneriqueService implements I_TableauService
 {
     private TableauRepository $tableauRepository;
 

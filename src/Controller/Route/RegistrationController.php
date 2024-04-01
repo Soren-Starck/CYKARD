@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
-class RegistrationController extends generiqueController
+class RegistrationController extends GeneriqueController
 {
 
     public function __construct(Conteneur $container,private readonly I_UserService $userService)

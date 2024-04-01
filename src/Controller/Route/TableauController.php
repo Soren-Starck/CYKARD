@@ -6,28 +6,27 @@ use App\Controller\generiqueController;
 use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
-use App\Repository\TableauRepository;
 use App\Service\I_TableauService;
-use App\Service\TableauService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
-class TableauController extends generiqueController
+class TableauController extends GeneriqueController
 {
 
-    public function __construct(Conteneur $container, private readonly I_TableauService $tableauService)
+    private I_TableauService $tableauService;
+
+    public function __construct()
     {
-        parent::__construct($container);
-    }
+        parent::__construct(Conteneur::getService('container'));
+        $this->tableauService = $this->container->getService('TableauService');    }
 
     #[Route('/tableaux', name: 'app_tableaux')]
     public function listTableaux(Request $request): Response
     {
         if (UserHelper::isUserLoggedIn()) {
-            $tableaux = $this->tableauService->getTableaux($this->getLoginFromJwt($request),ConnexionUtilisateur::getRoles());
+            $tableaux = $this->tableauService->getTableaux($this->getLoginFromJwt($request), ConnexionUtilisateur::getRoles());
             return $this->renderTwig('tableau/list.html.twig', [
                 'tableaux' => $tableaux,
                 'pagetitle' => 'Liste des tableaux',

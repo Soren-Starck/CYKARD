@@ -3,11 +3,6 @@
 namespace App\Controller\Route;
 
 use App\Controller\GeneriqueController;
-use App\Controller\Route\BaseController;
-use App\Controller\Route\UserController;
-use App\Controller\Route\RegistrationController;
-use App\Controller\Route\TableauController;
-use App\Controller\Route\SecurityController;
 use App\Lib\Database\Database;
 use App\Lib\Flash\MessageFlash;
 use App\Lib\Route\AttributeRouteControllerLoader;
@@ -52,6 +47,7 @@ class RouteurURL
     public static function traiterRequete(): void
     {
         $conteneur = new ContainerBuilder();
+        Conteneur::addService('container', new Conteneur());
 
         $conteneur->register('database', Database::class);
 
@@ -92,6 +88,7 @@ class RouteurURL
                 'strict_variables' => true
             ]
         );
+
         Conteneur::addService("twig", $twig);
         $normalizers = [new ObjectNormalizer()];
         $encoders = [new JsonEncoder()];
@@ -131,12 +128,17 @@ class RouteurURL
         }
 
         $twig->addGlobal("app", [
-            "flashes" => MessageFlash::lireTousMessages()
+            "flashes" => MessageFlash::lireTousMessages(),
+            "user" => UserHelper::isUserLoggedIn() ? UserHelper::getLoginUtilisateurConnecte() : null
         ]);
 
         Conteneur::addService("generateurUrl", $generateurUrl);
         Conteneur::addService("assistantUrl", $assistantUrl);
         Conteneur::addService("UserService", $UserService);
+        Conteneur::addService("TableauService", $tableauService);
+        Conteneur::addService("ColonneService", $colonneService);
+        Conteneur::addService("CarteService", $carteService);
+
         try {
             $associateurUrl = new UrlMatcher($routes, $contexteRequete);
             $donneesRoute = $associateurUrl->match($requete->getPathInfo());
@@ -150,17 +152,23 @@ class RouteurURL
             $arguments = $resolveurDArguments->getArguments($requete, $controleur);
             $response = call_user_func_array($controleur, $arguments);
         } catch (BadRequestHttpException $exception) {
-            $response = generiqueController::renderError($exception->getMessage(), 400);
+            $generiqueController = new GeneriqueController(new Conteneur());
+            $response = $generiqueController->renderError($exception->getMessage(), 400);
         } catch (MethodNotAllowedHttpException $exception) {
-            $response = generiqueController::renderError($exception->getMessage(), 405);
+            $generiqueController = new GeneriqueController(new Conteneur());
+            $response = $generiqueController->renderError($exception->getMessage(), 405);
         } catch (ResourceNotFoundException|NotFoundHttpException $exception) {
-            $response = generiqueController::renderError($exception->getMessage(), 404);
+            $generiqueController = new GeneriqueController(new Conteneur());
+            $response = $generiqueController->renderError($exception->getMessage(), 404);
         } catch (AccessDeniedHttpException $exception) {
-            $response = generiqueController::renderError($exception->getMessage(), 403);
+            $generiqueController = new GeneriqueController(new Conteneur());
+            $response = $generiqueController->renderError($exception->getMessage(), 403);
         } catch (ServiceUnavailableHttpException $exception) {
-            $response = generiqueController::renderError($exception->getMessage(), 503);
+            $generiqueController = new GeneriqueController(new Conteneur());
+            $response = $generiqueController->renderError($exception->getMessage(), 503);
         } catch (\Exception $exception) {
-            $response = generiqueController::renderError($exception->getMessage());
+            $generiqueController = new GeneriqueController(new Conteneur());
+            $response = $generiqueController->renderError($exception->getMessage());
         }
         $response->send();
     }

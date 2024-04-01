@@ -11,12 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class SecurityController extends generiqueController
+class SecurityController extends GeneriqueController
 {
+    private I_UserService $userService;
 
-    public function __construct(Conteneur $container, private readonly I_UserService $userService)
+    public function __construct()
     {
-        parent::__construct($container);
+        parent::__construct(Conteneur::getService('container'));
+        $this->userService = $this->container->getService('UserService');
     }
 
     #[Route(path: '/login', name: 'app_login')]
@@ -55,4 +57,20 @@ class SecurityController extends generiqueController
         ConnexionUtilisateur::deconnecter();
         return $this->redirect('app_login');
     }
+
+    #[Route('/debug', name: 'app_debug')]
+    public function debug(): Response
+    {
+        $userService = $this->container->has('App\Service\I_UserService') ? 'Service is registered' : 'Service is not registered';
+        return new Response($userService);
+    }
+
+    #[Route('/debug/services', name: 'app_debug_services')]
+    public function debugServices(): Response
+    {
+        $services = array_keys($this->container->getServiceIds());
+        sort($services);
+        return new Response('<pre>' . print_r($services, true) . '</pre>');
+    }
+
 }

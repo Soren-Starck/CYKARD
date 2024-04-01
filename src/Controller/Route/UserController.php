@@ -11,7 +11,7 @@ use App\Service\I_UserService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class UserController extends generiqueController
+class UserController extends GeneriqueController
 {
     public function __construct(Conteneur $container, private readonly I_UserService $userService)
     {

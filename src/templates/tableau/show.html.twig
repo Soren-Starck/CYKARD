@@ -1,5 +1,3 @@
-{# templates/tableau/show.html.twig #}
-
 {% extends '../base.html.twig' %}
 
 {% block title %}{{ titretableau }}{% endblock %}
@@ -28,7 +26,7 @@
 {% block body %}
     <react-settings visible="false" id="settings-popup"
                     title="Modifier le tableau"></react-settings>
-    <react-columns login="{{ app_user.currentUser }}" class="grow" table="{{ idtableau }}"></react-columns>
+    <react-columns login="{{ app.user }}" class="grow" table="{{ idtableau }}"></react-columns>
     <react-new-card visible="false" id="new-card-popup" title="Créer une nouvelle carte"></react-new-card>
     <react-modify-column visible="false" id="modify-column-popup" title="Modifier une colonne"></react-modify-column>
     <react-new-column visible="false" id="new-column-popup" title="Créer une nouvelle colonne"></react-new-column>

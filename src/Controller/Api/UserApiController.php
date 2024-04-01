@@ -4,7 +4,7 @@ namespace App\Controller\Api;
 
 use App\Controller\generiquecontroller;
 
-class UserApiController extends generiquecontroller
+class UserApiController extends GeneriqueController
 {
 
 }

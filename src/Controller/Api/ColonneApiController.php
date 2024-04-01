@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
-class ColonneApiController extends generiquecontroller
+class ColonneApiController extends GeneriqueController
 {
     public function __construct(Conteneur $container, private I_ColonneService $colonneService)
     {

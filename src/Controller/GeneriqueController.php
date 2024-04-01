@@ -13,7 +13,9 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 class GeneriqueController
 {
 
-    public function __construct(private readonly Conteneur $container){}
+    public function __construct(protected readonly Conteneur $container){
+
+    }
 
     protected function redirect(string $routeName = "", array $param = []): RedirectResponse
     {

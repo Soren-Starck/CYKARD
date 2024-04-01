@@ -7,12 +7,24 @@ class Conteneur
     private static array $listeServices;
 
     public static function addService(string $nom, $service) : void {
-        Conteneur::$listeServices[$nom] = $service;
+        error_log("Adding service: $nom");
+        self::$listeServices[$nom] = $service;
     }
 
     public static function getService(string $nom) {
-        return Conteneur::$listeServices[$nom];
+        return self::$listeServices[$nom];
     }
+
+    public function has(string $string)
+    {
+        return isset(self::$listeServices[$string]);
+    }
+
+    public function getServiceIds()
+    {
+        return array_keys(self::$listeServices);
+    }
+
 }
 
 ?>

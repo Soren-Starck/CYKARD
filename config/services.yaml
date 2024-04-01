@@ -13,8 +13,19 @@ services:
   App\:
     resource: '../src/'
     exclude:
-      - '../src/DependencyInjection/'
-      - '../src/Entity/'
+      - '../src/test/'
+
+  App\Lib\Route\ControllerResolver:
+    arguments:
+      - '@service_container'
+      - '@logger'
+
+  Symfony\Component\HttpKernel\HttpKernel:
+    class: Symfony\Component\HttpKernel\HttpKernel
+    arguments:
+      - '@event_dispatcher'
+      - '@App\Lib\Route\ControllerResolver'
+      - '@request_stack'
 
   App\Lib\Database\Database:
     arguments:
@@ -23,6 +34,10 @@ services:
     class: PDO
     arguments:
       - '%env(resolve:DATABASE_URL_2)%'
+
+  App\Repository\UserRepository:
+    arguments:
+      $db: '@App\Lib\Database\Database'
 
   App\Lib\Security\UserConnection\UserExtension:
     tags:

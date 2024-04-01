@@ -6,7 +6,8 @@
     <title>{{ pagetitle }}</title>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app')|raw }}
-        <link rel="stylesheet" href="{{ asset('../assets/styles/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('../assets/styles/input.css') }}">
+        <link rel="stylesheet" href="{{ asset('../assets/styles/output.css') }}">
     {% endblock %}
 
     {% block javascripts %}
@@ -65,7 +66,7 @@
                 <li class="mr-5">
                     <react-navbaruserpanel showmenu=false logout-url="{{ path('app_logout') }}"
                                            account-url="{{ path('app_account') }}"
-                                           current-user="{{ app_user.currentUser }}"></react-navbaruserpanel>
+                                           current-user="{{ app.user }}"></react-navbaruserpanel>
                 </li>
             {% endif %}
         </ul>

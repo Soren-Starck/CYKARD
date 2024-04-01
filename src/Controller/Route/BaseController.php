@@ -2,13 +2,19 @@
 
 namespace App\Controller\Route;
 
-use App\Controller\generiqueController;
+use App\Controller\GeneriqueController;
+use App\Lib\Route\Conteneur;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class BaseController extends generiqueController
+class BaseController extends GeneriqueController
 {
+    public function __construct()
+    {
+        parent::__construct(Conteneur::getService('container'));
+    }
+
 
     #[Route('/', name: 'app_base')]
     public function index(): Response
