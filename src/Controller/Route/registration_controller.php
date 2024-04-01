@@ -2,7 +2,7 @@
 
 namespace App\Controller\Route;
 
-use App\Controller\GeneriqueController;
+use App\Controller\generique_controller;
 use App\Entity\User;
 use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\MotDePasse;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
-class RegistrationController extends GeneriqueController
+class registration_controller extends generique_controller
 {
 
     public function __construct(Conteneur $container,private readonly I_UserService $userService)

@@ -2,9 +2,9 @@
 
 namespace App\Controller\Api;
 
-use App\Controller\GeneriqueController;
+use App\Controller\generiquecontroller;
 
-class UserApiController extends GeneriqueController
+class UserApiController extends generiquecontroller
 {
 
 }

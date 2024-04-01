@@ -2,7 +2,7 @@
 
 namespace App\Lib\Route;
 
-class Conteneur implements I_Conteneur
+class Conteneur
 {
     private static array $listeServices;
 

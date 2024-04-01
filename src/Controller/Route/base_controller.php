@@ -2,12 +2,12 @@
 
 namespace App\Controller\Route;
 
-use App\Controller\GeneriqueController;
+use App\Controller\generique_controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class BaseController extends GeneriqueController
+class base_controller extends generique_controller
 {
 
     #[Route('/', name: 'app_base')]

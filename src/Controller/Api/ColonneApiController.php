@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api;
 
-use App\Controller\GeneriqueController;
+use App\Controller\generiquecontroller;
 use App\Lib\Route\Conteneur;
 use App\Service\I_ColonneService;
 use Symfony\Component\DependencyInjection\Container;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
-class ColonneApiController extends GeneriqueController
+class ColonneApiController extends generiquecontroller
 {
     public function __construct(Conteneur $container, private I_ColonneService $colonneService)
     {

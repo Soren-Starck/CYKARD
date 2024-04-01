@@ -2,15 +2,23 @@
 
 namespace App\Controller\Route;
 
-use App\Controller\GeneriqueController;
+use App\Controller\generique_controller;
 use App\Lib\Database\Database;
 use App\Lib\Flash\MessageFlash;
 use App\Lib\Route\AttributeRouteControllerLoader;
 use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\UserHelper;
+use App\Repository\CarteRepository;
+use App\Repository\ColonneRepository;
+use App\Repository\TableauRepository;
 use App\Repository\UserRepository;
+use App\Service\CarteService;
+use App\Service\ColonneService;
+use App\Service\TableauService;
 use App\Service\UserService;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\UrlHelper;
@@ -38,6 +46,36 @@ class RouteurURL
 
     public static function traiterRequete(): void
     {
+        $conteneur = new ContainerBuilder();
+
+        $conteneur->register('database', Database::class);
+
+        $carteRepositoryService = $conteneur->register('carte_repository', CarteRepository::class);
+        $carteRepositoryService->setArguments([new Reference('database')]);
+
+        $userRepositoryService = $conteneur->register('user_repository', UserRepository::class);
+        $userRepositoryService->setArguments([new Reference('database')]);
+
+        $colonneRepositoryService = $conteneur->register('colonne_repository', ColonneRepository::class);
+        $colonneRepositoryService->setArguments([new Reference('database')]);
+
+        $tableauRepositoryService = $conteneur->register('tableau_repository', TableauRepository::class);
+        $tableauRepositoryService->setArguments([new Reference('database')]);
+
+        $carteService = $conteneur->register('carte_service', CarteService::class);
+        $carteService->setArguments([new Reference('carte_repository'), new Reference('colonnes_repository')]);
+
+        $colonneService = $conteneur->register('colonne_service', ColonneService::class);
+        $colonneService->setArguments([new Reference('colonne_repository'), new Reference('tableau_repository')]);
+
+        $userService = $conteneur->register('user_service', UserService::class);
+        $userService->setArguments([new Reference('user_repository')]);
+
+        $tableauService = $conteneur->register('tableau_service', TableauService::class);
+        $tableauService->setArguments([new Reference('tableau_repository')]);
+
+        $conteneur->compile();
+
         $db = Database::getInstance();
         $UserRepository = new UserRepository($db);
         $UserService = new UserService($UserRepository);
@@ -53,8 +91,9 @@ class RouteurURL
         $normalizers = [new ObjectNormalizer()];
         $encoders = [new JsonEncoder()];
         $serializer = new Serializer($normalizers, $encoders);
-
         Conteneur::addService('serializer', $serializer);
+
+
         $requete = Request::createFromGlobals();
         $contexteRequete = (new RequestContext())->fromRequest($requete);
 
@@ -93,9 +132,7 @@ class RouteurURL
         Conteneur::addService("generateurUrl", $generateurUrl);
         Conteneur::addService("assistantUrl", $assistantUrl);
         Conteneur::addService("UserService", $UserService);
-
         try {
-
             $associateurUrl = new UrlMatcher($routes, $contexteRequete);
             $donneesRoute = $associateurUrl->match($requete->getPathInfo());
 
@@ -103,25 +140,22 @@ class RouteurURL
 
             $resolveurDeControleur = new ControllerResolver();
             $controleur = $resolveurDeControleur->getController($requete);
-            print_r($controleur);
-            print_r($requete->attributes->all());
 
             $resolveurDArguments = new ArgumentResolver();
             $arguments = $resolveurDArguments->getArguments($requete, $controleur);
             $response = call_user_func_array($controleur, $arguments);
-            print_r($response);
         } catch (BadRequestHttpException $exception) {
-            $response = GeneriqueController::renderError($exception->getMessage(), 400);
+            $response = generique_controller::renderError($exception->getMessage(), 400);
         } catch (MethodNotAllowedHttpException $exception) {
-            $response = GeneriqueController::renderError($exception->getMessage(), 405);
+            $response = generique_controller::renderError($exception->getMessage(), 405);
         } catch (ResourceNotFoundException|NotFoundHttpException $exception) {
-            $response = GeneriqueController::renderError($exception->getMessage(), 404);
+            $response = generique_controller::renderError($exception->getMessage(), 404);
         } catch (AccessDeniedHttpException $exception) {
-            $response = GeneriqueController::renderError($exception->getMessage(), 403);
+            $response = generique_controller::renderError($exception->getMessage(), 403);
         } catch (ServiceUnavailableHttpException $exception) {
-            $response = GeneriqueController::renderError($exception->getMessage(), 503);
+            $response = generique_controller::renderError($exception->getMessage(), 503);
         } catch (\Exception $exception) {
-            $response = GeneriqueController::renderError($exception->getMessage());
+            $response = generique_controller::renderError($exception->getMessage());
         }
         $response->send();
     }

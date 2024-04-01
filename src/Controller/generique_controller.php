@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-class GeneriqueController
+class generique_controller
 {
 
     public function __construct(private readonly Conteneur $container){}

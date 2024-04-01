@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api;
 
-use App\Controller\GeneriqueController;
+use App\Controller\generiquecontroller;
 use App\Lib\Route\Conteneur;
 use App\Service\CarteService;
 use App\Service\I_CarteService;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
-class CarteApiController extends GeneriqueController
+class CarteApiController extends generiquecontroller
 {
 
     public function __construct(Conteneur $container, private I_CarteService $carteService)

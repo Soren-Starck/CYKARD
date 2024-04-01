@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api;
 
-use App\Controller\GeneriqueController;
+use App\Controller\generiquecontroller;
 use App\Lib\Route\Conteneur;
 use App\Service\I_TableauService;
 use App\Service\TableauService;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
-class TableauApiController extends GeneriqueController
+class TableauApiController extends generiquecontroller
 {
 
     public function __construct(Conteneur $container, private I_TableauService $tableauService)
