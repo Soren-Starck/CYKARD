@@ -3,28 +3,13 @@
 namespace App\Controller\Route;
 
 use App\Controller\GeneriqueController;
-use App\Lib\Database\Database;
 use App\Lib\Flash\MessageFlash;
 use App\Lib\Route\AttributeRouteControllerLoader;
 use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\UserHelper;
-use App\Repository\CarteRepository;
-use App\Repository\ColonneRepository;
-use App\Repository\I_ColonneRepository;
-use App\Repository\TableauRepository;
-use App\Repository\UserRepository;
-use App\Service\CarteService;
-use App\Service\ColonneService;
-use App\Service\I_CarteService;
-use App\Service\I_ColonneService;
-use App\Service\I_TableauService;
-use App\Service\I_UserService;
-use App\Service\TableauService;
-use App\Service\UserService;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\UrlHelper;
@@ -55,9 +40,10 @@ class RouteurURL
      */
     public static function traiterRequete(): void
     {
+        $configDir = realpath(__DIR__ . '/../../../config');
         $container = new ContainerBuilder();
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
-        $loader->load('conteneur.yml');
+        $loader = new YamlFileLoader($container, new FileLocator($configDir));
+        $loader->load('conteneur.yaml');
 
 
         $twigLoader = new FilesystemLoader(dirname(__DIR__) . '/../templates');

@@ -1,7 +1,6 @@
 parameters:
 
 services:
-
   database:
     class: App\Lib\Database\Database
 
@@ -12,9 +11,9 @@ services:
   #Services
   tableau_service:
     class: App\Service\TableauService
-    arguments: ['@publication_repository']
+    arguments: [ '@publication_repository' ]
 
   #Controleurs
   generique_controller:
     class: App\Controller\GeneriqueController
-    arguments: ???
+    arguments: [ ]
