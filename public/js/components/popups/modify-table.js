@@ -2,6 +2,7 @@ import {Popup} from "../popup.js";
 import {API} from "../../api.js";
 import {Store} from "../../store.js";
 import {UserStore} from "../../stores/user-store.js";
+import {Notif} from "../../notifications.js";
 
 export class ModifyTable extends Popup {
     onMount() {
@@ -43,6 +44,12 @@ export class ModifyTable extends Popup {
         console.log("delete")
     }
 
+    copyToClipboard(e) {
+    e.preventDefault();
+    navigator.clipboard.writeText("lien d'invitation");
+    Notif.success("Copié", "Le lien d'invitation a été copié dans le presse-papier");
+}
+
     render() {
         const isAdmin = UserStore.isAdmin()
 
@@ -70,7 +77,11 @@ export class ModifyTable extends Popup {
                 </button>
             </div>` : ""}
             ${userList}
-            ${isAdmin ? `<button type="submit" class="mt-5">Modifier</button>` : ""}
+            <button onclick="copyToClipboard" class="btnPrimary mt-3">
+            Partager
+            <i class="fas fa-copy"></i>
+            </button>
+            ${isAdmin ? `<button type="submit">Modifier</button>` : ""}
             ${!isAdmin ? `
                 <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="leave">Quitter</button>` : `
                 <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="delete">Supprimer</button>

@@ -12,7 +12,7 @@ nav > ul > li > a {
 }
 
 #usermenu > a {
-    @apply w-full hover:bg-gray-100 px-5 py-3;
+    @apply w-full hover:bg-gray-100 px-3 py-2;
 }
 
 .container {
@@ -187,6 +187,7 @@ h2 {
     animation: slide-in 0.5s forwards;
     transition: all 0.3s ease-in-out;
     max-height: 200px;
+    z-index: 1000;
 }
 
 @keyframes slide-in {
