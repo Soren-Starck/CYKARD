@@ -2,7 +2,12 @@
 
 namespace App\Controller\Route;
 
-use App\Controller\generique_controller;
+use App\Controller\GeneriqueController;
+use App\Controller\Route\BaseController;
+use App\Controller\Route\UserController;
+use App\Controller\Route\RegistrationController;
+use App\Controller\Route\TableauController;
+use App\Controller\Route\SecurityController;
 use App\Lib\Database\Database;
 use App\Lib\Flash\MessageFlash;
 use App\Lib\Route\AttributeRouteControllerLoader;
@@ -145,17 +150,17 @@ class RouteurURL
             $arguments = $resolveurDArguments->getArguments($requete, $controleur);
             $response = call_user_func_array($controleur, $arguments);
         } catch (BadRequestHttpException $exception) {
-            $response = generique_controller::renderError($exception->getMessage(), 400);
+            $response = generiqueController::renderError($exception->getMessage(), 400);
         } catch (MethodNotAllowedHttpException $exception) {
-            $response = generique_controller::renderError($exception->getMessage(), 405);
+            $response = generiqueController::renderError($exception->getMessage(), 405);
         } catch (ResourceNotFoundException|NotFoundHttpException $exception) {
-            $response = generique_controller::renderError($exception->getMessage(), 404);
+            $response = generiqueController::renderError($exception->getMessage(), 404);
         } catch (AccessDeniedHttpException $exception) {
-            $response = generique_controller::renderError($exception->getMessage(), 403);
+            $response = generiqueController::renderError($exception->getMessage(), 403);
         } catch (ServiceUnavailableHttpException $exception) {
-            $response = generique_controller::renderError($exception->getMessage(), 503);
+            $response = generiqueController::renderError($exception->getMessage(), 503);
         } catch (\Exception $exception) {
-            $response = generique_controller::renderError($exception->getMessage());
+            $response = generiqueController::renderError($exception->getMessage());
         }
         $response->send();
     }

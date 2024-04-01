@@ -2,7 +2,7 @@
 
 namespace App\Controller\Route;
 
-use App\Controller\generique_controller;
+use App\Controller\generiqueController;
 use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
-class tableau_controller extends generique_controller
+class TableauController extends generiqueController
 {
 
     public function __construct(Conteneur $container, private readonly I_TableauService $tableauService)

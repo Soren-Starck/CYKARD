@@ -4,14 +4,13 @@ namespace App\Controller;
 
 use App\Lib\Route\Conteneur;
 use App\Lib\Security\JWT\JsonWebToken;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-class generique_controller
+class GeneriqueController
 {
 
     public function __construct(private readonly Conteneur $container){}

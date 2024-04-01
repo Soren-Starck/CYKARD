@@ -3,17 +3,15 @@
 namespace App\Controller\Route;
 
 
-use App\Controller\generique_controller;
+use App\Controller\generiqueController;
 use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
-use App\Repository\UserRepository;
 use App\Service\I_UserService;
-use App\Service\UserService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class user_controller extends generique_controller
+class UserController extends generiqueController
 {
     public function __construct(Conteneur $container, private readonly I_UserService $userService)
     {

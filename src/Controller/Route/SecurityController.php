@@ -2,7 +2,7 @@
 
 namespace App\Controller\Route;
 
-use App\Controller\generique_controller;
+use App\Controller\generiqueController;
 use App\Lib\HTTP\Cookie;
 use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class security_controller extends generique_controller
+class SecurityController extends generiqueController
 {
 
     public function __construct(Conteneur $container, private readonly I_UserService $userService)
