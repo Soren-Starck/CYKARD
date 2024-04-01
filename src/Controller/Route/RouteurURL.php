@@ -23,6 +23,7 @@ use App\Service\TableauService;
 use App\Service\UserService;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -49,39 +50,14 @@ use Twig\TwigFunction;
 class RouteurURL
 {
 
+    /**
+     * @throws \Exception
+     */
     public static function traiterRequete(): void
     {
-        $conteneur = new ContainerBuilder();
-
-        $conteneur->register('database', Database::class);
-
-        $carteRepositoryService = $conteneur->register('carte_repository', CarteRepository::class);
-        $carteRepositoryService->setArguments([new Reference('database')]);
-
-        $userRepositoryService = $conteneur->register('user_repository', UserRepository::class);
-        $userRepositoryService->setArguments([new Reference('database')]);
-
-        $colonneRepositoryService = $conteneur->register('colonne_repository', ColonneRepository::class);
-        $colonneRepositoryService->setArguments([new Reference('database')]);
-
-        $tableauRepositoryService = $conteneur->register('tableau_repository', TableauRepository::class);
-        $tableauRepositoryService->setArguments([new Reference('database')]);
-
-        $carteService = $conteneur->register('carte_service', CarteService::class);
-        $carteService->setArguments([new Reference('carte_repository'), new Reference('colonnes_repository')]);
-
-        $colonneService = $conteneur->register('colonne_service', ColonneService::class);
-        $colonneService->setArguments([new Reference('colonne_repository'), new Reference('tableau_repository')]);
-
-        $userService = $conteneur->register('user_service', UserService::class);
-        $userService->setArguments([new Reference('user_repository')]);
-
-        $tableauService = $conteneur->register('tableau_service', TableauService::class);
-        $tableauService->setArguments([new Reference('tableau_repository')]);
-
-        $conteneur->set('container', $conteneur);
-
-        $conteneur->compile();
+        $container = new ContainerBuilder();
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
+        $loader->load('conteneur.yml');
 
 
         $twigLoader = new FilesystemLoader(dirname(__DIR__) . '/../templates');

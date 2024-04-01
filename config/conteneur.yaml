@@ -1,0 +1,20 @@
+parameters:
+
+services:
+
+  database:
+    class: App\Lib\Database\Database
+
+  #Repositories
+  tableau_repository:
+    class: App\Repository\TableauRepository
+    arguments:
+  #Services
+  tableau_service:
+    class: App\Service\TableauService
+    arguments: ['@publication_repository']
+
+  #Controleurs
+  generique_controller:
+    class: App\Controller\GeneriqueController
+    arguments: ???
