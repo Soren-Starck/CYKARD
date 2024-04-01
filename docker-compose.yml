@@ -8,9 +8,20 @@ services:
       dockerfile: Dockerfile
     image: trello:latest
     env_file:
-      - .env
-    environment:
-      - APP_ENV=prod
+      - .env.prod
     ports:
       - "8000:8000"
     container_name: Trello
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: gozzog
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cykard
+    volumes:
+      - ./export.sql:/docker-entrypoint-initdb.d/export.sql
+    command: [ "postgres", "-c", "max_connections=200" ]
+    ports:
+      - "5432:5432"
+    container_name: Postgres

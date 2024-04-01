@@ -21,6 +21,7 @@ export class TableList extends ReactiveComponent {
 
     render() {
         if (!this.state.tables) return ""
+        if (Object.values(this.state.tables).length === 0) return `<div class="text-center">Aucun tableau trouvé</div>`
         const tables = Object.values(this.state.tables).map(table => `
             <div class="group relative h-20 flex flex-col hover:cursor-pointer overflow-hidden shadow rounded-md border w-full justify-around items-center bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,.2)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] bg-[position:-100%_0,0_0] bg-no-repeat hover:bg-[position:200%_0,0_0] hover:transition-[background-position_0s_ease] hover:duration-[1500ms]">
                 <a href="/tableaux/${table.id}"
