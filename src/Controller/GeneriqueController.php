@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Lib\Route\Conteneur;
 use App\Lib\Security\JWT\JsonWebToken;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,14 +14,12 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 class GeneriqueController
 {
 
-    public function __construct(protected readonly Conteneur $container){
-
-    }
+    public function __construct(protected ContainerInterface $container){}
 
     protected function redirect(string $routeName = "", array $param = []): RedirectResponse
     {
         /** @var UrlGenerator $generateurUrl */
-        $generateurUrl = $this->container::getService("generateurUrl");
+        $generateurUrl = $this->container->get("generateurUrl");
         return new RedirectResponse($generateurUrl->generate($routeName, $param));
     }
 
@@ -36,7 +35,7 @@ class GeneriqueController
     protected function renderTwig(string $cheminVue, array $parametres = []): Response
     {
         /** @var Environment $twig */
-        $twig = $this->container::getService("twig");
+        $twig = $this->container->get("twig");
         $corpsReponse = $twig->render($cheminVue, $parametres);
         return new Response($corpsReponse);
     }
@@ -49,7 +48,7 @@ class GeneriqueController
 
     protected function json($data, int $status = 200, array $headers = [], array $context = []): JsonResponse
     {
-        $serializer = $this->container::getService('serializer');
+        $serializer = $this->container->get('serializer');
 
         if ($serializer) {
             $json = $serializer->serialize($data, 'json', array_merge([

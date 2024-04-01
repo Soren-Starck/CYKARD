@@ -12,7 +12,8 @@ class AttributeRouteControllerLoader extends AttributeClassLoader
      */
     protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, object $annot): void
     {
-        $route->setDefault('_controller', $class->getName().'::'.$method->getName());
+        print_r($class->getShortName());
+        $route->setDefault('_controller', $class->getShortName().'::'.$method->getName());
     }
 
 }

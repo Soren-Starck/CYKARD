@@ -10,10 +10,15 @@ use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\UserHelper;
 use App\Repository\CarteRepository;
 use App\Repository\ColonneRepository;
+use App\Repository\I_ColonneRepository;
 use App\Repository\TableauRepository;
 use App\Repository\UserRepository;
 use App\Service\CarteService;
 use App\Service\ColonneService;
+use App\Service\I_CarteService;
+use App\Service\I_ColonneService;
+use App\Service\I_TableauService;
+use App\Service\I_UserService;
 use App\Service\TableauService;
 use App\Service\UserService;
 use Symfony\Component\Config\FileLocator;
@@ -47,7 +52,6 @@ class RouteurURL
     public static function traiterRequete(): void
     {
         $conteneur = new ContainerBuilder();
-        Conteneur::addService('container', new Conteneur());
 
         $conteneur->register('database', Database::class);
 
@@ -75,11 +79,11 @@ class RouteurURL
         $tableauService = $conteneur->register('tableau_service', TableauService::class);
         $tableauService->setArguments([new Reference('tableau_repository')]);
 
+        $conteneur->set('container', $conteneur);
+
         $conteneur->compile();
 
-        $db = Database::getInstance();
-        $UserRepository = new UserRepository($db);
-        $UserService = new UserService($UserRepository);
+
         $twigLoader = new FilesystemLoader(dirname(__DIR__) . '/../templates');
         $twig = new Environment(
             $twigLoader,
@@ -134,10 +138,6 @@ class RouteurURL
 
         Conteneur::addService("generateurUrl", $generateurUrl);
         Conteneur::addService("assistantUrl", $assistantUrl);
-        Conteneur::addService("UserService", $UserService);
-        Conteneur::addService("TableauService", $tableauService);
-        Conteneur::addService("ColonneService", $colonneService);
-        Conteneur::addService("CarteService", $carteService);
 
         try {
             $associateurUrl = new UrlMatcher($routes, $contexteRequete);

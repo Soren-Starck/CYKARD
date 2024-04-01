@@ -7,6 +7,7 @@ use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
 use App\Service\I_TableauService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,13 +15,10 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 class TableauController extends GeneriqueController
 {
-
-    private I_TableauService $tableauService;
-
-    public function __construct()
+    public function __construct(ContainerInterface $container, private readonly I_TableauService $tableauService)
     {
-        parent::__construct(Conteneur::getService('container'));
-        $this->tableauService = $this->container->getService('TableauService');    }
+        parent::__construct($container);
+    }
 
     #[Route('/tableaux', name: 'app_tableaux')]
     public function listTableaux(Request $request): Response

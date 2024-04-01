@@ -4,15 +4,16 @@ namespace App\Controller\Route;
 
 use App\Controller\GeneriqueController;
 use App\Lib\Route\Conteneur;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class BaseController extends GeneriqueController
 {
-    public function __construct()
+    public function __construct(ContainerInterface $container)
     {
-        parent::__construct(Conteneur::getService('container'));
+        parent::__construct($container);
     }
 
 

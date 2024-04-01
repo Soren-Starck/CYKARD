@@ -2,7 +2,9 @@
 
 namespace App\Lib\Route;
 
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver as BaseControllerResolver;
 
@@ -18,6 +20,10 @@ class ControllerResolver extends BaseControllerResolver
         $this->logger = $logger;
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     protected function instantiateController($class): object
     {
         $this->logger->info('Instantiating controller', ['class' => $class]);
