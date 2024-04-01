@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Repository\I_CarteRepository;
 use App\Repository\I_ColonneRepository;
 
-class CarteService extends GeneriqueService
+class CarteService extends GeneriqueService implements I_CarteService
 {
     private I_CarteRepository $carteRepository;
     private I_ColonneRepository $colonneRepository;

@@ -14,26 +14,28 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 class GeneriqueController
 {
 
-    protected static function redirect(string $routeName = "", array $param = []): RedirectResponse
+    public function __construct(private readonly Conteneur $container){}
+
+    protected function redirect(string $routeName = "", array $param = []): RedirectResponse
     {
         /** @var UrlGenerator $generateurUrl */
-        $generateurUrl = Conteneur::getService("generateurUrl");
+        $generateurUrl = $this->container::getService("generateurUrl");
         return new RedirectResponse($generateurUrl->generate($routeName, $param));
     }
 
-    public static function renderError($messageErreur = "", $statusCode = 400): Response
+    public function renderError($messageErreur = "", $statusCode = 400): Response
     {
-        $reponse = GeneriqueController::renderTwig('erreur.html.twig', [
+        $reponse = $this->renderTwig('erreur.html.twig', [
             "messageErreur" => $messageErreur
         ]);
         $reponse->setStatusCode($statusCode);
         return $reponse;
     }
 
-    protected static function renderTwig(string $cheminVue, array $parametres = []): Response
+    protected function renderTwig(string $cheminVue, array $parametres = []): Response
     {
         /** @var Environment $twig */
-        $twig = Conteneur::getService("twig");
+        $twig = $this->container::getService("twig");
         $corpsReponse = $twig->render($cheminVue, $parametres);
         return new Response($corpsReponse);
     }
@@ -46,7 +48,7 @@ class GeneriqueController
 
     protected function json($data, int $status = 200, array $headers = [], array $context = []): JsonResponse
     {
-        $serializer = Conteneur::getService('serializer');
+        $serializer = $this->container::getService('serializer');
 
         if ($serializer) {
             $json = $serializer->serialize($data, 'json', array_merge([

@@ -4,20 +4,20 @@ namespace App\Controller\Route;
 
 use App\Controller\GeneriqueController;
 use App\Entity\User;
+use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\MotDePasse;
-use App\Repository\UserRepository;
-use App\Service\UserService;
+use App\Service\I_UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 class RegistrationController extends GeneriqueController
 {
-    private UserService $userService;
 
-    public function __construct(UserService $userService)
+    public function __construct(Conteneur $container,private readonly I_UserService $userService)
     {
-        $this->userService = $userService;
+        parent::__construct($container);
     }
 
     #[Route('/register', name: 'app_register')]

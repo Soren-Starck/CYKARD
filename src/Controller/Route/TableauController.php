@@ -3,9 +3,11 @@
 namespace App\Controller\Route;
 
 use App\Controller\GeneriqueController;
+use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
 use App\Repository\TableauRepository;
+use App\Service\I_TableauService;
 use App\Service\TableauService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,11 +17,10 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 class TableauController extends GeneriqueController
 {
-    private TableauService $tableauService;
 
-    public function __construct(TableauService $tableauService)
+    public function __construct(Conteneur $container, private readonly I_TableauService $tableauService)
     {
-        $this->tableauService = $tableauService;
+        parent::__construct($container);
     }
 
     #[Route('/tableaux', name: 'app_tableaux')]

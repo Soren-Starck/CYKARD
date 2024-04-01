@@ -3,6 +3,8 @@
 namespace App\Controller\Api;
 
 use App\Controller\GeneriqueController;
+use App\Lib\Route\Conteneur;
+use App\Service\I_TableauService;
 use App\Service\TableauService;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +14,8 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 class TableauApiController extends GeneriqueController
 {
-    public function __construct(Container $container, private TableauService $tableauService)
+
+    public function __construct(Conteneur $container, private I_TableauService $tableauService)
     {
         parent::__construct($container);
     }

@@ -3,7 +3,9 @@
 namespace App\Controller\Api;
 
 use App\Controller\GeneriqueController;
+use App\Lib\Route\Conteneur;
 use App\Service\CarteService;
+use App\Service\I_CarteService;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +15,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 class CarteApiController extends GeneriqueController
 {
 
-    public function __construct(Container $container, private CarteService $carteService)
+    public function __construct(Conteneur $container, private I_CarteService $carteService)
     {
         parent::__construct($container);
     }

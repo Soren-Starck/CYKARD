@@ -7,7 +7,7 @@ use App\Repository\TableauRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class TableauService extends GeneriqueService
+class TableauService extends GeneriqueService implements ITableauService
 {
     private TableauRepository $tableauRepository;
 

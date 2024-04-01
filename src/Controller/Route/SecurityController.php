@@ -4,21 +4,19 @@ namespace App\Controller\Route;
 
 use App\Controller\GeneriqueController;
 use App\Lib\HTTP\Cookie;
+use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
-use App\Repository\UserRepository;
-use App\Service\UserService;
-use Symfony\Component\DependencyInjection\Container;
+use App\Service\I_UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class SecurityController extends GeneriqueController
 {
-    private UserService $userService;
 
-    public function __construct(UserService $userService)
+    public function __construct(Conteneur $container, private readonly I_UserService $userService)
     {
-        $this->userService = $userService;
+        parent::__construct($container);
     }
 
     #[Route(path: '/login', name: 'app_login')]

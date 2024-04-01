@@ -3,10 +3,13 @@
 namespace App\Controller\Route;
 
 use App\Controller\GeneriqueController;
+use App\Lib\Database\Database;
 use App\Lib\Flash\MessageFlash;
 use App\Lib\Route\AttributeRouteControllerLoader;
 use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\UserHelper;
+use App\Repository\UserRepository;
+use App\Service\UserService;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -35,6 +38,9 @@ class RouteurURL
 
     public static function traiterRequete(): void
     {
+        $db = Database::getInstance();
+        $UserRepository = new UserRepository($db);
+        $UserService = new UserService($UserRepository);
         $twigLoader = new FilesystemLoader(dirname(__DIR__) . '/../templates');
         $twig = new Environment(
             $twigLoader,
@@ -71,9 +77,9 @@ class RouteurURL
             new TwigFunction("path", function ($nomRoute, $parametres = []) use ($generateurUrl) {
                 return $generateurUrl->generate($nomRoute, $parametres);
             }),
-           new TwigFunction("asset", function ($chemin) use ($assistantUrl) {
-               return $assistantUrl->getAbsoluteUrl($chemin);
-           }),
+            new TwigFunction("asset", function ($chemin) use ($assistantUrl) {
+                return $assistantUrl->getAbsoluteUrl($chemin);
+            }),
         ];
 
         foreach ($functions as $function) {
@@ -86,6 +92,8 @@ class RouteurURL
 
         Conteneur::addService("generateurUrl", $generateurUrl);
         Conteneur::addService("assistantUrl", $assistantUrl);
+        Conteneur::addService("UserService", $UserService);
+
         try {
 
             $associateurUrl = new UrlMatcher($routes, $contexteRequete);
@@ -95,10 +103,13 @@ class RouteurURL
 
             $resolveurDeControleur = new ControllerResolver();
             $controleur = $resolveurDeControleur->getController($requete);
+            print_r($controleur);
+            print_r($requete->attributes->all());
 
             $resolveurDArguments = new ArgumentResolver();
             $arguments = $resolveurDArguments->getArguments($requete, $controleur);
             $response = call_user_func_array($controleur, $arguments);
+            print_r($response);
         } catch (BadRequestHttpException $exception) {
             $response = GeneriqueController::renderError($exception->getMessage(), 400);
         } catch (MethodNotAllowedHttpException $exception) {

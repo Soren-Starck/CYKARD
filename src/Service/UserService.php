@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Repository\UserRepository;
 
-class UserService extends GeneriqueService
+class UserService extends GeneriqueService implements I_UserService
 {
     private UserRepository $userRepository;
 
