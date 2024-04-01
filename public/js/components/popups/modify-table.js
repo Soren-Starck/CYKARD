@@ -56,7 +56,8 @@ export class ModifyTable extends Popup {
         const userList = this.state.users ? this.state.users.map(user => `
             <div class="flex justify-between rounded-md bg-slate-100 px-3 py-1">
                 <div class="flex flex-col">
-                    <p class="font-medium">${user.login}</p>
+                    <p class="font-medium whitespace-nowrap">
+                    ${user.login}</p>
                     <span class="text-xs">${UserStore.roleToText(user.role)}</span>
                 </div>
                 ${isAdmin && !UserStore.isMe(user.login) ? `
@@ -67,9 +68,13 @@ export class ModifyTable extends Popup {
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
             ${isAdmin ? `
-            <label for="title">Titre</label>
+            <label for="title">
+            <i class="fas fa-pencil-alt"></i>
+            Titre</label>
             <input type="text" id="title" value="${Store.get("table")}" name="titretableau" required autofocus>
-            <label for="user">Utilisateurs</label>
+            <label for="user">
+            <i class="fas fa-user"></i>
+            Utilisateurs</label>
             <div class="flex relative">
                 <input placeholder="ajouter un utilisateur" type="text" id="user" name="user" class="border !rounded-l px-4 py-2 w-full h-9">
                 <button class="absolute right-0 border bg-slate-100 text-neutral-900 !rounded-r flex items-center h-9 px-4 py-2 my-2">
@@ -78,13 +83,19 @@ export class ModifyTable extends Popup {
             </div>` : ""}
             ${userList}
             <button onclick="copyToClipboard" class="btnPrimary mt-3">
-            Partager
             <i class="fas fa-copy"></i>
+            Partager
             </button>
-            ${isAdmin ? `<button type="submit">Modifier</button>` : ""}
+            ${isAdmin ? `<button type="submit">
+            <i class="fas fa-save"></i>
+            Modifier</button>` : ""}
             ${!isAdmin ? `
-                <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="leave">Quitter</button>` : `
-                <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="delete">Supprimer</button>
+                <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="leave">
+                <i class="fas fa-sign-out-alt"></i>
+                Quitter</button>` : `
+                <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="delete">
+                <i class="fas fa-trash"></i>
+                Supprimer</button>
                 `}
         </form>
         `)

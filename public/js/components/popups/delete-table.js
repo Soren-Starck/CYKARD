@@ -16,7 +16,9 @@ export class DeleteTable extends Popup {
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
             <p>Le tableau '${name}' sera supprimé à jamais.</p>
-            <button type="submit">Supprimer</button>
+            <button type="submit">
+            <i class="fas fa-trash"></i>
+            Supprimer</button>
         </form>
         `)
     }

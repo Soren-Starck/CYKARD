@@ -23,9 +23,13 @@ export class NewColumn extends Popup {
     render() {
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
-            <label for="title">Titre</label>
+            <label for="title">
+            <i class="fas fa-pencil-alt"></i>
+            Titre</label>
             <input type="text" id="title" name="TitreColonne" value="Nouvelle colonne" required autofocus>
-            <button type="submit" name="modify">Créer</button>
+            <button type="submit" name="modify">
+            <i class="fas fa-save"></i>
+            Créer</button>
         </form>
         `)
     }
