@@ -1,7 +1,7 @@
 import CookiesCrous from "./cookies-crous.js";
 import {Notif} from "./notifications.js";
 
-const host = "http://localhost:8000/api";
+const host = window.location.origin + "/api";
 
 function getToken() {
     const jwt = CookiesCrous.get("jwt")

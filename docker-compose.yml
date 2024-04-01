@@ -1,17 +1,6 @@
 version: '3.8'
 
 services:
-  trello:
-    restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: trello:latest
-    env_file:
-      - .env.prod
-    ports:
-      - "8000:8000"
-    container_name: Trello
   db:
     image: postgres:latest
     restart: always
@@ -25,3 +14,16 @@ services:
     ports:
       - "5432:5432"
     container_name: Postgres
+  trello:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: trello:latest
+    env_file:
+      - .env.prod
+    ports:
+      - "8000:8000"
+    container_name: Trello
+    depends_on:
+      - db

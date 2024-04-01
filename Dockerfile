@@ -1,10 +1,10 @@
 FROM php:8.3-cli
 
+WORKDIR /var/www/html
+
 RUN apt-get update && apt-get install -y nodejs npm && \
     apt-get install -y libpq-dev libicu-dev && \
     docker-php-ext-install pdo pdo_pgsql intl
-
-WORKDIR /var/www/html
 
 ADD composer.json ./
 
@@ -22,4 +22,4 @@ RUN npm install
 
 RUN npm run build
 
-CMD "php -S 0.0.0.0:8000 -t public"
+CMD php -S 0.0.0.0:8000 -t public
