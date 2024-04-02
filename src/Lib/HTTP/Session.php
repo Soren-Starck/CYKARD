@@ -31,10 +31,12 @@ class Session
         return static::$instance;
     }
 
+
     public function verifierDerniereActivite(int $dureeExpiration): void
     {
         if ($dureeExpiration == 0)
             return;
+
 
         if (isset($_SESSION['derniereActivite']) && (time() - $_SESSION['derniereActivite'] > ($dureeExpiration)))
             session_unset();

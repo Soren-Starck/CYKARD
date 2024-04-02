@@ -54,16 +54,6 @@ class User
     }
 
     /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUserIdentifier(): string
-    {
-        return (string)$this->login;
-    }
-
-    /**
      * @return list<string>
      * @see UserInterface
      *

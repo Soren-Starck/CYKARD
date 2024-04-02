@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Colonne;
 use App\Lib\Database\Database;
 
-class ColonneRepository
+class ColonneRepository implements I_ColonneRepository
 {
     private Database $db;
 

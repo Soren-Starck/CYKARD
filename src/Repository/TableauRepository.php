@@ -7,7 +7,7 @@ use App\Entity\Colonne;
 use App\Entity\Tableau;
 use App\Lib\Database\Database;
 
-class TableauRepository implements AbstractRepository
+class TableauRepository implements I_TableauRepository
 {
     private Database $db;
 
@@ -26,12 +26,12 @@ class TableauRepository implements AbstractRepository
             ->fetchAll();
     }
 
-    public function join(string $codetableau, string $login): false|array
+    public function join(string $codetableau, string $login): false|Tableau
     {
         try {
             $tableau = $this->db->table('tableau')->select('tableau', ['id', 'titretableau', 'codetableau'])->where('codetableau', '=', 'codetableau')->bind('codetableau', $codetableau)->fetchAll();
             $this->db->insert('user_tableau', ['user_login' => $login, 'tableau_id' => $tableau[0]['id'], 'user_role' => 'USER_READ']);
-            return $tableau;
+            return $this->createTableauFromDbResponse($tableau);
         } catch (\Exception $e) {
             return false;
         }
@@ -71,13 +71,14 @@ class TableauRepository implements AbstractRepository
             ->fetchAll();
     }
 
-    public function create(mixed $titre, ?string $login): array|bool
+    public function create(mixed $titre, ?string $login): Tableau|bool
     {
         try {
             $this->db->insert('tableau', ['titretableau' => $titre]);
             $tableauId = $this->db->lastInsertId();
             $this->db->insert('user_tableau', ['user_login' => $login, 'tableau_id' => $tableauId, 'user_role' => 'USER_ADMIN']);
-            return $this->db->table('tableau')->select('tableau', ['id', 'titretableau', 'codetableau'])->where('id', '=', 'id')->bind('id', $tableauId)->fetchAll();
+            $array = $this->db->table('tableau')->select('tableau', ['id', 'titretableau', 'codetableau'])->where('id', '=', 'id')->bind('id', $tableauId)->fetchAll();
+            return $this->createTableauFromDbResponse($array);
         } catch (\Exception $e) {
             return false;
         }

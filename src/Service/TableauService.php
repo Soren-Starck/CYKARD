@@ -3,9 +3,8 @@
 namespace App\Service;
 
 use App\Repository\TableauRepository;
-use Symfony\Component\HttpFoundation\Request;
 
-class TableauService extends GeneriqueService
+class TableauService extends GeneriqueService implements I_TableauService
 {
     private TableauRepository $tableauRepository;
 
@@ -30,7 +29,7 @@ class TableauService extends GeneriqueService
         return $this->showTableau($login, $id);
     }
 
-    public function showTableau(string $login , int $id): array
+    public function showTableau(string $login, int $id): array
     {
         $tableau = $this->tableauRepository->findTableauColonnes($login, $id);
         if (!$tableau) return ['error' => 'No tableau found', 'status' => 404];
@@ -50,16 +49,22 @@ class TableauService extends GeneriqueService
         if (!array_key_exists('titretableau', $data) || !$data['titretableau']) return ['error' => 'Titre is required', 'status' => 400];
         $tableau = $this->tableauRepository->create($data['titretableau'], $login);
         if (!$tableau) return ['error' => 'Error creating tableau', 'status' => 500];
-        $tableau[0]['colonnes'] = [];
-        return $tableau[0];
+        return $tableau->toArray();
     }
 
     public function joinTableau(string $login, string $codetableau): array
     {
-        if (!$codetableau || strlen($codetableau) !== 16) return ['error' => 'Invalid codetableau', 'status' => 400];
+        if (strlen($codetableau) !== 16) return ['error' => 'Invalid codetableau', 'status' => 400];
         $tableau = $this->tableauRepository->join($codetableau, $login);
         if (!$tableau) return ['error' => 'Error joining tableau', 'status' => 500];
-        $tableau[0]['colonnes'] = [];
-        return $tableau[0];
+        return $tableau->toArray();
+    }
+
+    public function getTableaux(string $login, array $roles): array
+    {
+        if (!str_contains($roles[0]['roles'], 'ROLE_USER'))
+            return ['error' => 'Access Denied', 'status' => 403];
+
+        return $this->tableauRepository->findByUser($login);
     }
 }

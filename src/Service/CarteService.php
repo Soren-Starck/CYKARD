@@ -2,22 +2,22 @@
 
 namespace App\Service;
 
-use App\Repository\CarteRepository;
-use App\Repository\ColonneRepository;
+use App\Repository\I_CarteRepository;
+use App\Repository\I_ColonneRepository;
 
-class CarteService extends GeneriqueService
+class CarteService extends GeneriqueService implements I_CarteService
 {
-    private CarteRepository $carteRepository;
-    private ColonneRepository $colonneRepository;
+    private I_CarteRepository $carteRepository;
+    private I_ColonneRepository $colonneRepository;
 
-    public function __construct(CarteRepository $carteRepository, ColonneRepository $colonneRepository)
+    public function __construct(I_CarteRepository $carteRepository, I_ColonneRepository $colonneRepository)
     {
         $this->carteRepository = $carteRepository;
         $this->colonneRepository = $colonneRepository;
     }
 
 
-    public function modifyCarte(string $login, int $id, array $data): array
+    public function modifyCarte(mixed $data, string $login, int $id): array
     {
         if (!$this->carteRepository->verifyUserTableauByCardAndAccess($id, $login)) return ['error' => 'Access denied', 'status' => 403];
         if (array_key_exists('titrecarte', $data) && !$data['titrecarte']) return ['error' => 'Titre de carte manquant', 'status' => 400];
@@ -42,7 +42,7 @@ class CarteService extends GeneriqueService
         return [];
     }
 
-    public function createCarte(mixed $data, string $login, int $colonne_id): array
+    public function createCarte(mixed $data, string $login , int $colonne_id): array
     {
         $titre = array_key_exists('titrecarte', $data) ? $data['titrecarte'] : null;
         if (!$titre) return ['error' => 'Titre de carte manquant', 'status' => 400];
