@@ -18,11 +18,11 @@
         <div>
             <h1 class="h3 mb-3">
                 Mon compte</h1>
-            <div class="VBox">
-                <span><i class="fas fa-user"></i>Identifiant</span>
-                <p type="text">{{ user.login }}</p>
-                <span><i class="fas fa-envelope"></i>Email</span>
-                <p type="text">{{ user.email }}</p>
+            <div class="VBox gap-2">
+                <label><i class="fas fa-user mr-2"></i>Identifiant</label>
+                <p type="text" class="bg-slate-100 rounded-md px-3 py-1">{{ user.login }}</p>
+                <label><i class="fas fa-envelope mr-2"></i>Email</label>
+                <p type="text" class="bg-slate-100 rounded-md px-3 py-1">{{ user.email }}</p>
                 <react-password></react-password>
 
                 {% if user.is_verified == false %}
