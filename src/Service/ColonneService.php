@@ -44,6 +44,7 @@ class ColonneService extends GeneriqueService implements I_ColonneService
         if (!$this->tableauRepository->verifyUserTableau($login, $tableau_id)) return ['error' => 'Access Denied', 'status' => 403];
         $colonneResponse = $this->colonneRepository->create($titre, $tableau_id);
         if (!$colonneResponse) return ['error' => 'Error creating colonne', 'status' => 500];
+        $colonneResponse->setTableauId($tableau_id);
         return $colonneResponse->toArray();
     }
 }

@@ -229,10 +229,10 @@ class TableauRepository implements I_TableauRepository
         }
     }
 
-    public function editUserRoleTableau(int $id, string $role): bool
+    public function editUserRoleTableau(int $id, string $role, string $login): bool
     {
         try {
-            $this->db->update('user_tableau', ['user_role' => $role], ['tableau_id' => $id]);
+            $this->db->update('user_tableau', ['user_role' => $role], ['tableau_id' => $id, 'user_login' => $login]);
             return true;
         } catch (\Exception $e) {
             return false;

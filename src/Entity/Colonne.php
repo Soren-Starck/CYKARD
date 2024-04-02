@@ -96,4 +96,10 @@ class Colonne
             'cartes' => [$this->cartes],
         ];
     }
+
+    public function setTableauId(int $tableau_id): void
+    {
+        $this->tableau = new Tableau();
+        $this->tableau->setId($tableau_id);
+    }
 }
