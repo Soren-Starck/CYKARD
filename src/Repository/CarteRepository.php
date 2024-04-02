@@ -117,12 +117,11 @@ class CarteRepository implements I_CarteRepository
             return [];
         }
     }
-    public function unassignCard(int $id, ?string $login): bool
+    public function unassignCard(int $id): bool
     {
         try {
             $this->db->delete('user_carte', [
                 'carte_id' => $id,
-                'user_login' => $login,
             ]);
             return true;
         } catch (Exception $e) {
