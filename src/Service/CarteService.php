@@ -65,7 +65,7 @@ class CarteService extends GeneriqueService implements I_CarteService
     public function unassignUser(string $login, int $id): array
     {
         if (!$this->carteRepository->verifyUserTableauByCardAndAccess($id, $login)) return ['error' => 'Access denied', 'status' => 403];
-        $dbResponse = $this->carteRepository->unassignCard($id, $login);
+        $dbResponse = $this->carteRepository->unassignCard($id);
         if (!$dbResponse) return ['error' => 'Error unassigning the user from the card', 'status' => 500];
         return $this->carteRepository->find($id)[0];
     }

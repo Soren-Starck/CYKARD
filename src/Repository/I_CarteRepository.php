@@ -18,7 +18,7 @@ interface I_CarteRepository extends AbstractRepository
 
     public function assignCard(int $idCard, ?string $login): array;
 
-    public function unassignCard(int $id, ?string $login): bool;
+    public function unassignCard(int $id): bool;
 
     public function delete(int $id): bool;
 }
