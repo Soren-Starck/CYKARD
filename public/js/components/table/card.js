@@ -32,7 +32,7 @@ export class Card extends ReactiveComponent {
 
     render() {
         if (!this.state.data) return "";
-        let regex = /\bhttps?:\/\/[^)''"]+\.(?:jpg|jpeg|gif|png)\b/g;
+        let regex = /\b(?:https?|ftp):\/\/\S+?\.(?:png|jpe?g|gif|bmp)/g;
 
         let description = this.state.data.descriptifcarte ?? "";
         let matches = description.match(regex);
@@ -45,7 +45,7 @@ export class Card extends ReactiveComponent {
             <p class="font-bold">${this.state.data.titrecarte}</p>
             <p class="bg-neutral-900 text-sm rounded-lg px-2 text-white w-fit">${this.state.data.user_carte_login ?? ""}</p>
             ${matches ? `<img src="${matches}" class="w-full mt-2 h-36 object-cover rounded-md bg-zinc-300" alt="Image de la carte">` : ""}
-            <p>${description}</p>
+            <p class="hyphens-auto">${description}</p>
         </div>
         `;
     }

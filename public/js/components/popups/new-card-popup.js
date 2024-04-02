@@ -46,7 +46,7 @@ export class NewCardPopup extends Popup {
             <label for="description">
             <i class="fas fa-align-left"></i>
             Description</label>
-            <textarea id="description" name="descriptifcarte"></textarea>
+            <textarea id="description" name="descriptifcarte" class="h-[100px] resize-none"></textarea>
             <label for="color">
             <i class="fas fa-palette"></i>
             Couleur</label>
