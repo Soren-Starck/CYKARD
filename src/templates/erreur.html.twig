@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Error{% endblock %}
+{% block title %}Erreur{% endblock %}
 
 {% block body %}
-    <div class=" flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class=" flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 my-auto">
         <div class="max-w-md w-full space-y-8">
             <div>
                 <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Oops! Something went wrong.
+                    Oups! Quelque chose s'est mal passé.
                 </h2>
                 <p class="mt-2 text-center text-sm text-red-600 italic">
                     {{ messageErreur }}
@@ -16,7 +16,7 @@
             <div class="mt-5 sm:mt-8 sm:flex justify-center">
                 <div class="rounded-md shadow">
                     <a href="{{ path('app_accueil') }}" class="w-full flex items-center justify-center px-4 py-1.5 border border-transparent text-base font-medium rounded-md text-white bg-zinc-800 hover:bg-zinc-900  md:text-lg">
-                        Go back to home
+                        Retour à l'accueil
                     </a>
                 </div>
             </div>

@@ -31,3 +31,4 @@ yarn-error.log
 
 .env.*
 .env.prod
+public/assets/styles/output.css
