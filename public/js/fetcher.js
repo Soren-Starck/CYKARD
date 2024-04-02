@@ -22,7 +22,7 @@ export async function fetcher(route, callback, timeout = 0) {
     if (events[route].data) callback(events[route].data)
     else callCallback(callback, await fetchData(route))
     if (timeout > 0) {
-        setTimeout(() => {
+        setInterval(() => {
             mutate(route)
         }, timeout * 1000);
     }
