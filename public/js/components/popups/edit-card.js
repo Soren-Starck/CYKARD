@@ -32,6 +32,14 @@ export class EditCard extends Popup {
         })
     }
 
+    unassign() {
+        API.remove(`/carte/${this.props.card_id}/unassign-user`)
+        ColumnStore.modifyCard(this.props.column_id, this.props.card_id, (card) => {
+            card.user_carte_login = null
+            return card
+        })
+    }
+
     render() {
         const users = Store.get("users") ?? []
         const canModify = UserStore.canModify()
@@ -49,14 +57,14 @@ export class EditCard extends Popup {
             <label for="description">
             <i class="fas fa-align-left"></i>
             Description</label>
-            <textarea id="description" name="descriptifcarte">${this.props.description}</textarea>
+            <textarea id="description" name="descriptifcarte" class="max-h-24 min-h-5">${this.props.description}</textarea>
             
-            <p>
+            <label class="whitespace-nowrap">
             <i class="fas fa-user"></i>
-            Utilisateur assigné</p>
-            <div class="flex flex-row gap-1 w-full">
+            Utilisateur assigné</label>
+            <div class="flex flex-col md:flex-row gap-1 w-full">
                 ${this.props.assigned === "null" ? (canModify ? `
-                   <div class="w-full flex gap-4">
+                   <div class="w-full flex flex-col md:flex-row gap-4">
                        <select id="assign-select" class="w-full !my-0">
                          ${userList}
                         </select>
@@ -64,14 +72,21 @@ export class EditCard extends Popup {
                        <i class="fas fa-user-plus"></i>
                        Assigner</button>
                     </div>` : "Aucun utilisateur assigné")
-            : `<p class="bg-black text-white px-2 rounded pb-1">${this.props.assigned}</p>`}
+            : `
+                <div class="w-full flex flex-col md:flex-row gap-4">
+                <p class="bg-black text-white px-2 rounded pb-1">${this.props.assigned}</p>
+            ${canModify ? `
+                <button onclick="unassign" class="btnSecondary w-full" type="button">
+                <i class="fas fa-user-edit"></i>
+                Retirer</button>` : ""}
+                </div>`}
             </div>
             
             <label for="color">
             <i class="fas fa-palette"></i>
             Couleur</label>
             <input type="color" id="color" name="couleurcarte" value="${this.props.color}">
-            <div class="flex flex-row gap-4 w-full justify-between">
+            <div class="flex flex-col md:flex-row gap-4 w-full justify-between">
             <button class="w-full whitespace-nowrap" type="submit">
             <i class="fas fa-save"></i>
             Modifier</button>
