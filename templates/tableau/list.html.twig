@@ -2,28 +2,29 @@
 
 {% block title %}List of Tableaux{% endblock %}
 
-{% block body %}
-    <h3>Mes tableaux ({{ tableaux|length }})</h3>
-    <div class="tableaux">
-        {% for tableau in tableaux %}
-            <div class="flex flex-row w-full justify-around items-center">
-                <div>
-                    <h2><a href="{{ path('app_tableau_show', {'id': tableau.id}) }}">{{ tableau.titretableau }}</a></h2>
+{% block components %}
+    <script type="module">
+        import {loadComponent} from "/js/reactive.js";
+        import {openPopup} from "/js/components/popup.js";
+        import {NewTable} from "/js/components/popups/new-table.js";
+        import {TableList} from "/js/components/table/table-list.js";
 
-                </div>
-                <div>
-                    <a href="{{ path('app_tableau_edit', {'id': tableau.id}) }}">
-                        Modifier
-                    </a>
-                </div>
-                <div>
-                    <a href="{{ path('app_tableau_delete', {'id': tableau.id}) }}"
-                       onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-    <div>
-        <a href="{{ path('app_tableau_new') }}">Ajouter un tableau</a>
+        loadComponent("new-table", NewTable);
+        loadComponent("table-list", TableList);
+
+        document.getElementById("new-table").addEventListener("click", () => {
+            openPopup("new-table-popup")
+        })
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="w-1/2 mx-auto">
+        <div class="flex flex-row justify-between mb-3">
+            <h1>Mes tableaux ({{ tableaux|length }})</h1>
+            <i id="new-table" class="cursor-pointer fas fa-plus icon mt-1 mr-1"></i>
+        </div>
+        <react-new-table visible="false" id="new-table-popup" title="Créer un nouveau tableau"></react-new-table>
+        <react-table-list tables="{{ tableaux|json_encode() }}"></react-table-list>
     </div>
 {% endblock %}

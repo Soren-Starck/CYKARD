@@ -25,8 +25,9 @@ class Tableau implements \JsonSerializable
 
     public function addColonne(Colonne $colonne): static
     {
-        if (!in_array($colonne, (array) $this->colonnes, true)) {
+        if (!in_array($colonne, (array)$this->colonnes, true)) {
             $this->colonnes->append($colonne);
+            $this->colonnes->uasort(fn($a, $b) => $a->getId() <=> $b->getId());
             $colonne->setTableau($this);
         }
 
@@ -35,7 +36,7 @@ class Tableau implements \JsonSerializable
 
     public function removeColonne(Colonne $colonne): static
     {
-        $index = array_search($colonne, (array) $this->colonnes, true);
+        $index = array_search($colonne, (array)$this->colonnes, true);
         if (false !== $index) {
             $this->colonnes->offsetUnset($index);
             if ($colonne->getTableau() === $this) {
@@ -57,7 +58,7 @@ class Tableau implements \JsonSerializable
 
     public function removeUser(User $user): static
     {
-        $index = array_search($user, (array) $this->users, true);
+        $index = array_search($user, (array)$this->users, true);
         if (false !== $index) {
             $this->users->offsetUnset($index);
         }

@@ -3,7 +3,6 @@
 namespace App\Lib\Security\RateLimiter;
 
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class RateLimitListener
@@ -20,10 +19,10 @@ class RateLimitListener
      */
     public function onKernelRequest(RequestEvent $event): void
     {
-        $ip = $event->getRequest()->getClientIp();
+        /*$ip = $event->getRequest()->getClientIp();
         if (!$this->rateLimiter->limit($ip)) {
             $response = new Response('Rate limit exceeded', 429);
             $event->setResponse($response);
-        }
+        }*/
     }
 }
