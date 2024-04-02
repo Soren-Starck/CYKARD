@@ -76,6 +76,7 @@ use PDO;
     {
         $stmt = $this->pdo->prepare($query);
         foreach ($params as $key => $value) {
+            $value= htmlspecialchars($value);
             $stmt->bindValue(':' . $key, $value);
         }
         $stmt->execute();
