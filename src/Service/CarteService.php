@@ -55,8 +55,9 @@ class CarteService extends GeneriqueService implements I_CarteService
 
     public function assignUser(string $login, int $id): array
     {
-        if (!$this->carteRepository->verifyUserTableauByCardAndAccess($id, $login)) return ['error' => 'Access denied', 'status' => 403];
+        if (!$this->carteRepository->verifyUserTableauByCardAndAccess($id,$login)) return ['error' => 'Access denied', 'status' => 403];
         $dbResponse = $this->carteRepository->assignCard($id, $login);
+
         if (!$dbResponse) return ['error' => 'Error assigning the user to the card', 'status' => 500];
         return $this->carteRepository->find($id)[0];
     }

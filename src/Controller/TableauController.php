@@ -46,4 +46,6 @@ class TableauController extends GeneriqueController
         }
         return $this->redirect('app_login');
     }
+
+
 }
