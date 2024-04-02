@@ -51,14 +51,18 @@ export class EditCard extends Popup {
             Description</label>
             <textarea id="description" name="descriptifcarte">${this.props.description}</textarea>
             
-            <p>Utilisateur assigné</p>
+            <p>
+            <i class="fas fa-user"></i>
+            Utilisateur assigné</p>
             <div class="flex flex-row gap-1 w-full">
                 ${this.props.assigned === "null" ? (canModify ? `
-                   <div class="w-full flex gap-1">
-                       <select id="assign-select" class="w-full">
+                   <div class="w-full flex gap-4">
+                       <select id="assign-select" class="w-full !my-0">
                          ${userList}
                         </select>
-                       <button onclick="assign" class="btn btn-primary w-full" type="button">Assigner</button>
+                       <button onclick="assign" class="btnSecondary w-full" type="button">
+                       <i class="fas fa-user-plus"></i>
+                       Assigner</button>
                     </div>` : "Aucun utilisateur assigné")
             : `<p class="bg-black text-white px-2 rounded pb-1">${this.props.assigned}</p>`}
             </div>
