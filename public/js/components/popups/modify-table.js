@@ -24,30 +24,39 @@ export class ModifyTable extends Popup {
         this.close()
     }
 
-    removeUser(e) {
-        const login = e.target.getAttribute("data-login")
+    removeByLogin(login) {
         let users = Store.get("users")
         users = users.filter(user => user.login !== login)
         Store.set("users", users)
-        const logins = users.map(user => user.login)
-        console.log(logins)
-        /*API.update(`/tableau/${this.props.table}/modify`, {
-            userslogins: logins
-        })*/
+        API.remove(`/tableau/${this.props.table}/delete-user`, {
+            userslogin: login
+        })
+    }
+
+    removeUser(e) {
+        const login = e.target.getAttribute("data-login")
+        this.removeByLogin(login)
     }
 
     leave() {
-        console.log("leave")
-    }
-
-    delete() {
-        console.log("delete")
+        this.removeByLogin(this.state.me.login)
+        window.location.href = "/"
     }
 
     copyToClipboard(e) {
         e.preventDefault();
         navigator.clipboard.writeText("lien d'invitation");
         Notif.success("Copié", "Le lien d'invitation a été copié dans le presse-papier");
+    }
+
+    updateRole(e) {
+        const login = e.target.getAttribute("data-login")
+        const role = e.target.value
+        UserStore.changeRole(login, role)
+        API.update(`/tableau/${this.props.table}/modify-role`, {
+            userslogin: login,
+            userrole: role
+        })
     }
 
     render() {
@@ -58,7 +67,10 @@ export class ModifyTable extends Popup {
                 <div class="flex flex-col">
                     <p class="font-medium whitespace-nowrap">
                     ${user.login}</p>
-                    <span class="text-xs">${UserStore.roleToText(user.role)}</span>
+                    ${isAdmin && user.role !== "USER_ADMIN" ? `<select class="cursor-pointer text-xs bg-slate-200 rounded-md px-2 py-1" onchange="updateRole" data-login="${user.login}">
+                        <option value="USER_EDITOR" ${user.role === "USER_EDITOR" ? "selected" : ""}>Lecture et écriture</option>
+                        <option value="USER_READ" ${user.role === "USER_READ" ? "selected" : ""}>Lecture seule</option>
+                    </select>` : `<span class="text-xs">${UserStore.roleToText(user.role)}</span>`}
                 </div>
                 ${isAdmin && !UserStore.isMe(user.login) ? `
                 <i onclick="removeUser" data-login="${user.login}" class="mt-1 text-red-500 cursor-pointer fa-solid fa-trash"></i>` : ""}
@@ -66,7 +78,7 @@ export class ModifyTable extends Popup {
         `).join("") : ""
 
         return super.render(`
-        <form onsubmit="submit" class="flex flex-col gap-2">
+        <form onsubmit="submit" class="flex flex-col gap-2 mb-2">
             ${isAdmin ? `
             <label for="title">
             <i class="fas fa-pencil-alt"></i>
@@ -78,17 +90,10 @@ export class ModifyTable extends Popup {
         </form>
         
         <div class="flex flex-col gap-2">
-            ${isAdmin ? `
-                <label for="user">
+            <label for="user">
                 <i class="fas fa-user"></i>
-                Utilisateurs</label>
-                <div class="flex relative">
-                    <input placeholder="ajouter un utilisateur" type="text" id="user" name="user" class="border !rounded-l px-4 py-2 w-full h-9">
-                    <button class="absolute right-0 border bg-slate-100 text-neutral-900 !rounded-r flex items-center h-9 px-4 py-2 my-2">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            ` : ""}
+                Utilisateurs
+            </label>
             ${userList}
             
             <button onclick="copyToClipboard" class="btnPrimary mt-3">
@@ -100,7 +105,7 @@ export class ModifyTable extends Popup {
                 <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="leave">
                 <i class="fas fa-sign-out-alt"></i>
                 Quitter</button>` : `
-                <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="delete">
+                <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="leave">
                 <i class="fas fa-trash"></i>
                 Supprimer</button>
                 `}

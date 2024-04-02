@@ -44,8 +44,8 @@ export class API {
         return await actions("PATCH", route, data)
     }
 
-    static async remove(route) {
-        return await actions("DELETE", route)
+    static async remove(route, data) {
+        return await actions("DELETE", route, data)
     }
 
     static formHandler(event) {
