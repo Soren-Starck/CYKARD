@@ -53,6 +53,7 @@ class SecurityController extends GeneriqueController
     public function logout(): Response
     {
         ConnexionUtilisateur::deconnecter();
+        Cookie::supprimer('jwt');
         return $this->redirect('app_base');
     }
 
