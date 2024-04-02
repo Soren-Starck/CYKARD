@@ -11,6 +11,6 @@
     "all": "concurrently 'npm run dev' 'npm run watch'",
     "dev": "php -S localhost:8000 -t public",
     "watch": "npx tailwindcss -i public/assets/styles/input.css -o public/assets/styles/output.css --watch",
-    "build": "npx tailwindcss -i public/assets/styles/input.css -o public/assets/styles/output.css"
+    "build": "npx tailwindcss -i public/assets/styles/input.css -o public/assets/styles/output.css --minify"
   }
 }
