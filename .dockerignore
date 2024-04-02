@@ -6,7 +6,6 @@ compose.*
 README.md
 *.sql
 public/build
-.env
 .env.prod
 Dockerfile
 docker-compose.yml
