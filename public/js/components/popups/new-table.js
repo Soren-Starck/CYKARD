@@ -3,6 +3,7 @@ import {API} from "../../api.js";
 
 export class NewTable extends Popup {
     async submit(e) {
+        if (this.state.loading) return
         const data = API.formHandler(e)
         this.setState({
             loading: true
