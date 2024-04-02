@@ -38,9 +38,9 @@ class TableauController extends GeneriqueController
     public function showTableau(Request $request, int $id): Response
     {
         if (UserHelper::isUserLoggedIn()) {
-            $tableau = $this->tableauService->showTableau($this->getLoginFromJwt($request), $id);
+            $tableau = $this->tableauService->showTableau($this->getLoginFromCookieJwt($request), $id);
             return $this->renderTwig('tableau/show.html.twig', [
-                'pagetitle' => $tableau[0]["titretableau"],
+                'pagetitle' => $tableau["titretableau"],
                 "idtableau" => $id,
             ]);
         }
