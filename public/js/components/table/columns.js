@@ -20,6 +20,7 @@ export class Columns extends ReactiveComponent {
             Store.set("me", data.users.find(user => user.login === this.props.login))
             Store.set("columns", columns)
             Store.set("table", data.titretableau)
+            Store.set("invitations", data.codetableau)
             Store.set("users", data.users)
         }, 30);
 
