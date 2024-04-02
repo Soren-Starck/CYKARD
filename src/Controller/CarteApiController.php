@@ -59,6 +59,7 @@ class CarteApiController extends GeneriqueController
     {
         $data = json_decode($request->getContent(), true);
         $login = $data['userslogin'];
+        $login1 = $this->getLoginFromJwt($request);
         $result = $this->carteService->assignUser($login, $id);
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
