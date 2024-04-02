@@ -7,10 +7,26 @@ class Cookie
     public static function enregistrer(string $cle, mixed $valeur, ?int $dureeExpiration = null): void
     {
         $valeurJSON = serialize($valeur);
+        $hostname = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']);
+        $secure = $_SERVER['HTTPS'] ?? false;
         if ($dureeExpiration === null)
-            setcookie($cle, $valeurJSON, 0);
+            setcookie($cle, $valeurJSON, [
+                'expires' => 0,
+                'path' => '/',
+                'domain' => $hostname,
+                'secure' => $secure,
+                'httponly' => true,
+                'samesite' => 'Strict'
+            ]);
         else
-            setcookie($cle, $valeurJSON, time() + $dureeExpiration);
+            setcookie($cle, $valeurJSON, [
+                'expires' => time() + $dureeExpiration,
+                'path' => '/',
+                'domain' => $hostname,
+                'secure' => $secure,
+                'httponly' => true,
+                'samesite' => 'Strict'
+            ]);
     }
 
     public static function lire(string $cle): mixed

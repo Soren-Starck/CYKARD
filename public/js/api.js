@@ -1,19 +1,10 @@
-import CookiesCrous from "./cookies-crous.js";
 import {Notif} from "./notifications.js";
 
 const host = window.location.origin + "/api";
 
-function getToken() {
-    const jwt = CookiesCrous.get("jwt")
-    if (!jwt) return null
-    return /"([^"]*)"/g.exec(decodeURI(jwt))[1]
-}
-
 async function actions(method, route, data, onError) {
-    const jwt = getToken()
     let headers = {}
     if (data) headers["Content-Type"] = "application/json"
-    if (jwt) headers["Authorization"] = "Bearer " + jwt
     try {
         const res = await fetch(host + route, {
             method,

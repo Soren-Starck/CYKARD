@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Repository\I_TableauRepository;
-use App\Repository\TableauRepository;
 
 class TableauService extends GeneriqueService implements I_TableauService
 {

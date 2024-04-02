@@ -1,11 +1,7 @@
 <?php
 namespace App\Entity;
 
-use App\Entity\Colonne;
-use App\Entity\User;
 use PHPUnit\Framework\TestCase;
-use App\Entity\Carte;
-use App\Entity\Tableau;
 
 class ColonneTest extends TestCase
 {
