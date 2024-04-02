@@ -31,11 +31,12 @@ class SecurityController extends GeneriqueController
 
                 return $this->redirect('app_base');
             } else {
+
                 return $this->renderTwig('security/login.html.twig', [
                     'last_username' => $lastUsername,
                     'error' => [
                         'messageKey' => 'Invalid credentials',
-                        'messageData' => []
+                        'messageData' => 'Invalid credentials',
                     ],
                     'pagetitle' => 'login'
                 ]);
