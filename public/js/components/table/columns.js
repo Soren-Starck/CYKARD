@@ -77,11 +77,16 @@ export class Columns extends ReactiveComponent {
         `).join("")
 
         return `<div class="w-full flex justify-between">
-                <h1 class="font-bold">${this.state.title}</h1>
-                <i onclick="settings" class="cursor-pointer fa-solid fa-gear"></i>
-            </div>
-            <div class="relative w-full grow !h-full py-6 mx-0" id="columns-container">
-            <div class="absolute top-0 left-0 h-full w-5 bg-gradient-to-r from-white to-transparent"></div>
+                    <div class="flex gap-4 items-center">
+                        <h1 class="font-bold">${this.state.title}</h1>
+                        ${!canModify ? `<p class="readonly-indicator px-3 py-1 bg-neutral-900 text-white rounded-md shadow" title="vous n'avez pas les droits nécessaires pour modifier ce tableau">
+                        <i class="fas fa-lock"></i>
+                        Lecture seule</p>` : ''}
+                    </div>
+                    <i onclick="settings" class="cursor-pointer fa-solid fa-gear"></i>
+                </div>
+                <div class="relative w-full grow !h-full py-6 mx-0" id="columns-container">
+                <div class="absolute top-0 left-0 h-full w-5 bg-gradient-to-r from-white to-transparent"></div>
                 <div class="flex gap-4 min-h-[500px] overflow-auto" id="columns-parent">
                     ${columns}
                     ${canModify ? `<div ondrop="dropNewColumn" ondragover="allowDropNewCol" onclick="newColumn" class="z-10 mr-5 relative cursor-pointer transition hover:bg-slate-50 shadow p-2 rounded-md flex-1 shrink-0 !max-w-[300px] min-w-[300px] min-h-full border-2 border-dashed">
