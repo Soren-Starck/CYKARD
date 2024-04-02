@@ -26,4 +26,14 @@ class UserApiController extends GeneriqueController
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
     }
+
+    #[Route('/api/user/modify-prenom', name: 'app_user_api_modify_prenom', methods: ['PATCH'])]
+    public function modifyPrenom(Request $request):Response
+    {
+        $login = $this->getLoginFromJwt($request);
+        $data = json_decode($request->getContent(), true);
+        $result = $this->userService->modifyPrenom($data['prenom'], $login);
+        if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
+        return $this->json($result, 200);
+    }
 }

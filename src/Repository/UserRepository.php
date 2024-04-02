@@ -86,5 +86,15 @@ class UserRepository implements I_UserRepository
         }
     }
 
+    public function editPrenomUser(string $login, mixed $prenom)
+    {
+        try{
+            $this->db->update('gozzog.user', ['prenom' => $prenom], ['login' => $login]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
 
 }

@@ -14,7 +14,7 @@ interface I_UserService
 
     public function verifyUser(string $token): void;
 
-    public function modifyPassword(mixed $oldpassword, mixed $newpassword, string $login);
-
     public function modifyName(mixed $nom, string $login);
+
+    public function modifyPrenom(mixed $prenom, string $login);
 }

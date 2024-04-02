@@ -33,10 +33,7 @@ class UserService extends GeneriqueService implements I_UserService
         $this->userRepository->verifyUser($token);
     }
 
-    public function modifyPassword(mixed $oldpassword, mixed $newpassword, string $login)
-    {
-        // TODO: Implement modifyPassword() method.
-    }
+
 
     public function modifyName(mixed $nom, string $login): array
     {
@@ -45,4 +42,13 @@ class UserService extends GeneriqueService implements I_UserService
         if(!$dbResponse) return ['error' => 'Error editing user name', 'status' => 500];
         return $this->getUserByLogin($login);
     }
+
+    public function modifyPrenom(mixed $prenom, string $login): array
+    {
+        if(!$prenom) return ['error' => 'Prenom is required', 'status' => 400];
+        $dbResponse = $this->userRepository->editPrenomUser($login, $prenom);
+        if(!$dbResponse) return ['error' => 'Error editing user prenom', 'status' => 500];
+        return $this->getUserByLogin($login);
+    }
+
 }
