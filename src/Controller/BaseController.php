@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Controller\Route;
+namespace App\Controller;
 
-use App\Controller\GeneriqueController;
-use App\Lib\Route\Conteneur;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +24,7 @@ class BaseController extends GeneriqueController
     }
 
     #[Route('/accueil', name: 'app_accueil')]
-    public function accueil(): Response
+    public static function accueil(): Response
     {
         return new RedirectResponse('/');
     }

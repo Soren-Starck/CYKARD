@@ -16,7 +16,13 @@ class AttributeRouteControllerLoader extends AttributeClassLoader
     }
 
     private function toSnakeCase($controllerName) : string {
-        return ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $controllerName)), '_');
+        $parts = explode('Controller', $controllerName);
+        $namePart = strtolower($parts[0]);
+        $namePart = str_replace('_', ' ', $namePart);
+        $namePart = ucwords($namePart);
+        $namePart = str_replace(' ', '', $namePart);
+        if (str_contains($namePart, 'api')) $namePart = str_replace('api', 'Api', $namePart);
+        return $namePart . 'Controller';
     }
 
 }

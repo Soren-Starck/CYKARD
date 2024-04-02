@@ -64,6 +64,7 @@ class TableauService extends GeneriqueService implements I_TableauService
     {
         if (!str_contains($roles[0]['roles'], 'ROLE_USER'))
             return ['error' => 'Access Denied', 'status' => 403];
+
         return $this->tableauRepository->findByUser($login);
     }
 }

@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller;
 
-use App\Controller\generiquecontroller;
 use App\Lib\Route\Conteneur;
-use App\Service\CarteService;
 use App\Service\I_CarteService;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

@@ -1,19 +1,118 @@
 parameters:
 
 services:
+  _defaults:
+    autowire: true
+    public: true
+
+  App\:
+    resource: '../src/'
+    exclude:
+      - '../src/test/'
+
+  twig_loader:
+    class: Twig\Loader\FilesystemLoader
+    arguments: [ '%project_root%/src/templates/' ]
+
+  twig:
+    class: Twig\Environment
+    arguments:
+      $loader: '@twig_loader'
+      $options:
+        autoescape: 'html'
+        strict_variables: true
+
+  #Database
   database:
     class: App\Lib\Database\Database
+
 
   #Repositories
   tableau_repository:
     class: App\Repository\TableauRepository
     arguments:
+        - '@database'
+
+  user_repository:
+    class: App\Repository\UserRepository
+    arguments:
+        - '@database'
+
+  carte_repository:
+    class: App\Repository\CarteRepository
+    arguments:
+        - '@database'
+
+  colonne_repository:
+    class: App\Repository\ColonneRepository
+    arguments:
+        - '@database'
+
   #Services
+  request_stack:
+    class: Symfony\Component\HttpFoundation\RequestStack
+
+  url_generator:
+    class: Symfony\Component\Routing\Generator\UrlGenerator
+    arguments: [ '@routes', '@request_context' ]
+
+  url_helper:
+    class: Symfony\Component\HttpFoundation\UrlHelper
+    arguments: [ '@request_stack', '@url_generator' ]
+
   tableau_service:
     class: App\Service\TableauService
-    arguments: [ '@publication_repository' ]
+    arguments: [ '@tableau_repository' ]
+
+  user_service:
+    class: App\Service\UserService
+    arguments: [ '@user_repository' ]
+
+  carte_service:
+    class: App\Service\CarteService
+    arguments: [ '@carte_repository', '@colonne_repository' ]
+
+  colonne_service:
+    class: App\Service\ColonneService
+    arguments: [ '@colonne_repository', '@tableau_repository' ]
 
   #Controleurs
-  generique_controller:
+  controleur_generique:
     class: App\Controller\GeneriqueController
-    arguments: [ ]
+    arguments: [ '@container' ]
+
+  BaseController:
+    class: App\Controller\BaseController
+    arguments: ['@container']
+
+  TableauController:
+    class: App\Controller\TableauController
+    arguments: [ '@container', '@tableau_service' ]
+
+  RegistrationController:
+    class: App\Controller\RegistrationController
+    arguments: [ '@container', '@user_service' ]
+
+  SecurityController:
+    class: App\Controller\SecurityController
+    arguments: [ '@container', '@user_service' ]
+
+  UserController:
+    class: App\Controller\UserController
+    arguments: [ '@container', '@user_service' ]
+
+  CarteApiController:
+    class: App\Controller\CarteApiController
+    arguments: [ '@container', '@carte_service' ]
+
+  ColonneApiController:
+    class: App\Controller\ColonneApiController
+    arguments: [ '@container', '@colonne_service' ]
+
+  TableauApiController:
+    class: App\Controller\TableauApiController
+    arguments: [ '@container', '@tableau_service' ]
+
+  UserApiController:
+    class: App\Controller\UserApiController
+    arguments: [ '@container', '@user_service' ]

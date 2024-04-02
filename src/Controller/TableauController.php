@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Controller\Route;
+namespace App\Controller;
 
-use App\Controller\generiqueController;
-use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
 use App\Service\I_TableauService;
@@ -15,16 +13,18 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 class TableauController extends GeneriqueController
 {
-    public function __construct(ContainerInterface $container, private readonly I_TableauService $tableauService)
+    private I_TableauService $tableauService;
+    public function __construct(ContainerInterface $container, I_TableauService $tableauService)
     {
         parent::__construct($container);
+        $this->tableauService = $tableauService;
     }
 
     #[Route('/tableaux', name: 'app_tableaux')]
     public function listTableaux(Request $request): Response
     {
         if (UserHelper::isUserLoggedIn()) {
-            $tableaux = $this->tableauService->getTableaux($this->getLoginFromJwt($request), ConnexionUtilisateur::getRoles());
+            $tableaux = $this->tableauService->getTableaux($this->getLoginFromCookieJwt($request), ConnexionUtilisateur::getRoles());
             return $this->renderTwig('tableau/list.html.twig', [
                 'tableaux' => $tableaux,
                 'pagetitle' => 'Liste des tableaux',

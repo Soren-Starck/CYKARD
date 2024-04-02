@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller;
 
-use App\Controller\generiquecontroller;
-use App\Lib\Route\Conteneur;
 use App\Service\I_TableauService;
-use App\Service\TableauService;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,7 +12,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 class TableauApiController extends GeneriqueController
 {
 
-    public function __construct(Conteneur $container, private I_TableauService $tableauService)
+    public function __construct(ContainerInterface $container, private I_TableauService $tableauService)
     {
         parent::__construct($container);
     }

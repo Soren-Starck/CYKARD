@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Controller\Route;
+namespace App\Controller;
 
-use App\Controller\generiqueController;
 use App\Lib\HTTP\Cookie;
-use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Service\I_UserService;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,21 +52,6 @@ class SecurityController extends GeneriqueController
     {
         ConnexionUtilisateur::deconnecter();
         return $this->redirect('app_login');
-    }
-
-    #[Route('/debug', name: 'app_debug')]
-    public function debug(): Response
-    {
-        $userService = $this->container->has('App\Service\I_UserService') ? 'Service is registered' : 'Service is not registered';
-        return new Response($userService);
-    }
-
-    #[Route('/debug/services', name: 'app_debug_services')]
-    public function debugServices(): Response
-    {
-        $services = array_keys($this->container->getServiceIds());
-        sort($services);
-        return new Response('<pre>' . print_r($services, true) . '</pre>');
     }
 
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Controller\Route;
+namespace App\Controller;
 
-use App\Controller\GeneriqueController;
 use App\Entity\User;
 use App\Lib\Security\UserConnection\MotDePasse;
 use App\Service\I_UserService;
@@ -11,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class RegistrationController extends generiqueController
+class RegistrationController extends GeneriqueController
 {
     public function __construct(ContainerInterface $container, private readonly I_UserService $userService)
     {

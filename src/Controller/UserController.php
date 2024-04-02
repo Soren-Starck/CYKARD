@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Controller\Route;
+namespace App\Controller;
 
 
-use App\Controller\generiqueController;
-use App\Lib\Route\Conteneur;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\UserHelper;
 use App\Service\I_UserService;

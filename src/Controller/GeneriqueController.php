@@ -14,7 +14,8 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 class GeneriqueController
 {
 
-    public function __construct(protected ContainerInterface $container){}
+    public function __construct(private ContainerInterface $container)
+    {}
 
     protected function redirect(string $routeName = "", array $param = []): RedirectResponse
     {
@@ -46,18 +47,16 @@ class GeneriqueController
         return JsonWebToken::getLogin($jwt);
     }
 
+    public function getLoginFromCookieJwt(Request $request): string
+    {
+        $jwt = $request->cookies->get('jwt');
+        return JsonWebToken::getLogin($jwt);
+    }
+
     protected function json($data, int $status = 200, array $headers = [], array $context = []): JsonResponse
     {
-        $serializer = $this->container->get('serializer');
+        $json = json_encode($data, JsonResponse::DEFAULT_ENCODING_OPTIONS);
 
-        if ($serializer) {
-            $json = $serializer->serialize($data, 'json', array_merge([
-                'json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS,
-            ], $context));
-
-            return new JsonResponse($json, $status, $headers, true);
-        }
-
-        return new JsonResponse($data, $status, $headers);
+        return new JsonResponse($json, $status, $headers, true);
     }
 }
