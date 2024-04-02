@@ -40,6 +40,10 @@ export class API {
         return await actions("POST", route, data, onError)
     }
 
+    static async post(route, data, onError) {
+        return await actions("POST", route, data, onError)
+    }
+
     static async update(route, data, onError) {
         return await actions("PATCH", route, data, onError)
     }

@@ -2,6 +2,7 @@ import {Popup} from "../popup.js";
 import {API} from "../../api.js";
 import {ColumnStore} from "../../stores/column-store.js";
 import {Store} from "../../store.js";
+import {UserStore} from "../../stores/user-store.js";
 
 export class EditCard extends Popup {
     submit(e) {
@@ -22,11 +23,21 @@ export class EditCard extends Popup {
         this.close()
     }
 
+    assign() {
+        const assigned = document.getElementById("assign-select").value
+        API.post(`/carte/${this.props.card_id}/assign-user`, {userslogin: assigned})
+        ColumnStore.modifyCard(this.props.column_id, this.props.card_id, (card) => {
+            card.user_carte_login = assigned
+            return card
+        })
+    }
+
     render() {
         const users = Store.get("users") ?? []
+        const canModify = UserStore.canModify()
 
         const userList = users.map(user => `
-        <p class="bg-black text-white px-2 rounded pb-1">${user.login}</p>
+        <option value="${user.login}">${user.login}</option>
         `).join("")
 
         return super.render(`
@@ -39,11 +50,19 @@ export class EditCard extends Popup {
             <i class="fas fa-align-left"></i>
             Description</label>
             <textarea id="description" name="descriptifcarte">${this.props.description}</textarea>
-            <p>Utilisateurs assignées</p>
+            
+            <p>Utilisateur assigné</p>
             <div class="flex flex-row gap-1 w-full">
-                ${userList}
-                <i class="fas fa-plus bg-black text-white p-2 cursor-pointer rounded"></i>
+                ${this.props.assigned === "null" ? (canModify ? `
+                   <div class="w-full flex gap-1">
+                       <select id="assign-select" class="w-full">
+                         ${userList}
+                        </select>
+                       <button onclick="assign" class="btn btn-primary w-full" type="button">Assigner</button>
+                    </div>` : "Aucun utilisateur assigné")
+            : `<p class="bg-black text-white px-2 rounded pb-1">${this.props.assigned}</p>`}
             </div>
+            
             <label for="color">
             <i class="fas fa-palette"></i>
             Couleur</label>

@@ -25,7 +25,8 @@ export class Card extends ReactiveComponent {
             card: this.state.data,
             title: this.state.data.titrecarte,
             description: this.state.data.descriptifcarte,
-            color: this.state.data.couleurcarte
+            color: this.state.data.couleurcarte,
+            assigned: this.state.data.user_carte_login
         })
     }
 
