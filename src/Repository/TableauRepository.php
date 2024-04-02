@@ -226,10 +226,10 @@ class TableauRepository implements I_TableauRepository
         }
     }
 
-    public function editNameTableau(int $id, string $name): bool
+    public function editNameTableau(int $id, string $titretableau): bool
     {
         try {
-            $this->db->update('tableau', ['name' => $name], ['id' => $id]);
+            $this->db->update('tableau', ['titretableau' => $titretableau], ['id' => $id]);
             return true;
         } catch (\Exception $e) {
             return false;
@@ -249,6 +249,7 @@ class TableauRepository implements I_TableauRepository
     public function deleteUserTableau(string $login, int $id): bool
     {
         try {
+            if (!$this->db->table('user_tableau')->where('user_login', '=', 'login')->where('tableau_id', '=', 'id')->bind('login', $login)->bind('id', $id)->fetchAll()) return false;
             $this->db->delete('user_tableau', ['tableau_id' => $id, 'user_login' => $login]);
             return true;
         } catch (\Exception $e) {
