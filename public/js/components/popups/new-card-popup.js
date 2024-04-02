@@ -6,6 +6,7 @@ export class NewCardPopup extends Popup {
     async submit(e) {
         if (this.state.loading) return
         const data = API.formHandler(e)
+        if (data.couleurcarte === "undefined") delete data.couleurcarte
         this.setState({
             loading: true
         })
