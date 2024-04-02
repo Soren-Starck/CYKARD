@@ -11,4 +11,8 @@ interface I_CarteService
     public function deleteCarte(string $login, int $id): array;
 
     public function createCarte(mixed $data, string $login, int $colonne_id): array;
+
+    public function assignUser(string $login, int $id): array;
+
+    public function unassignUser(string $login, int $id): array;
 }
