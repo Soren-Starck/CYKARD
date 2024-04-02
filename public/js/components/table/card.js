@@ -37,6 +37,7 @@ export class Card extends ReactiveComponent {
             <div class="w-14 h-3 rounded-full absolute top-3 right-4" style="background: ${this.state.data.couleurcarte}"></div>
             <p class="font-bold">${this.state.data.titrecarte}</p>
             <p>${this.state.data.descriptifcarte ?? ""}</p>
+            <p class="absolute bottom-3 right-4 bg-neutral-900 rounded-lg px-2 text-white w-fit">${this.state.data.user_carte_login ?? ""}</p>
         </div>
         `;
     }

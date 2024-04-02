@@ -91,7 +91,7 @@ export class EditCard extends Popup {
                     </div>` : "Aucun utilisateur assigné")
             : `
             <div class="w-full flex flex-col md:flex-row gap-4">
-            <p class="bg-black text-white px-2 rounded pb-1">${this.props.assigned}</p>
+            <p class="bg-black text-white px-2 py-1 rounded pb-1">${this.props.assigned}</p>
         ${canModify ? `
             <button onclick="unassign" class="btnSecondary w-full" type="button">
             <i class="fas fa-user-edit"></i>
