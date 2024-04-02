@@ -22,6 +22,12 @@ export class EditCard extends Popup {
     }
 
     render() {
+        const users = Store.get("users") ?? []
+
+        const userList = users.map(user => `
+        <p class="bg-black text-white px-2 rounded pb-1">${user.login}</p>
+        `).join("")
+
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
             <label for="title">
@@ -32,6 +38,11 @@ export class EditCard extends Popup {
             <i class="fas fa-align-left"></i>
             Description</label>
             <textarea id="description" name="descriptifcarte">${this.props.description}</textarea>
+            <p>Utilisateurs assignées</p>
+            <div class="flex flex-row gap-1 w-full">
+                ${userList}
+                <i class="fas fa-plus bg-black text-white p-2 cursor-pointer rounded"></i>
+            </div>
             <label for="color">
             <i class="fas fa-palette"></i>
             Couleur</label>

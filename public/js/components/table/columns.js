@@ -21,7 +21,6 @@ export class Columns extends ReactiveComponent {
             Store.set("columns", columns)
             Store.set("table", data.titretableau)
             Store.set("users", data.users)
-            console.log(data.users.find(user => user.login === this.props.login))
         }, 30);
 
         Store.subscribe("table", (table) => {
