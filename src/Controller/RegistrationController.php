@@ -18,7 +18,7 @@ class RegistrationController extends GeneriqueController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, MotDePasse $motDePasse): Response
+    public function register(Request $request): Response
     {
         $errors = [];
         $formIsValid = true;
