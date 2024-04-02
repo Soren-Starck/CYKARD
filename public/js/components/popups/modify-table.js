@@ -67,7 +67,7 @@ export class ModifyTable extends Popup {
                 <div class="flex flex-col">
                     <p class="font-medium whitespace-nowrap">
                     ${user.login}</p>
-                    ${isAdmin && user.role !== "USER_ADMIN" ? `<select class="cursor-pointer text-xs bg-slate-200 rounded-md px-2 py-1" onchange="updateRole" data-login="${user.login}">
+                    ${isAdmin && !UserStore.isMe(user.login) ? `<select class="cursor-pointer text-xs bg-slate-200 rounded-md px-2 py-1" onchange="updateRole" data-login="${user.login}">
                         <option value="USER_EDITOR" ${user.role === "USER_EDITOR" ? "selected" : ""}>Lecture et écriture</option>
                         <option value="USER_READ" ${user.role === "USER_READ" ? "selected" : ""}>Lecture seule</option>
                     </select>` : `<span class="text-xs">${UserStore.roleToText(user.role)}</span>`}
