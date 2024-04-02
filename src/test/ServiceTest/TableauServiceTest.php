@@ -28,6 +28,120 @@ class TableauServiceTest extends TestCase
         $this->login = 'login';
     }
 
+    public function testModifyNameCase1(): void
+    {
+        $this->assertEquals(
+            ['error' => 'Titre is required', 'status' => 400],
+            $this->tableauService->modifyName('', $this->login, 1)
+        );
+    }
+
+    public function testModifyNameCase2(): void
+    {
+        $this->tableauRepositoryMock->method('editTitreTableau')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'Error editing tableau name', 'status' => 500],
+            $this->tableauService->modifyName('titre', $this->login, 1)
+        );
+    }
+
+    public function testModifyNameCase3(): void
+    {
+        $tableau = new Tableau();
+        $tableau->setId(1);
+        $tableau->setTitreTableau('titre');
+        $tableau->setCodetableau('code');
+        $this->tableauRepositoryMock->method('editNameTableau')->willReturn(true);
+        $this->tableauRepositoryMock->method('findTableauColonnes')->willReturn($tableau->toArray());
+        $this->tableauRepositoryMock->method('createTableauFromDbResponse')->willReturn($tableau);
+        $this->assertEquals(
+            ['id' => 1, 'codetableau' => 'code', 'titretableau' => 'titre', 'users' => [], 'colonnes' => []],
+            $this->tableauService->modifyName('titre', $this->login, 1)
+        );
+    }
+
+    public function testAddUserCase1(): void
+    {
+        $this->assertEquals(
+            ['error' => 'User is required', 'status' => 400],
+            $this->tableauService->addUser('', $this->login, 1)
+        );
+    }
+
+    public function testAddUserCase2(): void
+    {
+        $this->tableauRepositoryMock->method('addUserTableau')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'Error adding user to tableau', 'status' => 500],
+            $this->tableauService->addUser('user', $this->login, 1)
+        );
+    }
+
+    public function testAddUserCase3(): void
+    {
+        $tableau = new Tableau();
+        $tableau->setId(1);
+        $tableau->setTitreTableau('titre');
+        $tableau->setCodetableau('code');
+        $this->tableauRepositoryMock->method('addUserTableau')->willReturn(true);
+        $this->tableauRepositoryMock->method('findTableauColonnes')->willReturn($tableau->toArray());
+        $this->tableauRepositoryMock->method('createTableauFromDbResponse')->willReturn($tableau);
+        $this->assertEquals(
+            ['id' => 1, 'codetableau' => 'code', 'titretableau' => 'titre', 'users' => [], 'colonnes' => []],
+            $this->tableauService->addUser('user', $this->login, 1)
+        );
+    }
+
+    public function testModifyRoleCase1(): void
+    {
+        $this->assertEquals(
+            ['error' => 'Role is required', 'status' => 400],
+            $this->tableauService->modifyRole('user', '', $this->login, 1)
+        );
+    }
+
+    public function testModifyRoleCase2(): void
+    {
+        $this->tableauRepositoryMock->method('editUserRoleTableau')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'Error modifying user role', 'status' => 500],
+            $this->tableauService->modifyRole('user', 'role', $this->login, 1)
+        );
+    }
+
+    public function testModifyRoleCase3(): void
+    {
+        $tableau = new Tableau();
+        $tableau->setId(1);
+        $tableau->setTitreTableau('titre');
+        $tableau->setCodetableau('code');
+        $this->tableauRepositoryMock->method('editUserRoleTableau')->willReturn(true);
+        $this->tableauRepositoryMock->method('findTableauColonnes')->willReturn($tableau->toArray());
+        $this->tableauRepositoryMock->method('createTableauFromDbResponse')->willReturn($tableau);
+        $this->assertEquals(
+            ['id' => 1, 'codetableau' => 'code', 'titretableau' => 'titre', 'users' => [], 'colonnes' => []],
+            $this->tableauService->modifyRole('user', 'role', $this->login, 1)
+        );
+    }
+
+    public function testDeleteUserCase1(): void
+    {
+        $this->tableauRepositoryMock->method('deleteUserTableau')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'Error deleting user from tableau', 'status' => 500],
+            $this->tableauService->deleteUser('user', $this->login, 1)
+        );
+    }
+
+    public function testDeleteUserCase2(): void
+    {
+        $this->tableauRepositoryMock->method('deleteUserTableau')->willReturn(true);
+        $this->assertEquals(
+            [],
+            $this->tableauService->deleteUser('user', $this->login, 1)
+        );
+    }
+
     public function testModifyTableauCase1(): void
     {
         $data = ['titretableau' => 'titre'];
@@ -72,7 +186,7 @@ class TableauServiceTest extends TestCase
 
     public function testModifyTableauCase5(): void
     {
-        $data = ['userrole' => ['USER_ADMIN']];
+        $data = ['userrole' => 'USER_ADMIN'];
         $this->tableauRepositoryMock->method('verifyUserTableauAccess')->willReturn([['user_role' => 'USER_ADMIN']]);
         $this->tableauRepositoryMock->method('editUserRoleTableau')->willReturn(false);
         $this->assertEquals(
@@ -109,7 +223,7 @@ class TableauServiceTest extends TestCase
 
     public function testModifyTableauCase9(): void
     {
-        $data = ['userrole' => ['USER_ADMIN']];
+        $data = ['userrole' => 'USER_ADMIN'];
         $this->tableauRepositoryMock->method('verifyUserTableauAccess')->willReturn([['user_role' => 'USER_ADMIN']]);
         $this->tableauRepositoryMock->method('editUserRoleTableau')->willReturn(true);
         $this->checkTableau($data);
