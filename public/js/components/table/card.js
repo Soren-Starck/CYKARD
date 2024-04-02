@@ -43,10 +43,8 @@ export class Card extends ReactiveComponent {
         return `<div ${canModify ? `onclick="editCard" draggable="true" ondragstart="drag"` : ''} class="hover:opacity-70 hover:!border-blue-600 transition relative bg-white shadow rounded-md border-2 p-2 flex flex-col gap-1 ${canModify ? "hover:cursor-grab active:cursor-grabbing" : ''} group" style="border-color: ${this.state.data.couleurcarte === '#ffffff' ? '#e5e7eb' : this.state.data.couleurcarte}">
             <div class="w-14 h-3 rounded-full absolute top-3 right-4" style="background: ${this.state.data.couleurcarte}"></div>
             <p class="font-bold">${this.state.data.titrecarte}</p>
-            <div class="flex flex-row justify-between mr-2">
-                <p class="hyphens-auto">${description}</p>
-                <p class="bg-neutral-900 text-sm rounded-lg px-2 text-white w-fit h-fit">${this.state.data.user_carte_login ?? ""}</p>
-            </div>
+            <p class="bg-neutral-900 text-sm rounded-lg px-2 text-white w-fit h-fit">${this.state.data.user_carte_login ?? ""}</p>
+            <p class="hyphens-auto">${description}</p>
             ${matches ? `<img src="${matches}" class="w-full mt-2 h-36 object-cover rounded-md bg-zinc-300" alt="Image de la carte">` : ""}
         </div>
         `;
