@@ -66,30 +66,29 @@ export class EditCard extends Popup {
 `).join("");
 
         return super.render(`
-    <form onsubmit="submit" class="flex flex-col gap-2">
-        <label for="title">
-        <i class="fas fa-pencil-alt"></i>
-        Titre</label>
-        <input type="text" id="title" name="titrecarte" value="${this.props.title}" required autofocus>
-        <label for="description">
-        <i class="fas fa-align-left"></i>
-        Description</label>
-        <textarea id="description" name="descriptifcarte" class="max-h-24 min-h-5">
-        ${this.props.description}</textarea>
-
-        <label class="whitespace-nowrap">
-        <i class="fas fa-user"></i>
-        Utilisateur assigné</label>
-        <div class="flex flex-col md:flex-row gap-1 w-full">
-            ${this.props.assigned === "null" ? (canModify ? `
-               <div class="w-full flex flex-col md:flex-row gap-4">
-                   <select id="assign-select" class="w-full !my-0">
-                     ${userList}
-                    </select>
-                   <button onclick="assign" class="btnSecondary w-full" type="button">
-                   <i class="fas fa-user-plus"></i>
-                   Assigner</button>
-                </div>` : "Aucun utilisateur assigné")
+        <form onsubmit="submit" class="flex flex-col gap-2">
+            <label for="title">
+            <i class="fas fa-pencil-alt"></i>
+            Titre</label>
+            <input type="text" id="title" name="titrecarte" value="${this.props.title}" required autofocus>
+            <label for="description">
+            <i class="fas fa-align-left"></i>
+            Description</label>
+            <textarea id="description" name="descriptifcarte" class="max-h-24 min-h-5">${this.props.description}</textarea>
+            
+            <label class="whitespace-nowrap">
+            <i class="fas fa-user"></i>
+            Utilisateur assigné</label>
+            <div class="flex flex-col md:flex-row gap-1 w-full">
+                ${this.props.assigned === "null" ? (canModify ? `
+                   <div class="w-full flex flex-col md:flex-row gap-4">
+                       <select id="assign-select" class="w-full !my-0">
+                         ${userList}
+                        </select>
+                       <button onclick="assign" class="btnSecondary w-full" type="button">
+                       <i class="fas fa-user-plus"></i>
+                       Assigner</button>
+                    </div>` : "Aucun utilisateur assigné")
             : `
             <div class="w-full flex flex-col md:flex-row gap-4">
             <p class="bg-black text-white px-2 rounded pb-1">${this.props.assigned}</p>
