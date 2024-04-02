@@ -49,6 +49,16 @@ export class ModifyTable extends Popup {
         Notif.success("Copié", "Le lien d'invitation a été copié dans le presse-papier");
     }
 
+    updateRole(e) {
+        const login = e.target.getAttribute("data-login")
+        const role = e.target.value
+        UserStore.changeRole(login, role)
+        API.update(`/tableau/${this.props.table}/modify-role`, {
+            userslogin: login,
+            userrole: role
+        })
+    }
+
     render() {
         const isAdmin = UserStore.isAdmin()
 
@@ -57,7 +67,10 @@ export class ModifyTable extends Popup {
                 <div class="flex flex-col">
                     <p class="font-medium whitespace-nowrap">
                     ${user.login}</p>
-                    <span class="text-xs">${UserStore.roleToText(user.role)}</span>
+                    ${isAdmin && user.role !== "USER_ADMIN" ? `<select class="cursor-pointer text-xs bg-slate-200 rounded-md px-2 py-1" onchange="updateRole" data-login="${user.login}">
+                        <option value="USER_EDITOR" ${user.role === "USER_EDITOR" ? "selected" : ""}>Lecture et écriture</option>
+                        <option value="USER_READ" ${user.role === "USER_READ" ? "selected" : ""}>Lecture seule</option>
+                    </select>` : `<span class="text-xs">${UserStore.roleToText(user.role)}</span>`}
                 </div>
                 ${isAdmin && !UserStore.isMe(user.login) ? `
                 <i onclick="removeUser" data-login="${user.login}" class="mt-1 text-red-500 cursor-pointer fa-solid fa-trash"></i>` : ""}
@@ -65,7 +78,7 @@ export class ModifyTable extends Popup {
         `).join("") : ""
 
         return super.render(`
-        <form onsubmit="submit" class="flex flex-col gap-2">
+        <form onsubmit="submit" class="flex flex-col gap-2 mb-2">
             ${isAdmin ? `
             <label for="title">
             <i class="fas fa-pencil-alt"></i>
@@ -77,7 +90,11 @@ export class ModifyTable extends Popup {
         </form>
         
         <div class="flex flex-col gap-2">
-            ${isAdmin ? `
+            <label for="user">
+                <i class="fas fa-user"></i>
+                Utilisateurs
+            </label>
+            ${isAdmin ? ''/*`
                 <label for="user">
                 <i class="fas fa-user"></i>
                 Utilisateurs</label>
@@ -87,7 +104,7 @@ export class ModifyTable extends Popup {
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
-            ` : ""}
+            `*/ : ""}
             ${userList}
             
             <button onclick="copyToClipboard" class="btnPrimary mt-3">

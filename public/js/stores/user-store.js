@@ -29,4 +29,14 @@ export class UserStore {
         if (!me) return false
         return me.login === login
     }
+
+    static changeRole(login, role) {
+        let users = Store.get("users")
+        users = users.map(u => {
+            if (u.login !== login) return u
+            u.role = role
+            return u
+        })
+        Store.set("users", users)
+    }
 }
