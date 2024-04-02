@@ -2,7 +2,6 @@
 
 namespace App\Tests\ServiceTest;
 
-use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\UserService;
 use PHPUnit\Framework\MockObject\Exception;

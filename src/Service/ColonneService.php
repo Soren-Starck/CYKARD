@@ -2,11 +2,8 @@
 
 namespace App\Service;
 
-use App\Repository\ColonneRepository;
 use App\Repository\I_ColonneRepository;
 use App\Repository\I_TableauRepository;
-use App\Repository\TableauRepository;
-use Symfony\Component\HttpFoundation\Request;
 
 class ColonneService extends GeneriqueService implements I_ColonneService
 {
