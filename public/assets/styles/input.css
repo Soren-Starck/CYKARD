@@ -264,3 +264,11 @@ h2 {
 #columns-parent > :first-child {
     @apply ml-5;
 }
+
+.color-circle {
+    @apply w-[30px] h-[30px] rounded-full cursor-pointer;
+}
+
+.color-circle.selected {
+    @apply border-2 border-neutral-900 p-2;
+}

@@ -678,6 +678,10 @@ video {
   top: 0.75rem;
 }
 
+.bottom-3 {
+  bottom: 0.75rem;
+}
+
 .\!z-\[200\] {
   z-index: 200 !important;
 }
@@ -753,10 +757,6 @@ video {
   margin-top: 0.75rem !important;
 }
 
-.mb-10 {
-  margin-bottom: 2.5rem;
-}
-
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -809,6 +809,10 @@ video {
   margin-top: 0.25rem;
 }
 
+.mt-10 {
+  margin-top: 2.5rem;
+}
+
 .mt-2 {
   margin-top: 0.5rem;
 }
@@ -849,6 +853,10 @@ video {
   display: grid;
 }
 
+.hidden {
+  display: none;
+}
+
 .\!h-full {
   height: 100% !important;
 }
@@ -883,10 +891,6 @@ video {
 
 .h-\[80vh\] {
   height: 80vh;
-}
-
-.h-dvh {
-  height: 100dvh;
 }
 
 .h-fit {
@@ -1043,10 +1047,6 @@ video {
   flex-direction: column;
 }
 
-.items-start {
-  align-items: flex-start;
-}
-
 .items-center {
   align-items: center;
 }
@@ -1103,10 +1103,6 @@ video {
 
 .overflow-x-hidden {
   overflow-x: hidden;
-}
-
-.overflow-y-hidden {
-  overflow-y: hidden;
 }
 
 .whitespace-nowrap {
@@ -1276,13 +1272,12 @@ video {
   padding: 1rem;
 }
 
-.p-6 {
-  padding: 1.5rem;
+.p-5 {
+  padding: 1.25rem;
 }
 
-.px-10 {
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
+.p-6 {
+  padding: 1.5rem;
 }
 
 .px-2 {
@@ -1323,6 +1318,11 @@ video {
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 .\!pt-2 {
@@ -1515,10 +1515,6 @@ video {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
-}
-
-.duration-300 {
-  transition-duration: 300ms;
 }
 
 html {
@@ -2031,6 +2027,20 @@ h2 {
 
 #columns-parent > :first-child {
   margin-left: 1.25rem;
+}
+
+.color-circle {
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+  border-radius: 9999px;
+}
+
+.color-circle.selected {
+  border-width: 2px;
+  --tw-border-opacity: 1;
+  border-color: rgb(23 23 23 / var(--tw-border-opacity));
+  padding: 0.5rem;
 }
 
 .hover\:cursor-grab:hover {
