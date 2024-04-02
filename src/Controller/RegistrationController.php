@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Lib\Security\UserConnection\MotDePasse;
 use App\Service\I_UserService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,8 +36,8 @@ class RegistrationController extends GeneriqueController
                 $user = new User();
                 $user->setLogin($login);
                 $user->setEmail($email);
-                $user->setPassword($motDePasse->hacher($password));
-                $user->setVerificationToken($motDePasse->genererChaineAleatoire(32));
+                $user->setPassword(MotDePasse::hacher($password));
+                $user->setVerificationToken(MotDePasse::genererChaineAleatoire(32));
                 $user->setRoles(['ROLE_USER']);
 
                 $this->userService->createUser($user);

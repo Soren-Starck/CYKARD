@@ -1,147 +1,81 @@
----
-lang: fr
----
-# SAE4A - Trello-Trollé
+<h1>Répartition des tâches</h1>
+<p>Daniil : Réalisation des API, du système de routage et des vues Twig</p>
+<p>Clément : Réalisation des API, des tests et de la base de donnée</p>
+<p>Giovanni : Conception et déploiement de la base de donnée, réalisation de tests et d’API</p>
+<p>Marius : élaboration des librairies réactive et des store utilisés en front-end, réalisation du front-end et configuration de Docker pour déployer le site web</p>
+<p>Soren : Réalisation des composants réactive et implémentation dans le front-end, structuration dans les vues twig et réalisation du design graphique avec TailwindCSS</p>
 
-Alias le Trello codé à l'envers, alias le Trello trop laid codé par un troll !
+<h1>Améliorations du site web "Trello-Trollé"</h1>
+Le projet "Trello-Trollé" avait pour objectif d'auditer et d'améliorer une application web existante, similaire à Trello mais initialement développée uniquement en PHP, présentant des limitations majeures en termes d'expérience utilisateur, de sécurité et de performances de base de données.
 
-## Site de Base
+Les améliorations implémentées dans le cadre de ce projet comprenaient :
 
-Le projet est un clone du site web [Trello](https://trello.com/) utilisé pour la gestion de projets qui permet de définir des **tableaux** contenant diverses **cartes** (tâches) organisées en différentes **colonnes**. Sur ce site, un utilisateur peut notamment :
+Intégration de JavaScript et AJAX : Pour dynamiser l'interface utilisateur, éliminer les rechargements de page et offrir une expérience plus fluide et réactive.
 
-* S'inscrire, se connecter.
-* Gérer son compte (mise à jour, suppression...).
-* Gérer des tableaux (CRUD).
-* Gérer des colonnes dans des tableaux (CRUD).
-* Gérer des cartes dans des colonnes (CRUD).
-* Ajouter des membres sur ses tableaux.
-* Affecter des membres du tableau à certaines cartes.
-* Quitter les tableaux où il est simplement membre.
+Normalisation et optimisation de la base de données PostgreSQL : Pour améliorer la sécurité, les performances et la maintenabilité de la base de données.
 
-Au niveau des droits d'accès, on notera que :
+Renforcement de la sécurité : Avec des techniques avancées de hashage des mots de passe, la mise en œuvre de requêtes préparées.
 
-* Le tableau peut être **partagé** en lecture seule (si la personne n'est pas membre du tableau) à n'importe qui par son URL. L'URL est déterminée par un système de **code secret** (système similaire aux vidéos non répertoriées de YouTube). Il ne doit pas être possible d'accéder à un tableau dont on ne connait pas l'URL, sauf à utiliser une méthode de force brute qui prendrait trop de temps à s'exécuter.  
-* Les membres invités du tableau ont quasiment les mêmes droits que le propriétaire (créateur) mais ne peuvent pas supprimer le tableau ou inviter de nouveaux membres.
+Ajout de nouvelles fonctionnalités et amélioration du design du site : Pour enrichir l'expérience utilisateur et rendre le site plus attrayant visuellement.
 
-Le site propose aussi quelques autres fonctionnalités mineures.
 
-Actuellement, l'application est **complètement fonctionnelle**, mais **uniquement codée en PHP** (pas de JavaScript). Donc, chaque action demande un chargement d'une nouvelle page.
+Remplacement des fichiers JSON par des relations de table
+**Avantages** :
+  - Réduction de la redondance des données.
+  - Simplification des accès et des manipulations des données.
+  - Amélioration de la sécurité et de la scalabilité de l'application.
+- **Suppression des mots de passe en clair** : Élimination des colonnes stockant les mots de passe lisibles.
+- **Hachage des mots de passe** : Utilisation de fonctions de hachage cryptographique avancées avec un sel unique pour rendre les mots de passe indéchiffrables.
+- **Avantages** :
+  - Réduction du risque de fuites de données.
+  - Renforcement de la confiance des utilisateurs dans la sécurité de la plateforme.
+  - Conformité avec les réglementations sur la protection des données, comme le RGPD.
 
-Le SGBD utilisé est **PostgreSQL** (vous ne devez pas en changer).
+- **Refonte du design avec Tailwind CSS** : Nous avons revu le design et l'interface du site en utilisant Tailwind CSS, ce qui a considérablement amélioré l'esthétique et l'ergonomie de la plateforme, la rendant plus intuitive et agréable à utiliser.
 
-## Projet
+- **Implémentation de composants Popups** : Les Popups permettent aux utilisateurs d'effectuer toutes les actions liées aux tableaux sans quitter la page principale. Par exemple, en cliquant sur une carte, une popup s'affiche, offrant la possibilité de modifier directement son titre, sa description et sa couleur.
 
-La SAÉ s'articule en deux parties : 
-* analyse et audit de l'application existante
-* puis amélioration et virtualisation de l'application.
+- **Fonctionnalité de glisser-déposer** : Les utilisateurs peuvent désormais déplacer les cartes d'une colonne à l'autre facilement. Si une carte est déposée sur le bouton "nouvelle colonne", une popup s'ouvre, permettant à l'utilisateur de créer une nouvelle colonne et d'y attribuer la carte.
 
-### Analyse
+- **Interface épurée et réactive** : Des éléments interactifs apparaissent lorsque l'utilisateur survole une colonne, tels qu'un bouton pour créer une nouvelle carte ou pour modifier la colonne. De plus, les popups réactives sont très intuitives d’utilisation.
 
-Il semble que ce site web a été codé par un développeur amateur... Il y a donc un gros risque que le code produit (et ce qu'il y a autour) soit de mauvaise qualité, voir dangereux !
+- **Gestion améliorée des tableaux** : La page de la liste des tableaux de l'utilisateur a été restructurée pour plus de praticité, avec l'ajout d'un bouton "plus" pour créer rapidement un nouveau tableau et des fonctionnalités telles que la suppression d'un tableau désormais facilement accessibles.
 
-Avant de toucher au code à proprement parler, vous devrez faire une analyse profonde des défauts de l'application dans son état actuel et faire un **rapport commenté** sur les points suivants :
+- **Authentification basée sur les jetons JWT** : Nous avons adopté un système basé sur les jetons JWT pour vérifier l'identité des utilisateurs lors de leur connexion et sécuriser les échanges ultérieurs avec l'application.
 
-* La modélisation de la **base de données**, vous devrez notamment :
+- **Système de routage basé sur Symfony** : Le système de routage assure que chaque requête utilisateur est correctement dirigée vers la fonctionnalité appropriée, facilitant ainsi une expérience utilisateur fluide et intuitive.
 
-    * Commenter le choix de la **clé primaire** choisie par le développeur.
-    * Expliquer les différentes **anomalies** qui peuvent survenir à cause de cette modélisation et leurs impacts sur l'application.
-    * Lister (par déduction) les différentes **dépendances fonctionnelles**.
-    * Déduire (en justifiant) la **forme normale** de l'unique relation de la base.    
-    * Proposer une normalisation de la base donnée afin d'obtenir un schéma sain. Dans votre rapport, vous devrez notamment prouver que votre décomposition est **sans perte de données** et **sans perte de dépendances fonctionnelles**.
+**Traitement des injections SQL** :
 
-* La qualité du code et de l'**architecture** de l'application, le respect des différents principes de qualité logicielle (**DRY**, **SOLID**...)
+Pour contrer les injections SQL, nous avons adopté l'utilisation systématique des requêtes préparées avec des paramètres liés, au lieu de concaténer des chaînes pour construire les requêtes SQL. Cette approche, recommandée par les bonnes pratiques de sécurité, permet d'éviter que les entrées utilisateur malveillantes soient interprétées comme du code SQL par le serveur de base de données. En outre, tous les inputs des utilisateurs sont désormais rigoureusement validés et nettoyés avant toute utilisation dans une requête SQL, afin d'assurer qu'ils ne contiennent pas de tentatives d'injection. Cela a notamment été possible grâce à l’utilisation de la class Database qui permet d'automatiser le bind des éléments a son exécution.
 
-* Les différentes **failles de sécurité** exploitables. Pour chaque faille, il faudra bien indiquer le bout de code non sécurisé, donner un exemple d'exploitation de cette faille, expliquer les dégats qu'elle pourrait causer, et enfin comment la régler.
+**Traitement des attaques XSS** :
 
-* Les différents problèmes rencontrés lors de l'utilisation du site.
+Pour prévenir les attaques par injection de scripts (XSS), nous avons intégré l'utilisation des templates Twig dans notre stratégie de sécurisation. Twig, un moteur de template pour PHP, apporte une couche supplémentaire de protection contre les XSS grâce à son système d'échappement automatique des variables. Par défaut, Twig traite toutes les variables insérées dans les templates comme étant potentiellement dangereuses et les échappe automatiquement. Cela signifie que, à moins d'être explicitement désactivé pour un cas d'usage particulier, Twig convertira les caractères spéciaux en entités HTML, similaires à l'effet de fonctions telles que htmlspecialchars en PHP. Cette fonctionnalité réduit le risque d'exécution de scripts malveillants en s'assurant que tout contenu injecté par l'utilisateur est rendu inoffensif avant son affichage dans le navigateur. Ainsi, l'utilisation des templates Twig complète efficacement les mesures d'échappement manuel des entrées utilisateur, offrant une approche robuste et à plusieurs niveaux contre les attaques XSS.
 
-### Amélioration et virtualisation
+En parallèle, nous avons renforcé les politiques de sécurité de contenu (Content Security Policy - CSP) pour restreindre les sources de scripts exécutables, empêchant ainsi l'exécution de scripts non autorisés. Cela ajoute une couche de sécurité supplémentaire en limitant les vecteurs d'attaque possibles pour les acteurs malveillants.
 
-Après votre analyse, il vous est demandé d'**améliorer cette application** de différentes manières :
+**Sécurisation des Cookies** :
+Notre classe Cookie est conçue pour offrir une gestion flexible et sécurisée des cookies. Voici comment nous procédons :
+- Enregistrement sécurisé des cookies : Lors de la création d'un cookie, nous n’utilisons pas serialize pour éviter les PHP Object Injection au moment de deserialize. La méthode enregistrer permet d'ajuster la durée de vie du cookie, avec la possibilité de le rendre persistant au-delà de la session courante en spécifiant une duréeExpiration. Si aucune durée n'est spécifiée, le cookie expire à la fin de la session. Elle ajoute des paramètres de sécurité comme HttpOnly, SameSite en strict, ou bien secure si le serveur utilise Https. Cela permet d’éviter des attaques CSRF notamment.
+- Lecture et suppression des cookies : Nous avons également des méthodes pour lire et supprimer des cookies, facilitant la récupération des données stockées et assurant que les cookies peuvent être effacés pour des raisons de sécurité ou de confidentialité.
 
-* Supprimer toutes les **failles de sécurité**.
+**Gestion Avancée des Sessions** :
+La gestion des sessions dans notre application est assurée par la classe Session, qui utilise un modèle Singleton pour garantir une instance unique de la session à travers l'application.
+- Initialisation et maintenance des sessions : À la création de l'instance Session, nous démarrons une session PHP si aucune n'est active. Nous utilisons les mêmes paramètres que pour la classe cookie afin de sécuriser au maximum le cookie de session.
+- Gestion de l'expiration de la session : Notre système contrôle rigoureusement l'expiration des sessions en se basant sur la dernière activité de l'utilisateur. Si l'utilisateur est inactif plus longtemps que la durée spécifiée, sa session est automatiquement réinitialisée, renforçant la sécurité en limitant le risque d'exploitation de sessions abandonnées.
+- Destruction sécurisée de la session : Lors de la déconnexion de l'utilisateur, la session et ses cookies associés sont complètement détruits, garantissant qu'aucune donnée résiduelle ne peut être exploitée.
 
-* **Normaliser** la base de données à partir de la décomposition proposée lors de la phase d'analyse.
+**Lancement de l'application** :
 
-* Améliorer la **qualité du code** et l'**architecture** de l'application. Il faudra appliquer les principes étudiés en cours de **complément web** : architecture en couches, couche **service**, **conteneur** de services.
+Pour lancer le projet avec docker compose, il suffit de cloner le dépôt GitHub, de se placer dans le répertoire du projet et d'exécuter la commande `docker-compose up`. Cela lancera les conteneurs Docker nécessaires pour exécuter l'application, y compris le serveur web, la base de données PostgreSQL et l'interface utilisateur. Une fois les conteneurs démarrés, l'application sera accessible à l'adresse `http://localhost:8080` dans un navigateur web.
+Il faut avoir égelement le .env.prod dans le dossier a la racine du projet. ce fichier est dans le rapport.
 
-* Utiliser un meilleur système de **routing** (comme dans le cours de complément web)
+Pour lancer le projet sans docker en local il faut exécuter les commandes suivantes :
+npm i ( ceci installe les dépendances de node)
+composer install ( ceci installe les dépendances de php)
+npm run all ( ceci compile les fichiers css et js et le lance en localhost:8000)
 
-* Utiliser **twig** pour les vues.
 
-* Ajouter des **tests unitaires** grâce à l'outil **PHPUnit** vu en cours. Attention à ce que vos tests ne dépendent pas de l'état (en production) de votre application ! C'est pour cela qu'il est important de posséder une bonne architecture. L'objectif est d'obtenir une couverture de test de **100%** pour la partie **métier** (notamment, les **services**). 
+**adresse du site** : https://sae-s4-nameless-smoke-5892.fly.dev/
 
-* Ajouter du **dynamisme** sur le site grâce à l'utilisation de **JavaScript** :
-
-    * Site avec le minimum de rechargement de page grâce à **AJAX** (il faudra donc transformer une partie de l'application en **API**). Notamment, tout ce qui est relatif à la gestion d'un **tableau** (gestion des colonnes, cartes, membres) doit pouvoir se passer sur la même page, sans rechargement.
-    * Ajouter un système de **Drag'n'drop** de cartes entre des colonnes d'un tableau.
-    * Utilisation de la programmation **réactive** (TD7 de JavaScript) :
-        * Pour **synchroniser** certains éléments du tableau, par exemple le nombre de cartes associées à chaque utilisateur par catégorie de colonne, la liste des utilisateurs associés à une carte, les membres du tableau, etc.
-        * Toujours au niveau du tableau, pour proposer des **formulaires** de modification qui changent la page en direct. Par exemple, édition d'une carte, de sa colonne, etc.
-        * Pour vérifier en direct lors du remplissage du formulaire de création que le login et l'email n'existe pas déjà.
-    * C'est une liste non exhaustive, donc, toute fonctionnalité existante qui peut être dynamisée grâce à JavaScript (et éventuellement grâce à de la programmation réactive) est une amélioration bienvenue !
-
-* **Une fois toutes les améliorations faites**, il est possible d'ajouter de nouvelles fonctionnalités que vous jugerez utile.
-
-* De manière mineure (une fois que tout est fini) vous pouvez éventuellement améliorer le **style** du site, mais ce n'est pas du tout la priorité ! Dans ce cas, il est autorisé (voire conseillé) d'utiliser un framework CSS : **Bootstrap** (plus vraiment conseillé de nos jours), **Tailwind CSS**, **bulma**, etc.
-
-Enfin, il faudra proposer une **virtualisation** multi-conteneur de votre projet avec un fichier `docker-compose.yml` permettant de déployer :
-
-* Un conteneur pour la base de données **PostgreSQL** de l'application.
-* Un conteneur qui fait tourner l'application sur un **serveur web** (qui communiquera donc avec le premier conteneur).
-L'objectif est que votre application puisse être déployée sans problèmes en quelques commandes simples grâce à **Docker**.
-
-## Ressources
-
-Dans ce dépôt, vous trouverez le fichier `sae4a.sql` qui vous permettra de créer la structure de votre base de données.
-
-Vous devrez utiliser le SGBD **PostgresSQL**. Les informations de connexion à votre base PostgreSQL de l'IUT sont disponibles sur [cette page](https://iutdepinfo.iutmontp.univ-montp2.fr/intranet/bases-de-donnees/).
-
-## Liens avec les différentes ressources
-
-Cette **SAÉ** mobilise des compétences développées lors de différentes ressources du semestre 4 :
-
-* R4.A.10 Complément web
-* R4.01 Architecture logicielle (**JavaScript**)
-* R4.02 Qualité de développement
-* R4.03 Qualité et au-delà du relationnel
-* R4.A.08 Virtualisation
-
-## Groupes et suivi
-
-Les groupes sont composés de **5 personnes** (exceptionnellement 4).
-
-Contrairement à la SAÉ du semestre 3, il n'y a pas vraiment de client. Néanmoins, vous pouvez quand même vous organiser (en interne) en sprints et appliquer les méthodes de gestion de projet.
-
-Liste des enseignants référents pour chaque groupe :
-
-* Groupe Q1 : [Malo Gasquet](mailto:malo.gasquet@umontpellier.fr)
-* Groupe Q2 : [Romain Lebreton](mailto:romain.lebreton@umontpellier.fr)
-* Groupe Q5 : [Cyrille Nadal](mailto:cyrille.nadal@umontpellier.fr)
-
-Dès que les groupes sont formés vous devez :
-
-* Créer un **dépôt gitlab privé** pour votre équipe en effectuant un **fork** de ce dépôt. À terme, le fichier `docker-compose.yml` devra aussi être placé dans ce dépôt.
-* Inviter votre enseignant référent dans de dépôt.
-* Envoyer un mail à votre enseignant référent pour lui donner la composition de l'équipe ainsi que le lien du dépôt.
-
-## Rendus et soutenance
-
-Il y aura **trois rendus** à faire pour cette SAÉ :
-
-* Rendu du **rapport d'analyse** (format PDF) de l'application sur ce [dépôt Moodle](https://moodle.umontpellier.fr/mod/assign/view.php?id=798160) le **19 mars (23h59 max)**.
-
-* Rendu du **rapport de projet final** (format PDF) le **2 avril (23h59 max)** sur ce [dépôt Moodle](https://moodle.umontpellier.fr/mod/assign/view.php?id=798161). Vous travaillez sur ce rapport en cours de communication.
-
-* Rendu du **projet amélioré** le **2 avril (23h59 max)** sur ce [dépôt Moodle](https://moodle.umontpellier.fr/mod/assign/view.php?id=798162). Votre rendu sera sous la forme d'une **archive zip** contenant :
-
-    * Les sources du projet (qui devra aussi inclure le fichier `docker-compose.yml`).
-    * Un script SQL permettant de créer votre base de données.
-    * Un fichier `README.md` contenant :
-        * L'adresse du site (hébergé dur **webinfo**)
-        * La liste des fonctionnalités améliorées.
-        * La répartition du travail dans l'équipe.
-    
-Les **soutenances** de projet auront lieu le **4 avril** à Sète et le **5 avril** à Montpellier
-
-Bon projet !
