@@ -30,11 +30,7 @@ use PDO;
 
     public static function getInstance(): Database
     {
-        return new Database(
-            new PDO(
-                $_ENV['DATABASE_URL_2']
-            )
-        );
+        return new Database();
     }
 
     /**
@@ -76,7 +72,7 @@ use PDO;
     {
         $stmt = $this->pdo->prepare($query);
         foreach ($params as $key => $value) {
-            $value= htmlspecialchars($value);
+            $value = htmlspecialchars($value);
             $stmt->bindValue(':' . $key, $value);
         }
         $stmt->execute();

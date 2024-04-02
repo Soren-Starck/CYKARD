@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.4.1 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.3 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -211,6 +211,8 @@ textarea {
   /* 1 */
   line-height: inherit;
   /* 1 */
+  letter-spacing: inherit;
+  /* 1 */
   color: inherit;
   /* 1 */
   margin: 0;
@@ -234,9 +236,9 @@ select {
 */
 
 button,
-[type='button'],
-[type='reset'],
-[type='submit'] {
+input:where([type='button']),
+input:where([type='reset']),
+input:where([type='submit']) {
   -webkit-appearance: button;
   /* 1 */
   background-color: transparent;
@@ -492,6 +494,10 @@ video {
   --tw-backdrop-opacity:  ;
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
 }
 
 ::backdrop {
@@ -542,6 +548,10 @@ video {
   --tw-backdrop-opacity:  ;
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
 }
 
 .container {
@@ -710,12 +720,12 @@ video {
   z-index: 200;
 }
 
-.z-\[300\] {
-  z-index: 300;
-}
-
 .z-\[1900\] {
   z-index: 1900;
+}
+
+.z-\[300\] {
+  z-index: 300;
 }
 
 .col-span-1 {
@@ -845,10 +855,6 @@ video {
   margin-bottom: 450px;
 }
 
-.-mt-10 {
-  margin-top: -2.5rem;
-}
-
 .block {
   display: block;
 }
@@ -920,6 +926,14 @@ video {
 
 .h-full {
   height: 100%;
+}
+
+.h-36 {
+  height: 9rem;
+}
+
+.h-\[100px\] {
+  height: 100px;
 }
 
 .max-h-24 {
@@ -1055,6 +1069,10 @@ video {
           user-select: none;
 }
 
+.resize-none {
+  resize: none;
+}
+
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
@@ -1131,6 +1149,11 @@ video {
 
 .overflow-y-hidden {
   overflow-y: hidden;
+}
+
+.hyphens-auto {
+  -webkit-hyphens: auto;
+          hyphens: auto;
 }
 
 .whitespace-nowrap {
@@ -1229,6 +1252,11 @@ video {
   background-color: rgb(39 39 42 / var(--tw-bg-opacity));
 }
 
+.bg-zinc-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(212 212 216 / var(--tw-bg-opacity));
+}
+
 .bg-\[linear-gradient\(45deg\2c transparent_25\%\2c rgba\(68\2c 68\2c 68\2c \.2\)_50\%\2c transparent_75\%\2c transparent_100\%\)\] {
   background-image: linear-gradient(45deg,transparent 25%,rgba(68,68,68,.2) 50%,transparent 75%,transparent 100%);
 }
@@ -1286,6 +1314,11 @@ video {
 
 .fill-neutral-900 {
   fill: #171717;
+}
+
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .p-1 {

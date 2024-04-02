@@ -8,6 +8,7 @@ use App\Lib\Security\UserConnection\UserHelper;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ContainerControllerResolver;
@@ -29,6 +30,9 @@ class RouteurURL
      */
     public static function traiterRequete(): void
     {
+
+        $dotenv = new Dotenv();
+        $dotenv->load(__DIR__.'/../../.env');
 
         $conteneur = new ContainerBuilder();
         $conteneur->setParameter('project_root', dirname(__DIR__).'/..');
