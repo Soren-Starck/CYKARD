@@ -4,7 +4,11 @@ import {ColumnStore} from "../../stores/column-store.js";
 
 export class NewColumn extends Popup {
     async submit(e) {
+        if (this.state.loading) return
         const data = API.formHandler(e)
+        this.setState({
+            loading: true
+        })
         const result = await API.create(`/tableau/${this.props.table}/colonne`, data)
         if (!result) return
         result.cartes = []
@@ -17,6 +21,9 @@ export class NewColumn extends Popup {
             })
             this.removeAttribute("card")
         }
+        this.setState({
+            loading: false
+        })
         this.close()
     }
 
@@ -27,7 +34,7 @@ export class NewColumn extends Popup {
             <i class="fas fa-pencil-alt"></i>
             Titre</label>
             <input type="text" id="title" name="TitreColonne" value="Nouvelle colonne" required autofocus>
-            <button type="submit" name="modify">
+            <button type="submit" name="modify" ${this.state.loading ? "disabled" : ""}>
             <i class="fas fa-save"></i>
             Créer</button>
         </form>

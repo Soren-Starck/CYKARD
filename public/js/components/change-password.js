@@ -34,20 +34,29 @@ export class ChangePassword extends ReactiveComponent {
 
     render() {
         return `
-            <form onsubmit="change" class="w-full">
-                <div class="form-group w-full">
-                    <label for="old_password">Ancien mot de passe</label>
+            <form onsubmit="change" class="w-full flex flex-col gap-2">
+            <h1 class="mt-2">Changer le mot de passe</h1>
+                <div class="form-group flex flex-col w-full">
+                    <label for="old_password">
+                        <i class="fas fa-lock"></i>
+                    Ancien mot de passe</label>
                     <input type="password" class="form-control" id="old_password" name="old_password" required>
                 </div>
-                <div class="form-group w-full">
-                    <label for="password1">Nouveau mot de passe</label>
+                <div class="form-group flex flex-col w-full">
+                    <label for="password1">
+                        <i class="fas fa-lock"></i>
+                    Nouveau mot de passe</label>
                     <input type="password" class="form-control" id="password1" name="password1" required>
                 </div>
-                <div class="form-group w-full">
-                    <label for="password2">Confirmer le mot de passe</label>
+                <div class="form-group flex flex-col w-full">
+                    <label for="password2">
+                        <i class="fas fa-lock"></i>
+                    Confirmer le mot de passe</label>
                     <input type="password" class="form-control" id="password2" name="password2" required>
                 </div>
-                <button type="submit" class="btn btn-primary w-full">Modifier</button>
+                <button type="submit" class="btn btn-primary w-full">
+                    <i class="fas fa-save"></i>
+                Changer le mot de passe</button>
                 <p class="text-danger">${this.state.error}</p>
             </form>
         `;

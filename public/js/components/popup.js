@@ -15,7 +15,7 @@ export class Popup extends ReactiveComponent {
         const useAnim = !this.wasVisible
         this.wasVisible = true
         return `<div onclick="close" class="w-full h-full z-50 backdrop-blur backdrop-brightness-50 absolute top-0 left-0 ${useAnim ? 'BackgroundBlur' : ''}"></div>
-            <div class="absolute !pt-2 top-1/3 z-50 w-1/2 left-1/4 md:w-1/3 md:left-1/3 2xl:w-1/5 2xl:left-[40%] max-h-1/2 border bg-white shadow-lg rounded-lg p-4 ${useAnim ? 'popups' : ''}">
+            <div class="absolute !pt-2 top-1/3 z-50 w-5/6 left-[8.5%] sm:w-1/2 sm:left-1/4 md:w-1/3 md:left-1/3 2xl:w-1/5 2xl:left-[40%] max-h-1/2 border bg-white shadow-lg rounded-lg p-4 ${useAnim ? 'popups' : ''}">
                 ${this.props.title ? `<h2 class="pr-2 mb-2">${this.props.title}</h2>` : ""}
                 <i onclick="close" class="fas fa-times absolute top-2 right-2 cursor-pointer"></i>
                 ${children}

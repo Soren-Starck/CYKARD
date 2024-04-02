@@ -3,7 +3,11 @@ import {API} from "../../api.js";
 
 export class NewTable extends Popup {
     async submit(e) {
+        if (this.state.loading) return
         const data = API.formHandler(e)
+        this.setState({
+            loading: true
+        })
         const result = await API.create(`/tableau`, data)
         if (!result) return
         window.location.href = `/tableaux/${result.id}`
@@ -16,7 +20,7 @@ export class NewTable extends Popup {
             <i class="fas fa-pencil-alt"></i>
             Titre</label>
             <input type="text" id="title" name="titretableau" value="Mon tableau" required autofocus>
-            <button type="submit">
+            <button type="submit" ${this.state.loading ? "disabled" : ""}>
             <i class="fas fa-plus"></i>
             Créer</button>
         </form>
