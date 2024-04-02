@@ -32,6 +32,14 @@ export class EditCard extends Popup {
         })
     }
 
+    unassign() {
+        API.remove(`/carte/${this.props.card_id}/unassign-user`)
+        ColumnStore.modifyCard(this.props.column_id, this.props.card_id, (card) => {
+            card.user_carte_login = null
+            return card
+        })
+    }
+
     render() {
         const users = Store.get("users") ?? []
         const canModify = UserStore.canModify()
@@ -64,7 +72,14 @@ export class EditCard extends Popup {
                        <i class="fas fa-user-plus"></i>
                        Assigner</button>
                     </div>` : "Aucun utilisateur assigné")
-            : `<p class="bg-black text-white px-2 rounded pb-1">${this.props.assigned}</p>`}
+            : `
+                <div class="w-full flex flex-col md:flex-row gap-4">
+                <p class="bg-black text-white px-2 rounded pb-1">${this.props.assigned}</p>
+            ${canModify ? `
+                <button onclick="unassign" class="btnSecondary w-full" type="button">
+                <i class="fas fa-user-edit"></i>
+                Retirer</button>` : ""}
+                </div>`}
             </div>
             
             <label for="color">
