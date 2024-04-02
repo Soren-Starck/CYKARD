@@ -29,7 +29,7 @@ class SecurityController extends GeneriqueController
                 Cookie::enregistrer('jwt', $jwt);
                 Cookie::lire('jwt');
 
-                return $this->redirect('app_base');
+                return $this->redirect('app_tableaux');
             } else {
 
                 return $this->renderTwig('security/login.html.twig', [
