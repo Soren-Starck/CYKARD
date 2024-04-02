@@ -1,6 +1,7 @@
 import {Popup} from "../popup.js";
 import {API} from "../../api.js";
 import {ColumnStore} from "../../stores/column-store.js";
+import {Store} from "../../store.js";
 
 export class EditCard extends Popup {
     submit(e) {

@@ -19,7 +19,7 @@ export class ModifyTable extends Popup {
 
     submit(e) {
         const data = API.formHandler(e)
-        API.update(`/tableau/${this.props.table}/modify`, data)
+        API.update(`/tableau/${this.props.table}/modify-name`, data)
         Store.set("table", data.titretableau)
         this.close()
     }
@@ -45,10 +45,10 @@ export class ModifyTable extends Popup {
     }
 
     copyToClipboard(e) {
-    e.preventDefault();
-    navigator.clipboard.writeText("lien d'invitation");
-    Notif.success("Copié", "Le lien d'invitation a été copié dans le presse-papier");
-}
+        e.preventDefault();
+        navigator.clipboard.writeText("lien d'invitation");
+        Notif.success("Copié", "Le lien d'invitation a été copié dans le presse-papier");
+    }
 
     render() {
         const isAdmin = UserStore.isAdmin()
@@ -72,23 +72,30 @@ export class ModifyTable extends Popup {
             <i class="fas fa-pencil-alt"></i>
             Titre</label>
             <input type="text" id="title" value="${Store.get("table")}" name="titretableau" required autofocus>
-            <label for="user">
-            <i class="fas fa-user"></i>
-            Utilisateurs</label>
-            <div class="flex relative">
-                <input placeholder="ajouter un utilisateur" type="text" id="user" name="user" class="border !rounded-l px-4 py-2 w-full h-9">
-                <button class="absolute right-0 border bg-slate-100 text-neutral-900 !rounded-r flex items-center h-9 px-4 py-2 my-2">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>` : ""}
+            <button type="submit">
+            <i class="fas fa-save"></i>
+            Appliquer</button>` : ""}
+        </form>
+        
+        <div class="flex flex-col gap-2">
+            ${isAdmin ? `
+                <label for="user">
+                <i class="fas fa-user"></i>
+                Utilisateurs</label>
+                <div class="flex relative">
+                    <input placeholder="ajouter un utilisateur" type="text" id="user" name="user" class="border !rounded-l px-4 py-2 w-full h-9">
+                    <button class="absolute right-0 border bg-slate-100 text-neutral-900 !rounded-r flex items-center h-9 px-4 py-2 my-2">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            ` : ""}
             ${userList}
+            
             <button onclick="copyToClipboard" class="btnPrimary mt-3">
             <i class="fas fa-copy"></i>
             Partager
             </button>
-            ${isAdmin ? `<button type="submit">
-            <i class="fas fa-save"></i>
-            Modifier</button>` : ""}
+            
             ${!isAdmin ? `
                 <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="leave">
                 <i class="fas fa-sign-out-alt"></i>
