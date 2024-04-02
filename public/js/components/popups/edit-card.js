@@ -51,12 +51,12 @@ export class EditCard extends Popup {
             Description</label>
             <textarea id="description" name="descriptifcarte">${this.props.description}</textarea>
             
-            <p>
+            <label class="whitespace-nowrap">
             <i class="fas fa-user"></i>
-            Utilisateur assigné</p>
-            <div class="flex flex-row gap-1 w-full">
+            Utilisateur assigné</label>
+            <div class="flex flex-col md:flex-row gap-1 w-full">
                 ${this.props.assigned === "null" ? (canModify ? `
-                   <div class="w-full flex gap-4">
+                   <div class="w-full flex flex-col md:flex-row gap-4">
                        <select id="assign-select" class="w-full !my-0">
                          ${userList}
                         </select>
@@ -71,7 +71,7 @@ export class EditCard extends Popup {
             <i class="fas fa-palette"></i>
             Couleur</label>
             <input type="color" id="color" name="couleurcarte" value="${this.props.color}">
-            <div class="flex flex-row gap-4 w-full justify-between">
+            <div class="flex flex-col md:flex-row gap-4 w-full justify-between">
             <button class="w-full whitespace-nowrap" type="submit">
             <i class="fas fa-save"></i>
             Modifier</button>
