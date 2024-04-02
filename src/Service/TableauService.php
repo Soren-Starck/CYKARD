@@ -29,6 +29,37 @@ class TableauService extends GeneriqueService implements I_TableauService
         return $this->showTableau($login, $id);
     }
 
+    public function modifyName(mixed $data, string $login, int $id): array
+    {
+        if (!array_key_exists('name', $data) || !$data['name']) return ['error' => 'Name is required', 'status' => 400];
+        $dbResponse = $this->tableauRepository->editNameTableau($id, $data['name']);
+        if (!$dbResponse) return ['error' => 'Error editing tableau name', 'status' => 500];
+        return $this->showTableau($login, $id);
+    }
+
+    public function addUser(mixed $data, string $login, int $id): array
+    {
+        if (!array_key_exists('user', $data) || !$data['user']) return ['error' => 'User is required', 'status' => 400];
+        $dbResponse = $this->tableauRepository->addUserTableau($id, $data['user']);
+        if (!$dbResponse) return ['error' => 'Error adding user to tableau', 'status' => 500];
+        return $this->showTableau($login, $id);
+    }
+
+    public function modifyRole(mixed $data, string $login, int $id): array
+    {
+        if (!array_key_exists('role', $data) || !$data['role']) return ['error' => 'Role is required', 'status' => 400];
+        $dbResponse = $this->tableauRepository->editUserRoleTableau($id, $data['role']);
+        if (!$dbResponse) return ['error' => 'Error modifying user role', 'status' => 500];
+        return $this->showTableau($login, $id);
+    }
+
+    public function deleteUser(string $login, int $id): array
+    {
+        $dbResponse = $this->tableauRepository->deleteUserTableau($login, $id);
+        if (!$dbResponse) return ['error' => 'Error deleting user from tableau', 'status' => 500];
+        return [];
+    }
+
     public function showTableau(string $login, int $id): array
     {
         $tableau = $this->tableauRepository->findTableauColonnes($login, $id);

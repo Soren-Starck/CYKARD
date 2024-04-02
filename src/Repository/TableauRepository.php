@@ -216,12 +216,40 @@ class TableauRepository implements I_TableauRepository
         }
     }
 
-    public function editUserRoleTableau(int $id, array $userrole): bool
+    public function editUserRoleTableau(int $id, string $role): bool
     {
         try {
-            foreach ($userrole as $login => $role) {
-                $this->db->update('user_tableau', ['user_role' => $role], ['tableau_id' => $id, 'user_login' => $login]);
-            }
+            $this->db->update('user_tableau', ['user_role' => $role], ['tableau_id' => $id]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function editNameTableau(int $id, string $name): bool
+    {
+        try {
+            $this->db->update('tableau', ['name' => $name], ['id' => $id]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function addUserTableau(int $id, string $user): bool
+    {
+        try {
+            $this->db->insert('user_tableau', ['tableau_id' => $id, 'user_login' => $user, 'user_role' => 'USER_READ']);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function deleteUserTableau(string $login, int $id): bool
+    {
+        try {
+            $this->db->delete('user_tableau', ['tableau_id' => $id, 'user_login' => $login]);
             return true;
         } catch (\Exception $e) {
             return false;

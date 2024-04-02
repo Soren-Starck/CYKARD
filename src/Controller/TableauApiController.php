@@ -17,14 +17,44 @@ class TableauApiController extends GeneriqueController
         parent::__construct($container);
     }
 
-    #[Route('/api/tableau/{id}/modify', name: 'app_tableau_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
-    public function modify(Request $request, int $id): Response
+    #[Route('/api/tableau/{id}/modify-name', name: 'app_tableau_api_modify_name', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
+    public function modifyName(Request $request, int $id): Response
     {
         $login = $this->getLoginFromJwt($request);
         $data = json_decode($request->getContent(), true);
-        $result = $this->tableauService->modifyTableau($data, $login, $id);
+        $result = $this->tableauService->modifyName($data['titretableau'], $login, $id);
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
+    }
+
+    #[Route('/api/tableau/{id}/add-user', name: 'app_tableau_api_add_user', requirements: ['id' => Requirement::DIGITS], methods: ['POST'])]
+    public function addUser(Request $request, int $id): Response
+    {
+        $login = $this->getLoginFromJwt($request);
+        $data = json_decode($request->getContent(), true);
+        $result = $this->tableauService->addUser($data['userslogin'], $login, $id);
+        if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
+        return $this->json($result, 200);
+    }
+
+    #[Route('/api/tableau/{id}/modify-role', name: 'app_tableau_api_modify_role', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
+    public function modifyRole(Request $request, int $id): Response
+    {
+        $login = $this->getLoginFromJwt($request);
+        $data = json_decode($request->getContent(), true);
+        $result = $this->tableauService->modifyRole($data['userslogin'], $data['userrole'], $login, $id);
+        if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
+        return $this->json($result, 200);
+    }
+
+    #[Route('/api/tableau/{id}/delete-user', name: 'app_tableau_api_delete_user', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]
+    public function deleteUser(Request $request, int $id): Response
+    {
+        $login = $this->getLoginFromJwt($request);
+        $data = json_decode($request->getContent(), true);
+        $result = $this->tableauService->deleteUser($data['userslogin'], $login, $id);
+        if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
+        return $this->json(null, 204);
     }
 
     #[Route('/api/tableau/{id}', name: 'app_tableau_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]

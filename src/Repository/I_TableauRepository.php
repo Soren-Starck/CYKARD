@@ -25,5 +25,5 @@ interface I_TableauRepository extends AbstractRepository
 
     public function delete(mixed $id): bool;
 
-    public function editUserRoleTableau(int $id, array $userrole): bool;
+    public function editUserRoleTableau(int $id, string $role): bool;
 }

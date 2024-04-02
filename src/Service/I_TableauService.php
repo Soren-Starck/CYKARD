@@ -6,6 +6,14 @@ interface I_TableauService
 {
     public function modifyTableau(mixed $data, string $login, int $id): array;
 
+    public function modifyName(mixed $data, string $login, int $id): array;
+
+    public function addUser(mixed $data, string $login, int $id): array;
+
+    public function modifyRole(mixed $data, string $login, int $id): array;
+
+    public function deleteUser(string $login, int $id): array;
+
     public function showTableau(string $login, int $id): array;
 
     public function deleteTableau(string $login, int $id): array;
