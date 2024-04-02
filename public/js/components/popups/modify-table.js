@@ -24,24 +24,23 @@ export class ModifyTable extends Popup {
         this.close()
     }
 
-    removeUser(e) {
-        const login = e.target.getAttribute("data-login")
+    removeByLogin(login) {
         let users = Store.get("users")
         users = users.filter(user => user.login !== login)
         Store.set("users", users)
-        const logins = users.map(user => user.login)
-        console.log(logins)
-        /*API.update(`/tableau/${this.props.table}/modify`, {
-            userslogins: logins
-        })*/
+        API.remove(`/tableau/${this.props.table}/delete-user`, {
+            userslogin: login
+        })
+    }
+
+    removeUser(e) {
+        const login = e.target.getAttribute("data-login")
+        this.removeByLogin(login)
     }
 
     leave() {
-        console.log("leave")
-    }
-
-    delete() {
-        console.log("delete")
+        this.removeByLogin(this.state.me.login)
+        window.location.href = "/"
     }
 
     copyToClipboard(e) {
@@ -100,7 +99,7 @@ export class ModifyTable extends Popup {
                 <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="leave">
                 <i class="fas fa-sign-out-alt"></i>
                 Quitter</button>` : `
-                <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="delete">
+                <button class="w-full !bg-red-100 !text-red-500 h-9 font-medium rounded-md text-sm" onclick="leave">
                 <i class="fas fa-trash"></i>
                 Supprimer</button>
                 `}
