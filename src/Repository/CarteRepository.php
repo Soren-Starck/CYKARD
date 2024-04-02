@@ -98,10 +98,11 @@ class CarteRepository implements I_CarteRepository
                 ->where('carte_id', '=', 'idCard')
                 ->bind('idCard', $idCard)
                 ->fetchAll();
+            if ($existingUser!== []) {
 
-            if ($existingUser[0]) {
                 $this->db->update('user_carte', ['user_login' => $login], ['carte_id' => $idCard]);
             } else {
+
                 $this->db->insert('user_carte', [
                     'carte_id' => $idCard,
                     'user_login' => $login,
