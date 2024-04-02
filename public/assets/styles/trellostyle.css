@@ -1,49 +1,49 @@
-* {
-    box-sizing: border-box;
-}
+/** {*/
+/*    box-sizing: border-box;*/
+/*}*/
 
-html {
-    height: 100%;
-}
+/*html {*/
+/*    height: 100%;*/
+/*}*/
 
-body {
-    /*  background-color: #f7f7f7;*/
-    margin: 0;
+/*body {*/
+/*    !*  background-color: #f7f7f7;*!*/
+/*    margin: 0;*/
 
-}
+/*}*/
 
-.trello-main {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    height: 85vh;
-}
+/*.trello-main {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    align-items: stretch;*/
+/*    height: 85vh;*/
+/*}*/
 
-aside {
-    width: 250px;
-    background-color: #F0F0F0;
-    padding: 8px;
-    padding-top: 15px;
-    display: flex;
-    flex-direction: column;
+/*aside {*/
+/*    width: 250px;*/
+/*    background-color: #F0F0F0;*/
+/*    padding: 8px;*/
+/*    padding-top: 15px;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
 
-    .utilisateur {
-        font-size: 1.5em;
-        font-weight: bold;
-        /*border-bottom: #f7f7f7 1px solid;*/
-        border-radius: 8px;
-        background-color: #fbfafd;
-        height: 50px;
-        padding: 0 5px 0 15px;
-    }
+/*    .utilisateur {*/
+/*        font-size: 1.5em;*/
+/*        font-weight: bold;*/
+/*        !*border-bottom: #f7f7f7 1px solid;*!*/
+/*        border-radius: 8px;*/
+/*        background-color: #fbfafd;*/
+/*        height: 50px;*/
+/*        padding: 0 5px 0 15px;*/
+/*    }*/
 
-    .tableau {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        flex-grow: 1;
-    }
-}
+/*    .tableau {*/
+/*        display: flex;*/
+/*        flex-direction: column;*/
+/*        justify-content: center;*/
+/*        flex-grow: 1;*/
+/*    }*/
+/*}*/
 
 img.icon {
     width: 10px;
@@ -206,50 +206,50 @@ article {
     }
 }
 
-main {
-    width: 90%;
-    margin-left: 5%;
-    min-height: 85vh;
-    display: flex;
+/*main {*/
+/*    width: 90%;*/
+/*    margin-left: 5%;*/
+/*    min-height: 85vh;*/
+/*    display: flex;*/
 
-    /*justify-content: center;*/
-    flex-direction: column;
+/*    !*justify-content: center;*!*/
+/*    flex-direction: column;*/
 
-}
+/*}*/
 
 /* Style des formulaires */
 
 /*inputs*/
 
-form p {
-    display: flex;
-    flex-direction: column;
+/*form p {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
 
-    > label {
-        text-align: start;
-        margin-bottom: 3px;
-    }
-}
-
-
-/* liste des tableau de l'utilisateur*/
-.tableaux {
-    display: flex;
-    flex-direction: column;
-
-    width: 100%;
+/*    > label {*/
+/*        text-align: start;*/
+/*        margin-bottom: 3px;*/
+/*    }*/
+/*}*/
 
 
+/*!* liste des tableau de l'utilisateur*!*/
+/*.tableaux {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
 
-    > .ligne_tableau {
-        display: flex;
-        flex-direction: row;justify-content: space-between;
-        padding: 10px;
-        border-collapse: collapse;
-        > div{flex-basis: 33%}
-
-    }
+/*    width: 100%;*/
 
 
-}
+
+/*    > .ligne_tableau {*/
+/*        display: flex;*/
+/*        flex-direction: row;justify-content: space-between;*/
+/*        padding: 10px;*/
+/*        border-collapse: collapse;*/
+/*        > div{flex-basis: 33%}*/
+
+/*    }*/
+
+
+/*}*/
 
