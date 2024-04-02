@@ -94,17 +94,6 @@ export class ModifyTable extends Popup {
                 <i class="fas fa-user"></i>
                 Utilisateurs
             </label>
-            ${isAdmin ? ''/*`
-                <label for="user">
-                <i class="fas fa-user"></i>
-                Utilisateurs</label>
-                <div class="flex relative">
-                    <input placeholder="ajouter un utilisateur" type="text" id="user" name="user" class="border !rounded-l px-4 py-2 w-full h-9">
-                    <button class="absolute right-0 border bg-slate-100 text-neutral-900 !rounded-r flex items-center h-9 px-4 py-2 my-2">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            `*/ : ""}
             ${userList}
             
             <button onclick="copyToClipboard" class="btnPrimary mt-3">
