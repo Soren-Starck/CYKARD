@@ -10,10 +10,12 @@ export class UserStore {
     static isAdmin() {
         const me = Store.get("me")
         if (!me) return false
+        me.role = me.role.replace(/[^a-zA-Z_]/g, "")
         return me.role === "USER_ADMIN"
     }
 
     static roleToText(role) {
+        role = role.replace(/[^a-zA-Z_]/g, "")
         switch (role) {
             case "USER_READ":
                 return "Lecture seule"
@@ -27,6 +29,7 @@ export class UserStore {
     static isMe(login) {
         const me = Store.get("me")
         if (!me) return false
+        me.role = me.role.replace(/[^a-zA-Z_]/g, "")
         return me.login === login
     }
 
@@ -34,7 +37,7 @@ export class UserStore {
         let users = Store.get("users")
         users = users.map(u => {
             if (u.login !== login) return u
-            u.role = role
+            u.role = role.replace(/[^a-zA-Z_]/g, "")
             return u
         })
         Store.set("users", users)
