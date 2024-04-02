@@ -19,7 +19,7 @@ class TableauService extends GeneriqueService implements I_TableauService
         if ($role == []) return ['error' => 'Access Denied', 'status' => 403];
         if (array_key_exists('titretableau', $data)) {
             if (!$data['titretableau']) return ['error' => 'Titre is required', 'status' => 400];
-            $dbResponse = $this->tableauRepository->editTitreTableau($id, $data['titretableau']);
+            $dbResponse = $this->tableauRepository->editTitreTableau($id, htmlspecialchars($data['titretableau']));
         } else if (array_key_exists('userslogins', $data) && !!$data['userslogins'] && $role[0]['user_role'] == 'USER_ADMIN') {
             $dbResponse = $this->tableauRepository->editUsersTableau($id, $data['userslogins']);
         } else if (array_key_exists('userrole', $data) && !!$data['userrole'] && $role[0]['user_role'] == 'USER_ADMIN') {
@@ -31,6 +31,7 @@ class TableauService extends GeneriqueService implements I_TableauService
 
     public function modifyName(string $titre, string $login, int $id): array
     {
+        $titre = htmlspecialchars($titre);
         if (!$titre) return ['error' => 'Titre is required', 'status' => 400];
         $role = $this->tableauRepository->verifyAdminTableauAccess($login, $id);
         if ($role == []) return ['error' => 'Access Denied', 'status' => 403];
@@ -54,7 +55,7 @@ class TableauService extends GeneriqueService implements I_TableauService
         if (!$role) return ['error' => 'Role is required', 'status' => 400];
         $adminRole = $this->tableauRepository->verifyAdminTableauAccess($login, $id);
         if (!$adminRole) return ['error' => 'Access Denied', 'status' => 403];
-        if($user == $login) return ['error' => 'Cannot modify own role', 'status' => 400];
+        if ($user == $login) return ['error' => 'Cannot modify own role', 'status' => 400];
         $dbResponse = $this->tableauRepository->editUserRoleTableau($id, $role, $user);
         if (!$dbResponse) return ['error' => 'Error modifying user role', 'status' => 500];
         return $this->showTableau($login, $id);
