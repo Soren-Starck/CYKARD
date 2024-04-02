@@ -20,7 +20,7 @@ class CarteApiController extends GeneriqueController
     #[Route('/api/carte/{id}/modify', name: 'app_carte_api_modify', requirements: ['id' => Requirement::DIGITS], methods: ['PATCH'])]
     public function modify(Request $request, int $id): Response
     {
-        $result = $this->carteService->modifyCarte(json_decode($request->getContent(), true), $this->getLoginFromJwt($request), $id);
+        $result = $this->carteService->modifyCarte(json_decode($request->getContent(), true), $this->getLoginFromCookieJwt($request), $id);
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
     }
@@ -28,7 +28,7 @@ class CarteApiController extends GeneriqueController
     #[Route('/api/carte/{id}', name: 'app_carte_api_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
     public function show(Request $request, int $id): Response
     {
-        $result = $this->carteService->showCarte($this->getLoginFromJwt($request), $id);
+        $result = $this->carteService->showCarte($this->getLoginFromCookieJwt($request), $id);
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
     }
@@ -36,7 +36,7 @@ class CarteApiController extends GeneriqueController
     #[Route('/api/carte/{id}/delete', name: 'app_carte_api_delete', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]
     public function delete(Request $request, int $id): Response
     {
-        $result = $this->carteService->deleteCarte($this->getLoginFromJwt($request), $id);
+        $result = $this->carteService->deleteCarte($this->getLoginFromCookieJwt($request), $id);
         if (isset($result['error'])) {
             return $this->json(['error' => $result['error']], $result['status']);
         }
@@ -47,7 +47,7 @@ class CarteApiController extends GeneriqueController
     public function create(Request $request, int $colonne_id): Response
     {
         $data = json_decode($request->getContent(), true);
-        $result = $this->carteService->createCarte($data, $this->getLoginFromJwt($request), $colonne_id);
+        $result = $this->carteService->createCarte($data, $this->getLoginFromCookieJwt($request), $colonne_id);
         if (isset($result['error'])) {
             return $this->json(['error' => $result['error']], $result['status']);
         }
@@ -67,7 +67,7 @@ class CarteApiController extends GeneriqueController
     #[Route('/api/carte/{id}/unassign-user', name: 'app_carte_api_unassign_user', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]
     public function unassignUser(Request $request, int $id): Response
     {
-        $result = $this->carteService->unassignUser($this->getLoginFromJwt($request), $id);
+        $result = $this->carteService->unassignUser($this->getLoginFromCookieJwt($request), $id);
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
     }

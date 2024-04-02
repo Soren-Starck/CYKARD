@@ -54,9 +54,9 @@ class TableauService extends GeneriqueService implements I_TableauService
     {
         if (!$role) return ['error' => 'Role is required', 'status' => 400];
         $adminRole = $this->tableauRepository->verifyAdminTableauAccess($login, $id);
-        if ($adminRole == []) return ['error' => 'Access Denied', 'status' => 403];
+        if (!$adminRole) return ['error' => 'Access Denied', 'status' => 403];
         if($user == $login) return ['error' => 'Cannot modify own role', 'status' => 400];
-        $dbResponse = $this->tableauRepository->editUserRoleTableau($id, $role, $login);
+        $dbResponse = $this->tableauRepository->editUserRoleTableau($id, $role, $user);
         if (!$dbResponse) return ['error' => 'Error modifying user role', 'status' => 500];
         return $this->showTableau($login, $id);
     }

@@ -21,7 +21,7 @@ class ColonneApiController extends GeneriqueController
     public function modify(Request $request, int $id): Response
     {
         $data = json_decode($request->getContent(), true);
-        $result = $this->colonneService->modifyColonne($data, $this->getLoginFromJwt($request), $id);
+        $result = $this->colonneService->modifyColonne($data, $this->getLoginFromCookieJwt($request), $id);
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
     }
@@ -29,7 +29,7 @@ class ColonneApiController extends GeneriqueController
     #[Route('/api/colonne/{id}/delete', name: 'app_colonne_api_delete', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]
     public function delete(Request $request, int $id): Response
     {
-        $result = $this->colonneService->deleteColonne($this->getLoginFromJwt($request), $id);
+        $result = $this->colonneService->deleteColonne($this->getLoginFromCookieJwt($request), $id);
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json(null, 204);
     }
@@ -37,7 +37,7 @@ class ColonneApiController extends GeneriqueController
     #[Route('/api/tableau/{tableau_id}/colonne', name: 'app_colonne_api_create', methods: ['POST'])]
     public function create(Request $request, int $tableau_id): Response
     {
-        $login = $this->getLoginFromJwt($request);
+        $login = $this->getLoginFromCookieJwt($request);
         $data = json_decode($request->getContent(), true);
         $result = $this->colonneService->createColonne($data, $login, $tableau_id);
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
