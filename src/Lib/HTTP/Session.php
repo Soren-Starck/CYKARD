@@ -13,6 +13,7 @@ class Session
         session_set_cookie_params([
             'lifetime' => 3600,
             'path' => '/',
+            'domain' => preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']),
             'secure' => $_SERVER['HTTPS'] ?? false,
             'httponly' => true,
             'samesite' => 'Strict'
