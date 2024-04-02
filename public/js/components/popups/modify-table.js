@@ -45,7 +45,7 @@ export class ModifyTable extends Popup {
 
     copyToClipboard(e) {
         e.preventDefault();
-        navigator.clipboard.writeText(window.location.origin + "/api/tableau/join/" + Store.get("invitations"));
+        navigator.clipboard.writeText(window.location.origin + "/tableaux/join/" + Store.get("invitations"));
         Notif.success("Copié", "Le lien d'invitation a été copié dans le presse-papier");
     }
 
