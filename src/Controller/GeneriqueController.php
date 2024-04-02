@@ -42,16 +42,15 @@ class GeneriqueController
         return new Response($corpsReponse);
     }
 
-    public function getLoginFromJwt(Request $request): string
-    {
-        $jwt = $request->headers->get('Authorization');
-        return JsonWebToken::getLogin($jwt);
-    }
-
     public function getLoginFromCookieJwt(Request $request): string
     {
-        $jwt = $request->cookies->get('jwt');
-        return JsonWebToken::getLogin($jwt);
+        try {
+            $jwt = $request->cookies->get('jwt');
+            return JsonWebToken::getLogin($jwt);
+        } catch (\Exception $e) {
+            return $this->json(["message" => "Erreur lors de la récupération du login"], 400);
+        }
+
     }
 
     protected function json($data, int $status = 200, array $headers = [], array $context = []): JsonResponse

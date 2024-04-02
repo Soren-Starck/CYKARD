@@ -24,8 +24,9 @@ class JsonWebToken
         }
     }
 
-    public static function getLogin(string $jwt): string
+    public static function getLogin(string|null $jwt): string
     {
+        if (is_null($jwt)) return "";
         $decoded = self::decoder(substr($jwt, 7));
         return $decoded['login'];
     }
