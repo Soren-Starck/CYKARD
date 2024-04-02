@@ -2,13 +2,14 @@
 
 namespace App\Service;
 
+use App\Repository\I_TableauRepository;
 use App\Repository\TableauRepository;
 
 class TableauService extends GeneriqueService implements I_TableauService
 {
-    private TableauRepository $tableauRepository;
+    private I_TableauRepository $tableauRepository;
 
-    public function __construct(TableauRepository $tableauRepository)
+    public function __construct(I_TableauRepository $tableauRepository)
     {
         $this->tableauRepository = $tableauRepository;
     }
