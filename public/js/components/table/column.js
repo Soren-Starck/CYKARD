@@ -56,7 +56,7 @@ export class Column extends ReactiveComponent {
             <react-card column_id="${carte.colonne_id}" card_id="${carte.id}"></react-card>
         `).join("")
 
-        return `<div ${canModify ? 'ondrop="drop" ondragover="allowDrop"' : ''} class="min-w-[300px] min-h-full shadow rounded-md border-2 p-2 col-span-1 flex flex-col gap-2 group">
+        return `<div ${canModify ? 'ondrop="drop" ondragover="allowDrop"' : ''} class="min-w-[300px] !max-w-[300px] min-h-full shadow rounded-md border-2 p-2 col-span-1 flex flex-col gap-2 group">
     <div class="flex justify-between">
         <p class="ml-1 font-bold">${this.state.column.titrecolonne}</p>
         ${canModify ? `<i onclick="modify" class="cursor-pointer transition fa-solid fa-pen opacity-0 group-hover:opacity-100"></i>` : ""}
