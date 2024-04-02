@@ -76,3 +76,6 @@ npm i ( ceci installe les dépendances de node)
 composer install ( ceci installe les dépendances de php)
 npm run all ( ceci compile les fichiers css et js et le lance en localhost:8000)
 
+
+**adresse du site** : https://sae-s4-nameless-smoke-5892.fly.dev/
+
