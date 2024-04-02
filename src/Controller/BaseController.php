@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -14,6 +13,11 @@ class BaseController extends GeneriqueController
         parent::__construct($container);
     }
 
+    #[Route('/accueil', name: 'app_accueil')]
+    public function accueil(): Response
+    {
+        return $this->redirect('app_base');
+    }
 
     #[Route('/', name: 'app_base')]
     public function index(): Response
@@ -21,11 +25,5 @@ class BaseController extends GeneriqueController
         return $this->renderTwig('base/accueil.html.twig', [
             'pagetitle' => 'Accueil',
         ]);
-    }
-
-    #[Route('/accueil', name: 'app_accueil')]
-    public static function accueil(): Response
-    {
-        return new RedirectResponse('/');
     }
 }

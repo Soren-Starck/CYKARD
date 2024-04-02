@@ -20,14 +20,15 @@ class GeneriqueController
     protected function redirect(string $routeName = "", array $param = []): RedirectResponse
     {
         /** @var UrlGenerator $generateurUrl */
-        $generateurUrl = $this->container->get("generateurUrl");
+        $generateurUrl = $this->container->get("url_generator");
         return new RedirectResponse($generateurUrl->generate($routeName, $param));
     }
 
     public function renderError($messageErreur = "", $statusCode = 400): Response
     {
         $reponse = $this->renderTwig('erreur.html.twig', [
-            "messageErreur" => $messageErreur
+            "messageErreur" => $messageErreur,
+            'pagetitle' => 'Erreur',
         ]);
         $reponse->setStatusCode($statusCode);
         return $reponse;

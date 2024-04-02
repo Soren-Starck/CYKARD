@@ -6,7 +6,6 @@ use App\Lib\HTTP\Cookie;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Service\I_UserService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,6 +28,7 @@ class SecurityController extends GeneriqueController
                 $jwt = ConnexionUtilisateur::connecter($loginUtilisateur);
                 Cookie::enregistrer('jwt', $jwt);
                 Cookie::lire('jwt');
+
                 return $this->redirect('app_base');
             } else {
                 return $this->renderTwig('security/login.html.twig', [
@@ -52,7 +52,7 @@ class SecurityController extends GeneriqueController
     public function logout(): Response
     {
         ConnexionUtilisateur::deconnecter();
-        return new RedirectResponse('/login');
+        return $this->redirect('app_base');
     }
 
 }
