@@ -24,7 +24,9 @@ use Twig\TwigFunction;
 
 class RouteurURL
 {
-
+    /**
+     * @throws \Exception
+     */
     public static function traiterRequete(): void
     {
 
