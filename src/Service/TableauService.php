@@ -72,7 +72,7 @@ class TableauService extends GeneriqueService implements I_TableauService
     public function showTableau(string $login, int $id): array
     {
         $tableau = $this->tableauRepository->findTableauColonnes($login, $id);
-        $role = $this->tableauRepository->verifyUserTableauAccess($login, $id);
+        $role = $this->tableauRepository->verifyUserTableau($login, $id);
         if ($role == []) return ['error' => 'Access Denied', 'status' => 403];
         if (!$tableau) return ['error' => 'No tableau found', 'status' => 404];
         return $this->tableauRepository->createTableauFromDbResponse($tableau)->toArray();
