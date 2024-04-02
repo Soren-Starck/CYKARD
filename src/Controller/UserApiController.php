@@ -46,4 +46,14 @@ class UserApiController extends GeneriqueController
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
     }
+
+    #[Route('/api/user/modify-password', name: 'app_user_api_modify_password', methods: ['PATCH'])]
+    public function modifyPassword(Request $request):Response
+    {
+        $login = $this->getLoginFromJwt($request);
+        $data = json_decode($request->getContent(), true);
+        $result = $this->userService->modifyPassword($data['old_password'],$data['new_password'], $login);
+        if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
+        return $this->json($result, 200);
+    }
 }

@@ -106,5 +106,15 @@ class UserRepository implements I_UserRepository
         }
     }
 
+    public function editPasswordUser(string $login, mixed $new_password)
+    {
+        try{
+            $this->db->update('gozzog.user', ['password' => MotDePasse::hacher($new_password)], ['login' => $login]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
 
 }

@@ -19,4 +19,7 @@ interface I_UserService
     public function modifyPrenom(mixed $prenom, string $login);
 
     public function modifyMail(mixed $mail, string $login);
+
+    public function modifyPassword(mixed $old_password, mixed $new_password, string $login);
+
 }

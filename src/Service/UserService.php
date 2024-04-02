@@ -59,4 +59,13 @@ class UserService extends GeneriqueService implements I_UserService
         return $this->getUserByLogin($login);
     }
 
+    public function modifyPassword(mixed $old_password, mixed $new_password, string $login)
+    {
+        if(!$old_password || !$new_password) return ['error' => 'Old and new password are required', 'status' => 400];
+        if($old_password === $new_password) return ['error' => 'Old and new password are the same', 'status' => 400];
+        if(!$this->verifierCredentials($login, $old_password)) return ['error' => 'Invalid old password', 'status' => 400];
+        $dbResponse = $this->userRepository->editPasswordUser($login, $new_password);
+        if(!$dbResponse) return ['error' => 'Error editing user password', 'status' => 500];
+        return $this->getUserByLogin($login);
+    }
 }
