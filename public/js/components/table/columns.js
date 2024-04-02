@@ -71,6 +71,7 @@ export class Columns extends ReactiveComponent {
             </div>`;
 
         const canModify = UserStore.canModify()
+        const isAdmin = UserStore.isAdmin()
 
         const columns = this.state.columns.map(col => `
             <react-column table="${this.props.table}" column_id="${col.id}"></react-column>
@@ -82,6 +83,9 @@ export class Columns extends ReactiveComponent {
                         ${!canModify ? `<p class="readonly-indicator px-3 py-1 bg-neutral-900 text-white rounded-md shadow" title="vous n'avez pas les droits nécessaires pour modifier ce tableau">
                         <i class="fas fa-lock"></i>
                         Lecture seule</p>` : ''}
+                        ${isAdmin ? `<p class="readonly-indicator px-3 py-1 bg-neutral-900 text-white rounded-md shadow" title="vous n'avez pas les droits nécessaires pour modifier ce tableau">
+                        <i class="fas fa-user-cog"></i>
+                        Administrateur</p>` : ''}
                     </div>
                     <i onclick="settings" class="cursor-pointer fa-solid fa-gear"></i>
                 </div>
