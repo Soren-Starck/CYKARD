@@ -5,7 +5,6 @@ namespace App\test\ServiceTest;
 use App\Entity\Carte;
 use App\Entity\Colonne;
 use App\Entity\Tableau;
-use App\Entity\User;
 use App\Repository\TableauRepository;
 use App\Service\TableauService;
 use PHPUnit\Framework\MockObject\Exception;

@@ -1,10 +1,10 @@
 <?php
 namespace App\test\EntityTest;
 
-use App\Entity\User;
-use PHPUnit\Framework\TestCase;
 use App\Entity\Carte;
 use App\Entity\Tableau;
+use App\Entity\User;
+use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
