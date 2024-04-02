@@ -4,6 +4,7 @@ import {ColumnStore} from "../../stores/column-store.js";
 
 export class NewColumn extends Popup {
     async submit(e) {
+        if (this.state.loading) return
         const data = API.formHandler(e)
         this.setState({
             loading: true
