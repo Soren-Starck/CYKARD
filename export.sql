@@ -180,7 +180,7 @@ ALTER TABLE gozzog.user_tableau OWNER TO gozzog;
 --
 
 COPY gozzog."user" (login, roles, password, nom, prenom, email, is_verified, verification_token) FROM stdin;
-admin	["ROLE_USER"]	$2y$10$foFgR9gHoXzty62NxAimDOMexya6BuuWnlR.cKKKibcZWBIFYINIK	\N	\N	admin@gmail.com	f	6b46eec3589766dfde5108657789e070
+admin	["ROLE_USER"]	$2y$10$d1Bc3VW6jELefBk1Fqgat.iBdyUKbBl8i0S0dGdwlNBf6DBAK15hO	\N	\N	admin@gmail.com	f	6b46eec3589766dfde5108657789e070
 \.
 
 --
