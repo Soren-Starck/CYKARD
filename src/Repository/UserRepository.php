@@ -75,4 +75,16 @@ class UserRepository implements I_UserRepository
         if (empty($user)) return false;
         return MotDePasse::verifier($password, $user[0]['password']);
     }
+
+    public function editNameUser(string $login, mixed $nom) : bool
+    {
+        try{
+            $this->db->update('gozzog.user', ['nom' => $nom], ['login' => $login]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+
 }

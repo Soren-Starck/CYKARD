@@ -13,4 +13,8 @@ interface I_UserService
     public function createUser(User $user): void;
 
     public function verifyUser(string $token): void;
+
+    public function modifyPassword(mixed $oldpassword, mixed $newpassword, string $login);
+
+    public function modifyName(mixed $nom, string $login);
 }
