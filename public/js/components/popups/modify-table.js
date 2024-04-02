@@ -82,8 +82,9 @@ export class ModifyTable extends Popup {
             ${isAdmin ? `
             <label for="title">
             <i class="fas fa-pencil-alt"></i>
-            Titre</label>
-            <input type="text" id="title" value="${Store.get("table")}" name="titretableau" required autofocus>
+            Titre*</label>
+            <input type="text" id="title" minlength="1"
+                       maxlength="50" value="${Store.get("table")}" name="titretableau" required autofocus>
             <button type="submit">
             <i class="fas fa-save"></i>
             Appliquer</button>` : ""}

@@ -18,18 +18,24 @@
         <form method="post" class="flex flex-col gap-1">
             <label for="login">
                 <i class="fas fa-user"></i>
-                Identifiant</label>
-            <input type="text" name="login" id="login" required>
+                Identifiant*</label>
+            <input type="text" name="login" id="login" required
+            minlength="1"
+                       maxlength="255">
 
             <label for="email">
                 <i class="fas fa-envelope"></i>
-                Email</label>
-            <input type="email" name="email" id="email" required>
+                Email*</label>
+            <input type="email" name="email" id="email" required
+            minlength="1"
+                       maxlength="255">
 
             <label for="password">
                 <i class="fas fa-lock" id="togglePassword"></i>
-                Mot de passe</label>
-            <input type="password" name="password" id="password" required>
+                Mot de passe*</label>
+            <input type="password" name="password" id="password" required
+            minlength="1"
+                       maxlength="255">
 
             <label for="agreeTerms" class="mb-3">
                 <input type="checkbox" name="agreeTerms" id="agreeTerms" required>
@@ -39,7 +45,10 @@
             <button type="submit">
                 <i class="fas fa-user-plus"></i>
                 S'inscrire</button>
-            <a class="link mt-3 text-sm" href="{{ path('app_login') }}">Déjà inscrit ?</a>
+            <div class="flex justify-between mt-3 text-sm">
+            <a class="link" href="{{ path('app_login') }}">Déjà inscrit ?</a>
+                <label>*requis</label>
+            </div>
         </form>
     </div>
 {% endblock %}

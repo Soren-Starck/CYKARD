@@ -24,8 +24,9 @@ export class ModifyColumn extends Popup {
         <form onsubmit="submit" class="flex flex-col gap-2">
             <label for="title">
             <i class="fas fa-pencil-alt"></i>
-            Titre</label>
-            <input type="text" id="title" value="${this.props.name}" name="titrecolonne" required autofocus>
+            Titre*</label>
+            <input type="text" id="title" minlength="1"
+                       maxlength="50" value="${this.props.name}" name="titrecolonne" required autofocus>
             <div class="flex flex-row gap-4 w-full justify-between">
             <button class="w-full" type="submit" name="modify">
             <i class="fas fa-save"></i>
