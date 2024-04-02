@@ -63,7 +63,7 @@ export class EditCard extends Popup {
             <i class="fas fa-user"></i>
             Utilisateur assigné</label>
             <div class="flex flex-col md:flex-row gap-1 w-full">
-                ${this.props.assigned === "null" ? (canModify ? `
+                ${this.props.assigned === "undefined" || this.props.assigned === "null" ? (canModify ? `
                    <div class="w-full flex flex-col md:flex-row gap-4">
                        <select id="assign-select" class="w-full !my-0">
                          ${userList}
