@@ -842,6 +842,14 @@ video {
   margin-top: 250px;
 }
 
+.mb-\[400px\] {
+  margin-bottom: 400px;
+}
+
+.mb-\[350px\] {
+  margin-bottom: 350px;
+}
+
 .block {
   display: block;
 }
