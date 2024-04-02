@@ -83,11 +83,11 @@ class TableauApiController extends GeneriqueController
         return $this->json($result, 201);
     }
 
-    #[Route('/api/tableau/join/{codetableau}', name: 'app_tableau_api_join', methods: ['POST'])]
+    #[Route('/api/tableau/join/{codetableau}', name: 'app_tableau_api_join', methods: ['GET'])]
     public function join(Request $request, string $codetableau): Response
     {
         $result = $this->tableauService->joinTableau($this->getLoginFromJwt($request), $codetableau);
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
-        return $this->json($result, 201);
+        return $this->json($result, 200);
     }
 }
