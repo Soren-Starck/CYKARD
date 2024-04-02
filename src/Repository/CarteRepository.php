@@ -94,10 +94,20 @@ class CarteRepository implements I_CarteRepository
     public function assignCard(int $idCard, ?string $login): array
     {
         try {
-            $this->db->insert('user_carte', [
-                'carte_id' => $idCard,
-                'user_login' => $login,
-            ]);
+            $existingUser = $this->db->table('user_carte')
+                ->where('carte_id', '=', 'idCard')
+                ->bind('idCard', $idCard)
+                ->fetchAll();
+
+            if ($existingUser[0]) {
+                $this->db->update('user_carte', ['user_login' => $login], ['carte_id' => $idCard]);
+            } else {
+                $this->db->insert('user_carte', [
+                    'carte_id' => $idCard,
+                    'user_login' => $login,
+                ]);
+            }
+
             return [
                 'carte_id' => $idCard,
                 'user_login' => $login,

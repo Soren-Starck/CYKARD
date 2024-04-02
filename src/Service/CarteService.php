@@ -16,7 +16,6 @@ class CarteService extends GeneriqueService implements I_CarteService
         $this->colonneRepository = $colonneRepository;
     }
 
-
     public function modifyCarte(mixed $data, string $login, int $id): array
     {
         if (!$this->carteRepository->verifyUserTableauByCardAndAccess($id, $login)) return ['error' => 'Access denied', 'status' => 403];
@@ -42,7 +41,7 @@ class CarteService extends GeneriqueService implements I_CarteService
         return [];
     }
 
-    public function createCarte(mixed $data, string $login , int $colonne_id): array
+    public function createCarte(mixed $data, string $login, int $colonne_id): array
     {
         $titre = array_key_exists('titrecarte', $data) ? $data['titrecarte'] : null;
         if (!$titre) return ['error' => 'Titre de carte manquant', 'status' => 400];
@@ -52,6 +51,22 @@ class CarteService extends GeneriqueService implements I_CarteService
         $dbResponse = $this->carteRepository->create($data['titrecarte'], $descriptifcarte, $couleurcarte, $colonne_id);
         if (!$dbResponse) return ['error' => 'Erreur lors de la création de la carte', 'status' => 500];
         return $dbResponse->toArray();
+    }
+
+    public function assignUser(string $login, int $id): array
+    {
+        if (!$this->carteRepository->verifyUserTableauByCardAndAccess($id, $login)) return ['error' => 'Access denied', 'status' => 403];
+        $dbResponse = $this->carteRepository->assignCard($id, $login);
+        if (!$dbResponse) return ['error' => 'Error assigning the user to the card', 'status' => 500];
+        return $this->carteRepository->find($id)[0];
+    }
+
+    public function unassignUser(string $login, int $id): array
+    {
+        if (!$this->carteRepository->verifyUserTableauByCardAndAccess($id, $login)) return ['error' => 'Access denied', 'status' => 403];
+        $dbResponse = $this->carteRepository->unassignCard($id, $login);
+        if (!$dbResponse) return ['error' => 'Error unassigning the user from the card', 'status' => 500];
+        return $this->carteRepository->find($id)[0];
     }
 
 }

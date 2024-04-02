@@ -54,4 +54,24 @@ class CarteApiController extends GeneriqueController
         return $this->json($result, 201);
     }
 
+    #[Route('/api/carte/{id}/assign-user', name: 'app_carte_api_assign_user', requirements: ['id' => Requirement::DIGITS], methods: ['POST'])]
+    public function assignUser(Request $request, int $id): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $login = $data['userslogin'];
+        $result = $this->carteService->assignUser($login, $id);
+        if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
+        return $this->json($result, 200);
+    }
+
+    #[Route('/api/carte/{id}/unassign-user', name: 'app_carte_api_unassign_user', requirements: ['id' => Requirement::DIGITS], methods: ['POST'])]
+    public function unassignUser(Request $request, int $id): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $login = $data['userslogin'];
+        $result = $this->carteService->unassignUser($login, $id);
+        if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
+        return $this->json($result, 200);
+    }
+
 }
