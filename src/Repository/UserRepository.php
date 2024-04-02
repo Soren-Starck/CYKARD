@@ -96,5 +96,15 @@ class UserRepository implements I_UserRepository
         }
     }
 
+    public function editMailUser(string $login, mixed $mail)
+    {
+        try{
+            $this->db->update('gozzog.user', ['email' => $mail], ['login' => $login]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
 
 }

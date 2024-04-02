@@ -36,4 +36,14 @@ class UserApiController extends GeneriqueController
         if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
         return $this->json($result, 200);
     }
+
+    #[Route('/api/user/modify-mail', name: 'app_user_api_modify_mail', methods: ['PATCH'])]
+    public function modifyMail(Request $request):Response
+    {
+        $login = $this->getLoginFromJwt($request);
+        $data = json_decode($request->getContent(), true);
+        $result = $this->userService->modifyMail($data['email'], $login);
+        if (isset($result['error'])) return $this->json(['error' => $result['error']], $result['status']);
+        return $this->json($result, 200);
+    }
 }

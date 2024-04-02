@@ -50,5 +50,13 @@ class UserService extends GeneriqueService implements I_UserService
         if(!$dbResponse) return ['error' => 'Error editing user prenom', 'status' => 500];
         return $this->getUserByLogin($login);
     }
+    public function modifyMail(mixed $mail, string $login): array
+    {
+        if(!$mail) return ['error' => 'Mail is required', 'status' => 400];
+        if(!filter_var($mail, FILTER_VALIDATE_EMAIL)) return ['error' => 'Invalid mail', 'status' => 400];
+        $dbResponse = $this->userRepository->editMailUser($login, $mail);
+        if(!$dbResponse) return ['error' => 'Error editing user mail', 'status' => 500];
+        return $this->getUserByLogin($login);
+    }
 
 }

@@ -17,4 +17,6 @@ interface I_UserService
     public function modifyName(mixed $nom, string $login);
 
     public function modifyPrenom(mixed $prenom, string $login);
+
+    public function modifyMail(mixed $mail, string $login);
 }
