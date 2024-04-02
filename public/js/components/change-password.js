@@ -35,6 +35,7 @@ export class ChangePassword extends ReactiveComponent {
     render() {
         return `
             <form onsubmit="change" class="w-full flex flex-col gap-2">
+            <h1 class="mt-2">Changer le mot de passe</h1>
                 <div class="form-group flex flex-col w-full">
                     <label for="old_password">
                         <i class="fas fa-lock"></i>
@@ -55,7 +56,7 @@ export class ChangePassword extends ReactiveComponent {
                 </div>
                 <button type="submit" class="btn btn-primary w-full">
                     <i class="fas fa-save"></i>
-                Modifier</button>
+                Changer le mot de passe</button>
                 <p class="text-danger">${this.state.error}</p>
             </form>
         `;
