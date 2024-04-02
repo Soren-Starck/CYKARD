@@ -2,13 +2,14 @@
 
 namespace App\Service;
 
+use App\Repository\I_UserRepository;
 use App\Repository\UserRepository;
 
 class UserService extends GeneriqueService implements I_UserService
 {
-    private UserRepository $userRepository;
+    private I_UserRepository $userRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(I_UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
     }
