@@ -32,4 +32,23 @@ class UserService extends GeneriqueService implements I_UserService
     {
         $this->userRepository->verifyUser($token);
     }
+
+
+
+    public function modifyName(mixed $nom, string $login): array
+    {
+        if(!$nom) return ['error' => 'Nom is required', 'status' => 400];
+        $dbResponse = $this->userRepository->editNameUser($login, $nom);
+        if(!$dbResponse) return ['error' => 'Error editing user name', 'status' => 500];
+        return $this->getUserByLogin($login);
+    }
+
+    public function modifyPrenom(mixed $prenom, string $login): array
+    {
+        if(!$prenom) return ['error' => 'Prenom is required', 'status' => 400];
+        $dbResponse = $this->userRepository->editPrenomUser($login, $prenom);
+        if(!$dbResponse) return ['error' => 'Error editing user prenom', 'status' => 500];
+        return $this->getUserByLogin($login);
+    }
+
 }
