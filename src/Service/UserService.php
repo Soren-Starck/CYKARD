@@ -64,6 +64,7 @@ class UserService extends GeneriqueService implements I_UserService
         if(!$old_password || !$new_password) return ['error' => 'Old and new password are required', 'status' => 400];
         if($old_password === $new_password) return ['error' => 'Old and new password are the same', 'status' => 400];
         if(!$this->verifierCredentials($login, $old_password)) return ['error' => 'Invalid old password', 'status' => 400];
+        if(strlen($new_password) < 6) return ['error' => 'Password must be at least 6 characters', 'status' => 400];
         $dbResponse = $this->userRepository->editPasswordUser($login, $new_password);
         if(!$dbResponse) return ['error' => 'Error editing user password', 'status' => 500];
         return $this->getUserByLogin($login);
