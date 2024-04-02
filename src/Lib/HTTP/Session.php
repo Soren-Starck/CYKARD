@@ -10,6 +10,14 @@ class Session
 
     private function __construct()
     {
+        session_set_cookie_params([
+            'lifetime' => 3600,
+            'path' => '/',
+            'domain' => preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']),
+            'secure' => $_SERVER['HTTPS'] ?? false,
+            'httponly' => true,
+            'samesite' => 'Strict'
+        ]);
         if (session_status() == PHP_SESSION_NONE) {
             if (session_start() === false) {
                 throw new Exception("La session n'a pas réussi à démarrer.");
