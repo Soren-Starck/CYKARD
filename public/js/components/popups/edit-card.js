@@ -49,7 +49,8 @@ export class EditCard extends Popup {
             <label for="description">
             <i class="fas fa-align-left"></i>
             Description</label>
-            <textarea id="description" name="descriptifcarte">${this.props.description}</textarea>
+            <textarea id="description" name="descriptifcarte" class="max-h-24 min-h-5">
+            ${this.props.description}</textarea>
             
             <label class="whitespace-nowrap">
             <i class="fas fa-user"></i>

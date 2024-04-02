@@ -894,12 +894,32 @@ video {
   height: 100%;
 }
 
+.h-24 {
+  height: 6rem;
+}
+
+.max-h-24 {
+  max-height: 6rem;
+}
+
 .min-h-\[500px\] {
   min-height: 500px;
 }
 
 .min-h-full {
   min-height: 100%;
+}
+
+.min-h-10 {
+  min-height: 2.5rem;
+}
+
+.min-h-7 {
+  min-height: 1.75rem;
+}
+
+.min-h-5 {
+  min-height: 1.25rem;
 }
 
 .w-1\/2 {
@@ -1017,6 +1037,10 @@ video {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+}
+
+.resize {
+  resize: both;
 }
 
 .grid-cols-1 {
