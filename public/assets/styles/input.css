@@ -264,3 +264,14 @@ h2 {
 #columns-parent > :first-child {
     @apply ml-5;
 }
+
+.color-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.color-circle.selected {
+    border: 2px solid blue;
+}
