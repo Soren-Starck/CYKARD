@@ -67,4 +67,13 @@ export class ColumnStore {
         columns[column.id] = column
         Store.set("columns", columns)
     }
+
+    static getAssigned(column_id, card_id) {
+        column_id = parseInt(column_id)
+        card_id = parseInt(card_id)
+        const column = this.getColumn(column_id)
+        if (!column) return null
+        const card = column.cartes.find(c => c.id === card_id)
+        return card.user_carte_login
+    }
 }

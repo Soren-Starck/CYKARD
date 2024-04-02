@@ -23,6 +23,7 @@ export class Store {
     }
 
     static getByIndex(key, index) {
+        if (!Store.data[key]) return null
         return Store.data[key][index]
     }
 

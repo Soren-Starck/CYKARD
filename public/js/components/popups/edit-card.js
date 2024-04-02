@@ -5,6 +5,12 @@ import {Store} from "../../store.js";
 import {UserStore} from "../../stores/user-store.js";
 
 export class EditCard extends Popup {
+    onMount() {
+        Store.subscribe("columns", () => {
+            this._render()
+        })
+    }
+
     submit(e) {
         const action = e.submitter.name
         const data = API.formHandler(e)
@@ -55,6 +61,7 @@ export class EditCard extends Popup {
     render() {
         const users = Store.get("users") ?? []
         const canModify = UserStore.canModify()
+        const assigned = ColumnStore.getAssigned(this.props.column_id, this.props.card_id)
 
         const userList = users.map(user => `
     <option value="${user.login}">${user.login}</option>
@@ -80,7 +87,7 @@ export class EditCard extends Popup {
             <i class="fas fa-user"></i>
             Utilisateur assigné</label>
             <div class="flex flex-col md:flex-row gap-1 w-full">
-                ${this.props.assigned === "undefined" || this.props.assigned === "null" ? (canModify ? `
+                ${!assigned ? (canModify ? `
                    <div class="w-full flex flex-col md:flex-row gap-4">
                        <select id="assign-select" class="w-full !my-0">
                          ${userList}
