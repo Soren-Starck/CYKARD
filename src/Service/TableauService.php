@@ -32,6 +32,8 @@ class TableauService extends GeneriqueService implements I_TableauService
     public function modifyName(string $titre, string $login, int $id): array
     {
         if (!$titre) return ['error' => 'Titre is required', 'status' => 400];
+        $role = $this->tableauRepository->verifyAdminTableauAccess($login, $id);
+        if ($role == []) return ['error' => 'Access Denied', 'status' => 403];
         $dbResponse = $this->tableauRepository->editNameTableau($id, $titre);
         if (!$dbResponse) return ['error' => 'Error editing tableau name', 'status' => 500];
         return $this->showTableau($login, $id);
@@ -40,6 +42,8 @@ class TableauService extends GeneriqueService implements I_TableauService
     public function addUser(string $user, string $login, int $id): array
     {
         if (!$user) return ['error' => 'User is required', 'status' => 400];
+        $role = $this->tableauRepository->verifyAdminTableauAccess($login, $id);
+        if ($role == []) return ['error' => 'Access Denied', 'status' => 403];
         $dbResponse = $this->tableauRepository->addUserTableau($id, $user);
         if (!$dbResponse) return ['error' => 'Error adding user to tableau', 'status' => 500];
         return $this->showTableau($login, $id);
@@ -48,6 +52,9 @@ class TableauService extends GeneriqueService implements I_TableauService
     public function modifyRole(string $user, string $role, string $login, int $id): array
     {
         if (!$role) return ['error' => 'Role is required', 'status' => 400];
+        $adminRole = $this->tableauRepository->verifyAdminTableauAccess($login, $id);
+        if ($adminRole == []) return ['error' => 'Access Denied', 'status' => 403];
+        if($user == $login) return ['error' => 'Cannot modify own role', 'status' => 400];
         $dbResponse = $this->tableauRepository->editUserRoleTableau($id, $role);
         if (!$dbResponse) return ['error' => 'Error modifying user role', 'status' => 500];
         return $this->showTableau($login, $id);
@@ -56,6 +63,8 @@ class TableauService extends GeneriqueService implements I_TableauService
     public function deleteUser(string $user, string $login, int $id): array
     {
         $dbResponse = $this->tableauRepository->deleteUserTableau($user, $id);
+        $adminRole = $this->tableauRepository->verifyAdminTableauAccess($login, $id);
+        if ($adminRole == []) return ['error' => 'Access Denied', 'status' => 403];
         if (!$dbResponse) return ['error' => 'Error deleting user from tableau', 'status' => 500];
         return [];
     }
@@ -63,6 +72,8 @@ class TableauService extends GeneriqueService implements I_TableauService
     public function showTableau(string $login, int $id): array
     {
         $tableau = $this->tableauRepository->findTableauColonnes($login, $id);
+        $role = $this->tableauRepository->verifyUserTableauAccess($login, $id);
+        if ($role == []) return ['error' => 'Access Denied', 'status' => 403];
         if (!$tableau) return ['error' => 'No tableau found', 'status' => 404];
         return $this->tableauRepository->createTableauFromDbResponse($tableau)->toArray();
     }

@@ -71,6 +71,19 @@ class TableauRepository implements I_TableauRepository
             ->fetchAll();
     }
 
+    public function verifyAdminTableauAccess(string $login, mixed $id): bool
+    {
+        return $this->db
+            ->table('user_tableau')
+            ->where('user_login', '=', 'login')
+            ->where('tableau_id', '=', 'id')
+            ->where('user_role', '=', 'role')
+            ->bind('login', $login)
+            ->bind('id', $id)
+            ->bind('role', 'USER_ADMIN')
+            ->fetchAll() !== [];
+    }
+
     public function create(mixed $titre, ?string $login): Tableau|bool
     {
         try {
