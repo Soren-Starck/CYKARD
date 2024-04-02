@@ -7,7 +7,7 @@ use App\Lib\Database\Database;
 use App\Lib\Security\UserConnection\ConnexionUtilisateur;
 use App\Lib\Security\UserConnection\MotDePasse;
 
-class UserRepository implements AbstractRepository
+class UserRepository implements I_UserRepository
 {
     private Database $db;
 
@@ -75,4 +75,36 @@ class UserRepository implements AbstractRepository
         if (empty($user)) return false;
         return MotDePasse::verifier($password, $user[0]['password']);
     }
+
+    public function editNameUser(string $login, mixed $nom) : bool
+    {
+        try{
+            $this->db->update('gozzog.user', ['nom' => $nom], ['login' => $login]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function editPrenomUser(string $login, mixed $prenom)
+    {
+        try{
+            $this->db->update('gozzog.user', ['prenom' => $prenom], ['login' => $login]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function editMailUser(string $login, mixed $mail)
+    {
+        try{
+            $this->db->update('gozzog.user', ['email' => $mail], ['login' => $login]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+
 }

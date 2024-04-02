@@ -22,10 +22,10 @@ use PDO;
      *
      * @param PDO $pdo L'instance PDO à utiliser pour les interactions avec la base de données.
      */
-    public function __construct(PDO $pdo)
+    public function __construct()
     {
-        $this->pdo = $pdo;
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->pdo = new PDO($_ENV['DATABASE_URL_2']);
+        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
     public static function getInstance(): Database

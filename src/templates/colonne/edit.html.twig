@@ -1,0 +1,15 @@
+{# templates/colonne/edit.html.twig #}
+
+{% extends '../base.html.twig' %}
+
+{% block title %}Modifier une colonne{% endblock %}
+
+{% block body %}
+    <h3>Modifier une colonne :</h3>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+
+    <button type="submit">Update</button>
+    {{ form_end(form) }}
+{% endblock %}
