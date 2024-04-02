@@ -30,7 +30,7 @@
 </head>
 <body class="w-full flex justify-start items-start flex-col duration-300 h-dvh overflow-y-hidden">
 
-<header class="w-full shadow flex flex-row justify-between backdrop-blur-md h-12 bg-white z-[1900] mb-10">
+<header class="w-full shadow flex flex-row justify-between backdrop-blur-md h-12 bg-white z-[1900] ">
     <a href="{{ path('app_accueil') }}" class="my-auto ml-5 drop-shadow-sm font-extrabold text-xl whitespace-nowrap">CYKARD</a>
     <nav class="flex flex-row justify-end my-auto">
         <ul>
@@ -72,7 +72,7 @@
     {% endfor %}
 </div>
 
-<main class="z-0 mx-auto w-full h-full px-10 overflow-x-hidden">
+<main class="z-0 mx-auto w-full h-full px-10 overflow-x-hidden pt-10">
     {% block body %}{% endblock %}
 </main>
 <div id="notificationContainer" class="fixed bottom-0 right-0 z-[1500] w-[200px]"></div>

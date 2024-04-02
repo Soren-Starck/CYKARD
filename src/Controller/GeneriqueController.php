@@ -15,7 +15,8 @@ class GeneriqueController
 {
 
     public function __construct(private ContainerInterface $container)
-    {}
+    {
+    }
 
     protected function redirect(string $routeName = "", array $param = []): RedirectResponse
     {

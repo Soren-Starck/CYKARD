@@ -47,5 +47,16 @@ class TableauController extends GeneriqueController
         return $this->redirect('app_login');
     }
 
-
+    #[Route('/tableaux/join/{codetableau}', name: 'app_tableau_join', methods: ['GET'])]
+    public function joinTableau(Request $request, string $codetableau): Response
+    {
+        if (UserHelper::isUserLoggedIn()) {
+            $login = $this->getLoginFromCookieJwt($request);
+            if (!$login) $this->redirect('app_login');
+            $result = $this->tableauService->joinTableau($login, $codetableau);
+            if (isset($result['error'])) return $this->redirect('app_tableaux');
+            return $this->redirect('app_tableau_show', ['id' => $result['id']]);
+        }
+        return $this->redirect('app_login');
+    }
 }

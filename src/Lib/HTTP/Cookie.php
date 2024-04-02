@@ -6,33 +6,29 @@ class Cookie
 {
     public static function enregistrer(string $cle, mixed $valeur, ?int $dureeExpiration = null): void
     {
-        $valeurJSON = serialize($valeur);
+        $valeurJSON = json_encode($valeur);
         $hostname = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']);
-        $secure = $_SERVER['HTTPS'] ?? false;
-        if ($dureeExpiration === null)
-            setcookie($cle, $valeurJSON, [
-                'expires' => 0,
-                'path' => '/',
-                'domain' => $hostname,
-                'secure' => $secure,
-                'httponly' => true,
-                'samesite' => 'Strict'
-            ]);
-        else
-            setcookie($cle, $valeurJSON, [
-                'expires' => time() + $dureeExpiration,
-                'path' => '/',
-                'domain' => $hostname,
-                'secure' => $secure,
-                'httponly' => true,
-                'samesite' => 'Strict'
-            ]);
+        $secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+
+        $options = [
+            'path' => '/',
+            'domain' => $hostname,
+            'secure' => $secure,
+            'httponly' => true,
+            'samesite' => 'Strict'
+        ];
+
+        if ($dureeExpiration !== null) {
+            $options['expires'] = time() + $dureeExpiration;
+        }
+
+        setcookie($cle, $valeurJSON, $options);
     }
 
     public static function lire(string $cle): mixed
     {
         if (self::contient($cle)) {
-            return unserialize($_COOKIE[$cle]);
+            return json_decode($_COOKIE[$cle], true);
         }
         return null;
     }
