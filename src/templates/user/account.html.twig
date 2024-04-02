@@ -4,23 +4,26 @@
 
 {% block title %}My Account{% endblock %}
 
+{% block components %}
+    <script type="module">
+        import {loadComponent} from "/js/reactive.js";
+        import {ChangePassword} from "/js/components/change-password.js";
+
+        loadComponent("password", ChangePassword)
+    </script>
+{% endblock %}
+
 {% block body %}
     <div class="container w-1/3 m-auto">
-        <form method="post">
+        <div>
             <h1 class="h3 mb-3">
                 Mon compte</h1>
             <div class="VBox">
-                <label for="inputLogin">
-                    <i class="fas fa-user"></i>
-                    Identifiant</label>
-                <input type="text" value="{{ user.login }}" name="login" id="inputLogin" class="form-control"
-                       autocomplete="username" required autofocus readonly>
-                <label for="inputEmail">
-                    <i class="fas fa-envelope"></i>
-                    Email</label>
-                <input type="email" name="email" id="inputEmail" value="{{ user.email }}" class="form-control"
-                       autocomplete="current-password"
-                       required readonly>
+                <span><i class="fas fa-user"></i>Identifiant</span>
+                <p type="text">{{ user.login }}</p>
+                <span><i class="fas fa-envelope"></i>Email</span>
+                <p type="text">{{ user.email }}</p>
+                <react-password></react-password>
 
                 {% if user.is_verified == false %}
                     <div class="alert-static bg-yellow-100 text-yellow-600 mt-2">
@@ -37,6 +40,6 @@
                     <i class="fas fa-sign-out-alt ml-2"></i>
                 </a>
             </div>
-        </form>
+        </div>
     </div>
 {% endblock %}

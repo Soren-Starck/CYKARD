@@ -32,7 +32,7 @@ export class TableList extends ReactiveComponent {
                     <div class="transition absolute top-1 right-2 opacity-0 group-hover:opacity-100 text-neutral-700">
                         <i table_id="${table.id}" onclick="delete" class="cursor-pointer fas fa-trash"></i>
                     </div>
-                    ${table.user_role === "USER_ADMIN" ? `<i class="fas fa-user-cog absolute bottom-1 left-2"></i>` : (table.user_role === "USER_EDITOR" ? `<i class="fas fa-user absolute bottom-1 left-2"></i>` : `<i class="fas fa-user absolute bottom-0 left-0"></i>`)}
+                    ${table.user_role === "USER_ADMIN" ? `<i class="fas fa-user-cog absolute bottom-1 left-2"></i>` : (table.user_role === "USER_EDITOR" ? `<i class="fas fa-user absolute bottom-1 left-2"></i>` : `<i class="fas fa-user absolute bottom-1 left-2"></i>`)}
                 </a>
             </div>
         `).join("")

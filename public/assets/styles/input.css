@@ -22,6 +22,8 @@ nav > ul > li > a {
 input[type=text],
 input[type=password],
 input[type=email],
+input[type=select],
+select,
 textarea {
     @apply h-9 text-sm shadow-sm rounded-md border border-neutral-200 px-3 py-1 my-2 active:border-neutral-400;
 }
