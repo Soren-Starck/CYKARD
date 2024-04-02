@@ -266,12 +266,9 @@ h2 {
 }
 
 .color-circle {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
+    @apply w-[30px] h-[30px] rounded-full cursor-pointer;
 }
 
 .color-circle.selected {
-    border: 2px solid blue;
+    @apply border-2 border-neutral-900 p-2;
 }

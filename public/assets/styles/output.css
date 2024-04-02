@@ -2021,14 +2021,17 @@ h2 {
 }
 
 .color-circle {
-  width: 30px;
   height: 30px;
-  border-radius: 50%;
+  width: 30px;
   cursor: pointer;
+  border-radius: 9999px;
 }
 
 .color-circle.selected {
-  border: 2px solid blue;
+  border-width: 2px;
+  --tw-border-opacity: 1;
+  border-color: rgb(23 23 23 / var(--tw-border-opacity));
+  padding: 0.5rem;
 }
 
 .hover\:cursor-grab:hover {

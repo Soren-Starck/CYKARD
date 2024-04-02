@@ -41,16 +41,16 @@ export class EditCard extends Popup {
     }
 
     selectColor(event) {
-    const color = event.target.getAttribute('data-color');
-    document.getElementById('color').value = color;
-    const colorCircles = event.target.parentElement.children;
-    for (let i = 0; i < colorCircles.length; i++) {
-        colorCircles[i].classList.remove('selected');
-        if (colorCircles[i].getAttribute('data-color') === color) {
-            colorCircles[i].classList.add('selected');
+        const color = event.target.getAttribute('data-color');
+        document.getElementById('color').value = color;
+        const colorCircles = event.target.parentElement.children;
+        for (let i = 0; i < colorCircles.length; i++) {
+            colorCircles[i].classList.remove('selected');
+            if (colorCircles[i].getAttribute('data-color') === color) {
+                colorCircles[i].classList.add('selected');
+            }
         }
     }
-}
 
     render() {
         const users = Store.get("users") ?? []
@@ -60,10 +60,10 @@ export class EditCard extends Popup {
     <option value="${user.login}">${user.login}</option>
     `).join("")
 
-        const colors = ['#f87171', '#facc15', '#4ade80', '#60a5fa', '#c084fc', '#f472b6']
+        const colors = ['#f87171', '#facc15', '#4ade80', '#60a5fa', '#c084fc', '#f472b6'];
         const colorList = colors.map(color => `
-    <div class="color-circle" style="background-color: ${color};" onclick="selectColor" data-color="${color}"></div>
-`).join("");
+        <div class="color-circle ${this.props.color === color ? 'selected' : ''}" style="background-color: ${color};" onclick="selectColor" data-color="${color}"></div>
+    `).join("");
 
         return super.render(`
         <form onsubmit="submit" class="flex flex-col gap-2">
