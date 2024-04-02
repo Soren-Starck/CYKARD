@@ -32,6 +32,72 @@ class CarteServiceTest extends TestCase
         $this->login = 'login';
     }
 
+    public function testAssignUserCase1(): void
+    {
+        $this->carteRepositoryMock->method('verifyUserTableauByCardAndAccess')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'Access denied', 'status' => 403],
+            $this->carteService->assignUser($this->login, 1)
+        );
+    }
+
+    public function testAssignUserCase2(): void
+    {
+        $response = [];
+        $this->carteRepositoryMock->method('verifyUserTableauByCardAndAccess')->willReturn(true);
+        $this->carteRepositoryMock->method('assignCard')->willReturn($response);
+        $this->assertEquals(
+            ['error' => 'Error assigning the user to the card', 'status' => 500],
+            $this->carteService->assignUser($this->login, 1)
+        );
+    }
+
+    public function testAssignUserCase3(): void
+    {
+        $response = [
+            'carte_id' => 1,
+            'user_login' => 'login',
+        ];
+        $this->carteRepositoryMock->method('verifyUserTableauByCardAndAccess')->willReturn(true);
+        $this->carteRepositoryMock->method('assignCard')->willReturn($response);
+        $this->carteRepositoryMock->method('find')->willReturn([['id' => 1]]);
+        $this->assertEquals(
+            ['id' => 1],
+            $this->carteService->assignUser($this->login, 1)
+        );
+    }
+
+    public function testUnassignUserCase1(): void
+    {
+        $this->carteRepositoryMock->method('verifyUserTableauByCardAndAccess')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'Access denied', 'status' => 403],
+            $this->carteService->unassignUser($this->login, 1)
+        );
+    }
+
+    public function testUnassignUserCase2(): void
+    {
+        $response = [];
+        $this->carteRepositoryMock->method('verifyUserTableauByCardAndAccess')->willReturn(true);
+        $this->carteRepositoryMock->method('unassignCard')->willReturn(false);
+        $this->assertEquals(
+            ['error' => 'Error unassigning the user from the card', 'status' => 500],
+            $this->carteService->unassignUser($this->login, 1)
+        );
+    }
+
+    public function testUnassignUserCase3(): void
+    {
+        $this->carteRepositoryMock->method('verifyUserTableauByCardAndAccess')->willReturn(true);
+        $this->carteRepositoryMock->method('unassignCard')->willReturn(true);
+        $this->carteRepositoryMock->method('find')->willReturn([['id' => 1]]);
+        $this->assertEquals(
+            ['id' => 1],
+            $this->carteService->unassignUser($this->login, 1)
+        );
+    }
+
     public function testModifyCarteCase1(): void
     {
         $data = ['titrecarte' => 'titre'];
