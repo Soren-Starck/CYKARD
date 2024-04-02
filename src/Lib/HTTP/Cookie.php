@@ -7,10 +7,12 @@ class Cookie
     public static function enregistrer(string $cle, mixed $valeur, ?int $dureeExpiration = null): void
     {
         $valeurJSON = json_encode($valeur);
+        $hostname = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']);
         $secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 
         $options = [
             'path' => '/',
+            'domain' => $hostname,
             'secure' => $secure,
             'httponly' => true,
             'samesite' => 'Strict'
