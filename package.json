@@ -1,16 +1,16 @@
 {
   "devDependencies": {
-    "@symfony/webpack-encore": "4.6.1",
     "autoprefixer": "^10.4.18",
+    "concurrently": "^8.2.2",
     "postcss": "^8.4.35",
     "postcss-loader": "^7.0.0",
     "tailwindcss": "^3.4.1",
-    "concurrently": "^8.2.2"
+    "webpack-notifier": "^1.15.0"
   },
   "scripts": {
     "all": "concurrently 'npm run dev' 'npm run watch'",
     "dev": "php -S localhost:8000 -t public",
     "watch": "npx tailwindcss -i public/assets/styles/input.css -o public/assets/styles/output.css --watch",
-    "build": "encore production --progress"
+    "build": "npx tailwindcss -i public/assets/styles/input.css -o public/assets/styles/output.css"
   }
 }

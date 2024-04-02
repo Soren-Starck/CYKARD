@@ -724,10 +724,6 @@ video {
   grid-column: span 1 / span 1;
 }
 
-.\!m-3 {
-  margin: 0.75rem !important;
-}
-
 .m-auto {
   margin: auto;
 }
@@ -762,10 +758,6 @@ video {
   margin-bottom: auto;
 }
 
-.mb-10 {
-  margin-bottom: 2.5rem;
-}
-
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -778,8 +770,8 @@ video {
   margin-bottom: 1rem;
 }
 
-.mb-\[450px\] {
-  margin-bottom: 450px;
+.mb-\[350px\] {
+  margin-bottom: 350px;
 }
 
 .ml-1 {
@@ -800,10 +792,6 @@ video {
 
 .mr-2 {
   margin-right: 0.5rem;
-}
-
-.mr-3 {
-  margin-right: 0.75rem;
 }
 
 .mr-4 {
@@ -840,14 +828,6 @@ video {
 
 .mt-\[250px\] {
   margin-top: 250px;
-}
-
-.mb-\[400px\] {
-  margin-bottom: 400px;
-}
-
-.mb-\[350px\] {
-  margin-bottom: 350px;
 }
 
 .block {
